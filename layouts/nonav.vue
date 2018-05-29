@@ -6,6 +6,8 @@
 
 <script>
 export default {
+  middleware: "guest",
+
   data: () => ({
     drawer: null
   })

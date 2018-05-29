@@ -1,4 +1,9 @@
 module.exports = {
+  env: {
+    API_URL: process.env.API_URL || "http://localhost:4444/api/v1",
+    AUTH_URL: process.env.AUTH_URL || "http://localhost:4444/api/auth"
+  },
+
   /*
   ** Headers of the page
   */
@@ -22,7 +27,7 @@ module.exports = {
       }
     ]
   },
-  plugins: ["~/plugins/vuetify.js"],
+  plugins: ["~/plugins/vuetify.js", "~/plugins/veevalidate.js"],
   css: ["~/assets/style/app.styl"],
   /*
   ** Customize the progress bar color
