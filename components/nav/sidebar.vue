@@ -50,7 +50,10 @@ export default {
       clipped: false,
       drawer: true,
       fixed: false,
-      items: [],
+      items: [
+        { title: "Dashboard", icon: "dashboard", to: "/" },
+        { title: "Universities", icon: "account_balance", to: "/universities" }
+      ],
       miniVariant: false,
       right: true,
       rightDrawer: false,

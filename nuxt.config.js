@@ -36,12 +36,12 @@ module.exports = {
   /*
   ** Customize the progress bar color
   */
-  loading: { color: "#3B8070" },
+  loading: { color: "#444444" },
   /*
   ** Build configuration
   */
   build: {
-    vendor: ["~/plugins/vuetify.js"],
+    vendor: ["~/plugins/vuetify.js", "axios"],
     extractCSS: true,
     /*
     ** Run ESLint on save
