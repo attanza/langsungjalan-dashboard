@@ -8,6 +8,11 @@
       app
     >
       <v-list>
+        <v-list-tile>
+          <img src="/images/logo2.png" alt="" width="50%" style="margin-left: -10px;">
+        </v-list-tile>
+      </v-list>
+      <v-list>
         <v-list-tile
           v-for="(item, i) in items"
           :to="item.to"
@@ -26,10 +31,11 @@
     </v-navigation-drawer>
     <v-toolbar color="primary" dark fixed app>
       <v-toolbar-side-icon @click="drawer = !drawer"/>
-      <v-toolbar-title v-text="title"/>
       <v-spacer/>
-      <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn flat @click="logout">Logout</v-btn>
+      <v-toolbar-items>
+        <v-btn icon @click="logout">
+          <v-icon>exit_to_app</v-icon>
+        </v-btn>
       </v-toolbar-items>
     </v-toolbar>
   </div>
@@ -44,10 +50,7 @@ export default {
       clipped: false,
       drawer: true,
       fixed: false,
-      items: [
-        { icon: "apps", title: "Welcome", to: "/" },
-        { icon: "bubble_chart", title: "Inspire", to: "/inspire" }
-      ],
+      items: [],
       miniVariant: false,
       right: true,
       rightDrawer: false,
