@@ -29,7 +29,7 @@
           <td class="text-xs-left">{{ props.item.email }}</td>
           <td class="text-xs-left">{{ props.item.city }}</td>
           <td class="justify-center layout px-0">
-            <v-btn icon class="mx-0">
+            <v-btn icon class="mx-0" @click="toDetail(props.item)">
               <v-icon color="white">remove_red_eye</v-icon>
             </v-btn>
             <v-btn icon class="mx-0">
@@ -40,32 +40,18 @@
             </v-btn>
           </td>
         </template>
-        <template slot="no-data">
-          <v-btn color="primary" @click="pupulateTable">Reset</v-btn>
-        </template>
       </v-data-table>
-    <!-- <UserForm 
-      :dialog="showForm" 
-      @close="close()" 
-      :is-edit="isEdit"
-      :item="itemEdit" 
-      @addUser="addUser"
-      @updateUser="updateUser"      
-    />
-    <ConfirmDialog :dialog="showConfirm" @close="closeDeleteConfirm" @confirm="deleteUser" :text="confirmMessage"/> -->
     </v-card>
   </div>
 </template>
 <script>
-// import UserForm from "../components/forms/UserForm"
-// import ConfirmDialog from "../components/ConfirmDialog"
 import _ from "lodash"
-import { universityList } from "~/utils/apis/universityApi"
-
-// import RestoApi from "../utils/apis/RestoApi.js"
-// const restoApi = new RestoApi()
+import { UNIVERSITY_URL } from "~/utils/apis"
+import { states } from "~/mixins"
+import axios from "axios"
 export default {
   middleware: "auth",
+  mixins: [states],
   data: () => ({
     loading: false,
     showForm: false,
@@ -119,7 +105,10 @@ export default {
     async pupulateTable() {
       this.loading = true
       const { page, rowsPerPage, descending, sortBy } = this.pagination
-      const res = await universityList(page, rowsPerPage, this.search)
+      const endPoint = `${UNIVERSITY_URL}?page=${page}&limit=${rowsPerPage}&search=${
+        this.search
+      }`
+      const res = await axios.get(endPoint).then(res => res.data)
       this.items = res.data
       this.totalItems = res.meta.total
       if (this.pagination.sortBy) {
@@ -139,6 +128,9 @@ export default {
         })
       }
       this.loading = false
+    },
+    toDetail(data) {
+      this.$router.push(`/universities/${data.id}`)
     }
     // editResto(item) {
     //   this.isEdit = true

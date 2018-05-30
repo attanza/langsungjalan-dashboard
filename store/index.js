@@ -3,7 +3,8 @@ const cookieparser = require("cookieparser")
 export const state = () => ({
   sidebar: false,
   user: {},
-  token: null
+  token: null,
+  currentEdit: null
 })
 
 export const mutations = {
@@ -15,6 +16,9 @@ export const mutations = {
   },
   token(state, p) {
     state.token = p
+  },
+  currentEdit(state, p) {
+    state.currentEdit = p
   }
 }
 
