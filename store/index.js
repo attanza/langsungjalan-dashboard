@@ -1,4 +1,5 @@
 const cookieparser = require("cookieparser")
+import axios from "axios"
 
 export const state = () => ({
   sidebar: false,
@@ -35,5 +36,6 @@ export const actions = {
     }
     commit("token", token)
     commit("user", user)
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
   }
 }

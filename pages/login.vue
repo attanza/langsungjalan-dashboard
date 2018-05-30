@@ -49,7 +49,8 @@
 
 <script>
 import Cookie from "js-cookie"
-import { postLogin } from "~/utils/apis/auth"
+import { LOGIN_URL } from "~/utils/apis"
+import axios from "axios"
 export default {
   layout: "nonav",
   $_veeValidate: {
@@ -77,7 +78,7 @@ export default {
           email: this.email,
           password: this.password
         }
-        const resp = await postLogin(credential)
+        const resp = await axios.post(LOGIN_URL, credential)
         console.log(resp)
         Cookie.set("lj_token", JSON.stringify(resp.data), { expires: 1 })
         this.$store.commit("user", resp.data.user)

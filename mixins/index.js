@@ -1,3 +1,4 @@
 import states from "./states"
+import global from "./global"
 
-export { states }
+export { states, global }

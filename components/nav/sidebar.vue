@@ -49,7 +49,6 @@ export default {
     return {
       clipped: false,
       drawer: true,
-      fixed: false,
       items: [
         { title: "Dashboard", icon: "dashboard", to: "/" },
         { title: "Universities", icon: "account_balance", to: "/universities" }
