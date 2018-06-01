@@ -15,8 +15,11 @@
         </gmap-map>
       </div>
       <v-card-actions>
+        <!-- <v-btn to="/universities" color="primary"> <v-icon>chevron_left</v-icon> </v-btn> -->
+        <Tbtn color="primary" icon="chevron_left" text="Back to University List" @onClick="toHome"/>
+        <v-spacer/>
         <gmap-autocomplete class="form-control" @place_changed="setPlace"/>
-        <v-btn flat color="primary" @click="setLocation"><v-icon>save</v-icon></v-btn>
+        <Tbtn :flat="true" color="primary" icon="save" text="Save Location Map" @onClick="setLocation"/>
       </v-card-actions>
     </v-card>
     <Noty :snackbar="showNoty" :text="notyText" :color="notyColor" @onClose="showNoty = false"/>    
@@ -49,6 +52,9 @@ export default {
     this.setInitLoc()
   },
   methods: {
+    toHome() {
+      this.$router.push("/universities")
+    },
     setPlace(place) {
       this.location.lat = place.geometry.location.lat()
       this.location.lng = place.geometry.location.lng()

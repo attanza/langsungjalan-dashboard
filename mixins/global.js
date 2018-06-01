@@ -2,9 +2,10 @@ import changeCase from "change-case"
 import { mapState } from "vuex"
 import axios from "axios"
 import Noty from "~/components/Noty"
+import Tbtn from "~/components/Tbtn"
 
 export default {
-  components: { Noty },
+  components: { Noty, Tbtn },
   data: () => ({
     showNoty: false,
     notyText: "",
