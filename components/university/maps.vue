@@ -25,13 +25,11 @@
 
 <script>
 import _ from "lodash"
-import { global, states } from "~/mixins"
+import { global } from "~/mixins"
 import { UNIVERSITY_URL } from "~/utils/apis"
 import axios from "axios"
-import Noty from "~/components/Noty"
 export default {
-  components: { Noty },
-  mixins: [global, states],
+  mixins: [global],
   data: () => ({
     location: {
       lat: -6.17511,
@@ -45,16 +43,8 @@ export default {
         }
       }
     ],
-    formData: {},
-    showNoty: false,
-    notyText: "",
-    notyColor: "success"
+    formData: {}
   }),
-  computed: {
-    currentEdit() {
-      return this.$store.state.currentEdit
-    }
-  },
   mounted() {
     this.setInitLoc()
   },
