@@ -78,8 +78,9 @@ export default {
           email: this.email,
           password: this.password
         }
-        const resp = await axios.post(LOGIN_URL, credential)
-        console.log(resp)
+        const resp = await axios
+          .post(LOGIN_URL, credential)
+          .then(res => res.data)
         Cookie.set("lj_token", JSON.stringify(resp.data), { expires: 1 })
         this.$store.commit("user", resp.data.user)
         this.$store.commit("token", resp.data.token)

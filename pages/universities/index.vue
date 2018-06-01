@@ -3,7 +3,7 @@
     <h2 class="mb-3">Universities</h2>
     <v-card dark>
       <v-card-title>
-        <v-btn color="primary" dark>Add</v-btn>
+        <v-btn color="primary" dark><v-icon>add</v-icon></v-btn>
         <v-spacer/>
         <v-text-field
           v-model="search"
@@ -31,12 +31,6 @@
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
               <v-icon color="white">remove_red_eye</v-icon>
-            </v-btn>
-            <v-btn icon class="mx-0">
-              <v-icon color="white">edit</v-icon>
-            </v-btn>
-            <v-btn icon class="mx-0">
-              <v-icon color="primary">delete</v-icon>
             </v-btn>
           </td>
         </template>

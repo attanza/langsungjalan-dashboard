@@ -6,11 +6,14 @@
       <v-tab href="#detail">
         Details
       </v-tab>
-      <v-tab href="#tab-2">
+      <v-tab href="#maps">
         Maps
       </v-tab>
       <v-tab-item :id="'detail'">
-        <dform/>
+        <detail/>
+      </v-tab-item>
+      <v-tab-item :id="'maps'">
+        <maps/>
       </v-tab-item>
     </v-tabs>
   </div>
@@ -19,7 +22,7 @@
 <script>
 import { UNIVERSITY_URL } from "~/utils/apis"
 import axios from "axios"
-import { detail, dform } from "~/components/university"
+import { detail, dform, maps } from "~/components/university"
 export default {
   async fetch({ store, params }) {
     try {
@@ -29,7 +32,7 @@ export default {
       console.log(e)
     }
   },
-  components: { detail, dform }
+  components: { detail, dform, maps }
 }
 </script>
 
