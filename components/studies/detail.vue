@@ -4,10 +4,10 @@
       <v-container grid-list-md>
         <div class="btn-group">
           <v-btn-toggle v-model="toggle_multiple" multiple>
-            <Tbtn color="primary" icon="chevron_left" text="Back to University List" @onClick="toHome"/>
+            <Tbtn color="primary" icon="chevron_left" text="Back to Study Programs List" @onClick="toHome"/>
             <Tbtn color="primary" icon="save" text="Save" @onClick="submit"/>              
             <Tbtn color="primary" icon="refresh" text="Refresh" @onClick="setFields"/>  
-            <Tbtn color="primary" icon="delete" text="Delete university" @onClick="confirmDelete"/>  
+            <Tbtn color="primary" icon="delete" text="Delete Study Program" @onClick="confirmDelete"/>  
           </v-btn-toggle>
           <hr >
         </div>    
@@ -83,14 +83,10 @@ export default {
         { key: "address", value: "", rules: "max:250" },
         { key: "description", value: "", rules: "max:250" }
       ],
-      formData: {},
-      showNoty: false,
       showDialog: false,
-      notyText: "",
-      notyColor: "success",
+      formData: {},
       toggle_multiple: [0, 1, 2, 3],
-      years: [],
-      universities: []
+      years: []
     }
   },
   created() {

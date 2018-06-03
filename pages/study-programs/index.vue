@@ -3,7 +3,7 @@
     <h2 class="primary--text mb-3">Study Programs</h2>
     <v-card dark>
       <v-card-title>
-        <Tbtn :bottom="true" color="primary" icon="add" text="Register new university" @onClick="showForm = true"/>
+        <Tbtn :bottom="true" color="primary" icon="add" text="Register new Study Program" @onClick="showForm = true"/>
         <v-spacer/>
         <v-text-field
           v-model="search"
@@ -41,7 +41,7 @@
 </template>
 <script>
 import _ from "lodash"
-import { STUDIES_URL } from "~/utils/apis"
+import { STUDIES_URL, COMBO_DATA_URL } from "~/utils/apis"
 import { global } from "~/mixins"
 import { dform } from "~/components/studies"
 import axios from "axios"
@@ -50,6 +50,17 @@ export default {
   middleware: "auth",
   components: { dform },
   mixins: [global],
+  async fetch({ store }) {
+    try {
+      // Combo / Select Data
+      let resp2 = await await axios
+        .get(COMBO_DATA_URL + "?model=University")
+        .then(res => res.data)
+      store.commit("comboData", resp2)
+    } catch (e) {
+      catchError(e)
+    }
+  },
   data: () => ({
     loading: false,
     showForm: false,

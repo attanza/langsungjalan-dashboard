@@ -63,9 +63,6 @@ export default {
         { key: "description", value: "", rules: "max:250" }
       ],
       formData: {},
-      showNoty: false,
-      notyText: "",
-      notyColor: "success",
       formTitle: "Register new university"
     }
   },

@@ -27,8 +27,10 @@ import catchError from "~/utils/catchError"
 export default {
   async fetch({ store, params }) {
     try {
+      // Current Edit
       let resp = await axios.get(STUDIES_URL + "/" + params.id)
       store.commit("currentEdit", resp.data.data)
+      // Combo / Select Data
       let resp2 = await await axios
         .get(COMBO_DATA_URL + "?model=University")
         .then(res => res.data)
