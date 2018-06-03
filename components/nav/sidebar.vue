@@ -51,7 +51,12 @@ export default {
       drawer: true,
       items: [
         { title: "Dashboard", icon: "dashboard", to: "/" },
-        { title: "Universities", icon: "account_balance", to: "/universities" }
+        { title: "Universities", icon: "account_balance", to: "/universities" },
+        {
+          title: "Studi Programs",
+          icon: "library_books",
+          to: "/study-programs"
+        }
       ],
       miniVariant: false,
       right: true,
