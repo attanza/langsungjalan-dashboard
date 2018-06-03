@@ -30,7 +30,6 @@
       </v-container>
     </v-card>
     <Dialog :showDialog="showDialog" text="Are you sure want to delete ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
-    <Noty :snackbar="showNoty" :text="notyText" :color="notyColor" @onClose="showNoty = false"/>
   </div>
 </template>
 
@@ -38,14 +37,14 @@
 import { global } from "~/mixins"
 import { UNIVERSITY_URL } from "~/utils/apis"
 import axios from "axios"
-import Noty from "~/components/Noty"
 import Dialog from "~/components/Dialog"
+import catchError, { showNoty } from "~/utils/catchError"
 
 export default {
   $_veeValidate: {
     validator: "new"
   },
-  components: { Noty, Dialog },
+  components: { Dialog },
   mixins: [global],
   data() {
     return {
@@ -98,11 +97,11 @@ export default {
             .then(res => res.data)
           this.$store.commit("currentEdit", resp.data)
           this.setFields()
-          this.showNoty = true
-          this.notyText = "Data Saved"
+          showNoty("Data Updated", "success")
         }
       } catch (e) {
         console.log(e)
+        catchError(e)
       }
     },
     confirmDelete() {
@@ -115,16 +114,14 @@ export default {
           const resp = await axios
             .delete(UNIVERSITY_URL + "/" + this.currentEdit.id)
             .then(res => res.data)
-          console.log(resp)
-
-          if (resp.status === 200) {
-            this.showNoty = true
-            this.notyText = "Data Deleted"
+          if (resp.meta.status === 200) {
+            showNoty("Data Deleted", "success")
             this.$router.push("/universities")
           }
         }
       } catch (e) {
         console.log(e)
+        catchError(e)
       }
     }
   }

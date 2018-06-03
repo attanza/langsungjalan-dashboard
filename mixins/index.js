@@ -1,4 +1,4 @@
-import states from "./states"
 import global from "./global"
+import catchError from "./catchError"
 
-export { states, global }
+export { global, catchError }

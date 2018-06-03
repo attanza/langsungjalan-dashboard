@@ -31,20 +31,17 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <Noty :snackbar="showNoty" :text="notyText" :color="notyColor" @onClose="showNoty = false"/>
-    
   </v-layout>
 </template>
 <script>
 import { global } from "~/mixins"
 import { UNIVERSITY_URL } from "~/utils/apis"
 import axios from "axios"
-import Noty from "~/components/Noty"
+import catchError, { showNoty } from "~/utils/catchError"
 export default {
   $_veeValidate: {
     validator: "new"
   },
-  components: { Noty },
   mixins: [global],
   props: {
     showForm: {
@@ -74,9 +71,7 @@ export default {
   },
   watch: {
     showForm() {
-      if (this.showForm || !this.showForm) {
-        this.dialog = this.showForm
-      }
+      this.dialog = this.showForm
     }
   },
   created() {
@@ -89,7 +84,7 @@ export default {
     setFields() {
       this.errors.clear()
       if (this.currentEdit) {
-        this.fillable.forEach(data => (this.formData[data.key] = data.key))
+        this.fillable.forEach(data => (this.formData[data.key] = data.value))
       }
     },
     submit() {
@@ -107,10 +102,13 @@ export default {
           .then(res => res.data)
         console.log(resp)
 
-        this.showNoty = true
-        this.notyText = "Data Saved"
+        if (resp.meta.status === 201) {
+          showNoty("Data Saved", "success")
+          this.$emit("onAdd", resp.data)
+          this.setFields()
+        }
       } catch (e) {
-        console.log(e)
+        catchError(e)
       }
     }
   }

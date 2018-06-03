@@ -36,7 +36,7 @@
         </template>
       </v-data-table>
     </v-card>
-    <dform :show-form="showForm" @onClose="showForm = false"/>
+    <dform :show-form="showForm" @onClose="showForm = false" @onAdd="addData"/>
   </div>
 </template>
 <script>
@@ -128,8 +128,9 @@ export default {
     toDetail(data) {
       this.$router.push(`/universities/${data.id}`)
     },
-    add() {
-      console.log("add")
+    addData(data) {
+      this.items.unshift(data)
+      this.showForm = false
     }
   }
 }

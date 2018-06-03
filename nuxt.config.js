@@ -36,7 +36,12 @@ module.exports = {
     "~/plugins/veevalidate.js",
     "~/plugins/gmaps.js"
   ],
-  css: ["~/assets/style/app.styl"],
+  css: [
+    "~/assets/style/app.styl",
+    "~/node_modules/noty/src/noty.scss",
+    "~/node_modules/noty/src/themes/metroui.scss",
+    "~/static/css/custom.css"
+  ],
   /*
   ** Customize the progress bar color
   */
@@ -45,7 +50,7 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    vendor: ["~/plugins/vuetify.js", "axios", "lodash"],
+    vendor: ["~/plugins/vuetify.js", "axios", "lodash", "noty"],
     extractCSS: true,
     /*
     ** Run ESLint on save
