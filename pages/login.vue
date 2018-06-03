@@ -51,6 +51,7 @@
 import Cookie from "js-cookie"
 import { LOGIN_URL } from "~/utils/apis"
 import axios from "axios"
+import catchError, { showNoty } from "~/utils/catchError"
 export default {
   layout: "nonav",
   $_veeValidate: {
@@ -81,14 +82,18 @@ export default {
         const resp = await axios
           .post(LOGIN_URL, credential)
           .then(res => res.data)
-        Cookie.set("lj_token", JSON.stringify(resp.data), { expires: 1 })
-        this.$store.commit("user", resp.data.user)
-        this.$store.commit("token", resp.data.token)
-        this.$router.push("/")
+        if (resp.meta.status === 200 && resp.data.user.role_id < 3) {
+          Cookie.set("lj_token", JSON.stringify(resp.data), { expires: 1 })
+          this.$store.commit("user", resp.data.user)
+          this.$store.commit("token", resp.data.token)
+          this.$router.push("/")
+        } else {
+          this.loading = false
+          showNoty("Login failed or unauthorized", "error")
+        }
       } catch (e) {
         this.loading = false
-        console.log(e)
-        console.log(e.response)
+        catchError(e)
       }
     }
   }

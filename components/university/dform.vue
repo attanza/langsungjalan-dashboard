@@ -3,7 +3,7 @@
     <v-dialog v-model="dialog" persistent max-width="500px">
       <v-card dark>
         <v-card-title>
-          <span class="headline">{{ formTitle }}</span>
+          <span class="headline primary--text">{{ formTitle }}</span>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>

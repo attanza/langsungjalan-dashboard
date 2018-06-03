@@ -6,11 +6,6 @@ import Tbtn from "~/components/Tbtn"
 
 export default {
   components: { Noty, Tbtn },
-  data: () => ({
-    showNoty: false,
-    notyText: "",
-    notyColor: "success"
-  }),
   mounted() {
     if (this.token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${this.token}`

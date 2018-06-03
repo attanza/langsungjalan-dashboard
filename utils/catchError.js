@@ -1,4 +1,5 @@
 import Noty from "noty"
+import Cookie from "js-cookie"
 
 export default e => {
   const { status } = e.response
@@ -7,6 +8,9 @@ export default e => {
     details.forEach(d => {
       showNoty(d.message, "error")
     })
+  } else if (status && status === 401) {
+    Cookie.remove("lj_token")
+    this.$router.push("/login")
   }
 }
 

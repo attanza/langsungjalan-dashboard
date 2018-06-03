@@ -8,7 +8,6 @@
             <Tbtn color="primary" icon="save" text="Save" @onClick="submit"/>              
             <Tbtn color="primary" icon="refresh" text="Refresh" @onClick="setFields"/>  
             <Tbtn color="primary" icon="delete" text="Delete university" @onClick="confirmDelete"/>  
-            
           </v-btn-toggle>
           <hr >
         </div>    

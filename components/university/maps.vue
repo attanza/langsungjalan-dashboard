@@ -24,7 +24,6 @@
         <Tbtn :flat="true" color="primary" icon="save" text="Save Location Map" @onClick="setLocation"/>
       </v-card-actions>
     </v-card>
-    <Noty :snackbar="showNoty" :text="notyText" :color="notyColor" @onClose="showNoty = false"/>    
   </div>
 </template>
 
@@ -33,6 +32,8 @@ import _ from "lodash"
 import { global } from "~/mixins"
 import { UNIVERSITY_URL } from "~/utils/apis"
 import axios from "axios"
+import catchError, { showNoty } from "~/utils/catchError"
+
 export default {
   mixins: [global],
   data: () => ({
@@ -79,11 +80,11 @@ export default {
             .put(UNIVERSITY_URL + "/" + this.currentEdit.id, this.formData)
             .then(res => res.data)
           this.$store.commit("currentEdit", resp.data)
-          this.showNoty = true
-          this.notyText = "Map Saved"
+          showNoty("Map Saved", "success")
         }
       } catch (e) {
         console.log(e)
+        catchError(e)
       }
     },
     setInitLoc() {
