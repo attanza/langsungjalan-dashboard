@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h2 class="mb-3">Universities</h2>
+    <h2 class="primary--text mb-3">Universities</h2>
     <v-card dark>
       <v-card-title>
-        <v-btn color="primary" dark><v-icon>add</v-icon></v-btn>
+        <Tbtn :bottom="true" color="primary" icon="add" text="Register new university" @onClick="showForm = true"/>
         <v-spacer/>
         <v-text-field
           v-model="search"
@@ -36,20 +36,22 @@
         </template>
       </v-data-table>
     </v-card>
+    <dform :show-form="showForm" @onClose="showForm = false"/>
   </div>
 </template>
 <script>
 import _ from "lodash"
 import { UNIVERSITY_URL } from "~/utils/apis"
-import { states } from "~/mixins"
+import { global } from "~/mixins"
+import { dform } from "~/components/university"
 import axios from "axios"
 export default {
   middleware: "auth",
-  mixins: [states],
+  components: { dform },
+  mixins: [global],
   data: () => ({
     loading: false,
     showForm: false,
-    isEdit: false,
     totalItems: 0,
     search: "",
     pagination: {
@@ -125,48 +127,10 @@ export default {
     },
     toDetail(data) {
       this.$router.push(`/universities/${data.id}`)
+    },
+    add() {
+      console.log("add")
     }
-    // editResto(item) {
-    //   this.isEdit = true
-    //   this.itemEdit = item
-    //   this.showForm = true
-    // },
-    // close() {
-    //   this.isEdit = false
-    //   this.showForm = false
-    //   this.itemEdit = {}
-    // },
-    // addUser(user) {
-    //   this.items.push(user)
-    // },
-    // updateUser(user) {
-    //   let index = _.findIndex(this.items, item => {
-    //     return item.id == user.id
-    //   })
-    //   this.items.splice(index, 1, user)
-    // },
-    // showDeleteConfirm(id) {
-    //   this.userIdDelete = id
-    //   this.showConfirm = true
-    // },
-    // closeDeleteConfirm() {
-    //   this.userIdDelete = ""
-    //   this.showConfirm = false
-    // },
-    // deleteUser() {
-    //   restoApi
-    //     .deleteUser(this.userIdDelete)
-    //     .then(res => {
-    //       if (res.status === 200) {
-    //         let index = _.findIndex(this.items, item => {
-    //           return item.id == this.userIdDelete
-    //         })
-    //         this.items.splice(index, 1)
-    //       }
-    //     })
-    //     .catch(e => console.log(e))
-    //   this.showConfirm = false
-    // }
   }
 }
 </script>

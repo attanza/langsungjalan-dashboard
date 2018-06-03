@@ -1,37 +1,42 @@
 <template>
-  <div>
-    <v-card dark>
-      <v-container grid-list-md>
-        <form>
-          <v-layout row wrap class="mt-3 px-2">
-            <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
-              <label>{{ setCase(f.key) }}</label>
-              <v-text-field
-                v-validate="f.rules"
-                v-model="formData[f.key]"
-                :multi-line="f.key == 'address' || f.key == 'description'"
-                :error-messages="errors.collect(f.key)"
-                :name="f.key"
-                :data-vv-name="f.key"
-              />
-            </v-flex>
-          </v-layout>
-          <v-layout row wrap class="mt-3 px-2">
-            <v-flex xs12>
-              <v-btn to="/universities" color="primary"> <v-icon>chevron_left</v-icon> </v-btn>
-              <v-btn color="primary" @click="submit"><v-icon>save</v-icon></v-btn>
-              <v-btn color="primary" @click="setFields"><v-icon>refresh</v-icon></v-btn>
-            </v-flex>
-          </v-layout>          
-        </form>
-      </v-container>
-    </v-card>
+  <v-layout row justify-center>
+    <v-dialog v-model="dialog" persistent max-width="500px">
+      <v-card dark>
+        <v-card-title>
+          <span class="headline">{{ formTitle }}</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container grid-list-md>
+            <form>
+              <v-layout row wrap>
+                <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
+                  <label>{{ setCase(f.key) }}</label>
+                  <v-text-field
+                    v-validate="f.rules"
+                    v-model="formData[f.key]"
+                    :multi-line="f.key == 'address' || f.key == 'description'"
+                    :error-messages="errors.collect(f.key)"
+                    :name="f.key"
+                    :data-vv-name="f.key"
+                  />
+                </v-flex>
+              </v-layout>     
+            </form>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn color="primary" flat @click.native="onClose">Close</v-btn>
+          <v-btn color="primary" flat @click.native="submit">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <Noty :snackbar="showNoty" :text="notyText" :color="notyColor" @onClose="showNoty = false"/>
-  </div>
+    
+  </v-layout>
 </template>
-
 <script>
-import { global, states } from "~/mixins"
+import { global } from "~/mixins"
 import { UNIVERSITY_URL } from "~/utils/apis"
 import axios from "axios"
 import Noty from "~/components/Noty"
@@ -40,9 +45,16 @@ export default {
     validator: "new"
   },
   components: { Noty },
-  mixins: [global, states],
+  mixins: [global],
+  props: {
+    showForm: {
+      type: Boolean,
+      required: true
+    }
+  },
   data() {
     return {
+      dialog: false,
       fillable: [
         { key: "name", value: "", rules: "required|max:50" },
         { key: "phone", value: "", rules: "required|max:30" },
@@ -56,45 +68,47 @@ export default {
       formData: {},
       showNoty: false,
       notyText: "",
-      notyColor: "success"
+      notyColor: "success",
+      formTitle: "Register new university"
     }
   },
-  computed: {
-    currentEdit() {
-      return this.$store.state.currentEdit
+  watch: {
+    showForm() {
+      if (this.showForm || !this.showForm) {
+        this.dialog = this.showForm
+      }
     }
   },
   created() {
     this.setFields()
   },
   methods: {
+    onClose() {
+      this.$emit("onClose")
+    },
     setFields() {
       this.errors.clear()
       if (this.currentEdit) {
-        this.fillable.forEach(
-          data => (this.formData[data.key] = this.currentEdit[data.key])
-        )
+        this.fillable.forEach(data => (this.formData[data.key] = data.key))
       }
     },
     submit() {
       this.$validator.validateAll().then(result => {
         if (result) {
-          this.editData()
+          this.saveData()
           return
         }
       })
     },
-    async editData() {
+    async saveData() {
       try {
-        if (this.currentEdit) {
-          const resp = await axios
-            .put(UNIVERSITY_URL + "/" + this.currentEdit.id, this.formData)
-            .then(res => res.data)
-          this.$store.commit("currentEdit", resp.data)
-          this.setFields()
-          this.showNoty = true
-          this.notyText = "Data Saved"
-        }
+        const resp = await axios
+          .post(UNIVERSITY_URL, this.formData)
+          .then(res => res.data)
+        console.log(resp)
+
+        this.showNoty = true
+        this.notyText = "Data Saved"
       } catch (e) {
         console.log(e)
       }
@@ -102,6 +116,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>

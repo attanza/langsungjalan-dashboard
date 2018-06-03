@@ -2,6 +2,16 @@
   <div>
     <v-card dark>
       <v-container grid-list-md>
+        <div class="btn-group">
+          <v-btn-toggle v-model="toggle_multiple" multiple>
+            <Tbtn color="primary" icon="chevron_left" text="Back to University List" @onClick="toHome"/>
+            <Tbtn color="primary" icon="save" text="Save" @onClick="submit"/>              
+            <Tbtn color="primary" icon="refresh" text="Refresh" @onClick="setFields"/>  
+            <Tbtn color="primary" icon="delete" text="Delete university" @onClick="confirmDelete"/>  
+            
+          </v-btn-toggle>
+          <hr >
+        </div>    
         <form>
           <v-layout row wrap class="mt-3 px-2">
             <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
@@ -15,32 +25,28 @@
                 :data-vv-name="f.key"
               />
             </v-flex>
-          </v-layout>
-          <v-layout row wrap class="mt-3 px-2">
-            <v-flex xs12>
-              <v-btn to="/universities" color="primary"> <v-icon>chevron_left</v-icon> </v-btn>
-              <v-btn color="primary" @click="submit"><v-icon>save</v-icon></v-btn>
-              <v-btn color="primary" @click="setFields"><v-icon>refresh</v-icon></v-btn>
-            </v-flex>
-          </v-layout>          
+          </v-layout>     
         </form>
       </v-container>
     </v-card>
+    <Dialog :showDialog="showDialog" text="Are you sure want to delete ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
     <Noty :snackbar="showNoty" :text="notyText" :color="notyColor" @onClose="showNoty = false"/>
   </div>
 </template>
 
 <script>
-import { global, states } from "~/mixins"
+import { global } from "~/mixins"
 import { UNIVERSITY_URL } from "~/utils/apis"
 import axios from "axios"
 import Noty from "~/components/Noty"
+import Dialog from "~/components/Dialog"
+
 export default {
   $_veeValidate: {
     validator: "new"
   },
-  components: { Noty },
-  mixins: [global, states],
+  components: { Noty, Dialog },
+  mixins: [global],
   data() {
     return {
       fillable: [
@@ -55,19 +61,19 @@ export default {
       ],
       formData: {},
       showNoty: false,
+      showDialog: false,
       notyText: "",
-      notyColor: "success"
-    }
-  },
-  computed: {
-    currentEdit() {
-      return this.$store.state.currentEdit
+      notyColor: "success",
+      toggle_multiple: [0, 1, 2, 3]
     }
   },
   created() {
     this.setFields()
   },
   methods: {
+    toHome() {
+      this.$router.push("/universities")
+    },
     setFields() {
       this.errors.clear()
       if (this.currentEdit) {
@@ -98,10 +104,39 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+    confirmDelete() {
+      this.showDialog = false
+      this.showDialog = true
+    },
+    async removeData() {
+      try {
+        if (this.currentEdit) {
+          const resp = await axios
+            .delete(UNIVERSITY_URL + "/" + this.currentEdit.id)
+            .then(res => res.data)
+          console.log(resp)
+
+          if (resp.status === 200) {
+            this.showNoty = true
+            this.notyText = "Data Deleted"
+            this.$router.push("/universities")
+          }
+        }
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 }
 </script>
 
 <style scoped>
+.btn-group {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
 </style>
