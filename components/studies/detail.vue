@@ -14,7 +14,7 @@
         <form>
           <v-layout row wrap class="mt-3 px-2">
             <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
-              <div v-if="f.key != 'year'">
+              <div v-if="f.key != 'year' && f.key != 'university_id'">
                 <label>{{ setCase(f.key) }}</label>
                 <v-text-field
                   v-validate="f.rules"
@@ -23,6 +23,19 @@
                   :error-messages="errors.collect(f.key)"
                   :name="f.key"
                   :data-vv-name="f.key"
+                />
+              </div>
+              <div v-if="f.key == 'university_id' && comboData">
+                <label>University</label>                
+                <v-select
+                  :items="comboData"
+                  v-model="formData['university_id']"
+                  label="Select University"
+                  single-line
+                  item-text="name"
+                  item-value="id"
+                  autocomplete
+                  cache-items
                 />
               </div>
               <div v-if="f.key == 'year'">
@@ -76,7 +89,8 @@ export default {
       notyText: "",
       notyColor: "success",
       toggle_multiple: [0, 1, 2, 3],
-      years: []
+      years: [],
+      universities: []
     }
   },
   created() {

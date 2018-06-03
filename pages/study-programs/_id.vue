@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { STUDIES_URL } from "~/utils/apis"
+import { STUDIES_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import { detail, dform, maps } from "~/components/studies"
 import catchError from "~/utils/catchError"
@@ -29,6 +29,10 @@ export default {
     try {
       let resp = await axios.get(STUDIES_URL + "/" + params.id)
       store.commit("currentEdit", resp.data.data)
+      let resp2 = await await axios
+        .get(COMBO_DATA_URL + "?model=University")
+        .then(res => res.data)
+      store.commit("comboData", resp2)
     } catch (e) {
       catchError(e)
     }

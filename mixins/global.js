@@ -27,6 +27,6 @@ export default {
     }
   },
   computed: {
-    ...mapState(["token", "currentEdit"])
+    ...mapState(["token", "currentEdit", "comboData"])
   }
 }

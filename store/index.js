@@ -5,7 +5,8 @@ export const state = () => ({
   sidebar: false,
   user: {},
   token: null,
-  currentEdit: null
+  currentEdit: null,
+  comboData: null
 })
 
 export const mutations = {
@@ -20,6 +21,9 @@ export const mutations = {
   },
   currentEdit(state, p) {
     state.currentEdit = p
+  },
+  comboData(state, p) {
+    state.comboData = p
   }
 }
 
