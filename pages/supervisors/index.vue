@@ -47,6 +47,8 @@ import { USER_URL } from "~/utils/apis"
 import { global } from "~/mixins"
 import { dform } from "~/components/supervisors"
 import axios from "axios"
+import catchError from "~/utils/catchError"
+
 export default {
   middleware: "auth",
   components: { dform },
@@ -100,34 +102,38 @@ export default {
       this.pupulateTable()
     }, 500),
     async pupulateTable() {
-      this.loading = true
-      const { page, rowsPerPage, descending, sortBy } = this.pagination
-      const endPoint = `${USER_URL}?page=${page}&limit=${rowsPerPage}&search=${
-        this.search
-      }&role_id=5`
-      const res = await axios.get(endPoint).then(res => res.data)
-      this.items = res.data
-      this.totalItems = res.meta.total
-      if (this.pagination.sortBy) {
-        this.items = this.items.sort((a, b) => {
-          const sortA = a[sortBy]
-          const sortB = b[sortBy]
+      try {
+        this.loading = true
+        const { page, rowsPerPage, descending, sortBy } = this.pagination
+        const endPoint = `${USER_URL}?page=${page}&limit=${rowsPerPage}&search=${
+          this.search
+        }&role_id=5`
+        const res = await axios.get(endPoint).then(res => res.data)
+        this.items = res.data
+        this.totalItems = res.meta.total
+        if (this.pagination.sortBy) {
+          this.items = this.items.sort((a, b) => {
+            const sortA = a[sortBy]
+            const sortB = b[sortBy]
 
-          if (descending) {
-            if (sortA < sortB) return 1
-            if (sortA > sortB) return -1
-            return 0
-          } else {
-            if (sortA < sortB) return -1
-            if (sortA > sortB) return 1
-            return 0
-          }
-        })
+            if (descending) {
+              if (sortA < sortB) return 1
+              if (sortA > sortB) return -1
+              return 0
+            } else {
+              if (sortA < sortB) return -1
+              if (sortA > sortB) return 1
+              return 0
+            }
+          })
+        }
+        this.loading = false
+      } catch (e) {
+        catchError(e)
       }
-      this.loading = false
     },
     toDetail(data) {
-      this.$router.push(`/users/${data.id}`)
+      this.$router.push(`/supervisors/${data.id}`)
     },
     addData(data) {
       this.items.unshift(data)

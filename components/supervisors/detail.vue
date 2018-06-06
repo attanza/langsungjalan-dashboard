@@ -4,24 +4,31 @@
       <v-container grid-list-md>
         <div class="btn-group">
           <v-btn-toggle v-model="toggle_multiple" multiple>
-            <Tbtn color="primary" icon="chevron_left" text="Back to University List" @onClick="toHome"/>
+            <Tbtn color="primary" icon="chevron_left" text="Back to Supervisor List" @onClick="toHome"/>
             <Tbtn color="primary" icon="save" text="Save" @onClick="submit"/>              
             <Tbtn color="primary" icon="refresh" text="Refresh" @onClick="setFields"/>  
-            <Tbtn color="primary" icon="delete" text="Delete university" @onClick="confirmDelete"/>  
+            <Tbtn color="primary" icon="delete" text="Delete Supervisor" @onClick="confirmDelete"/>  
           </v-btn-toggle>
           <hr >
         </div>    
         <form>
           <v-layout row wrap class="mt-3 px-2">
-            <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
+            
+            <v-flex v-for="(f, index) in fillable" v-if="!inArray(['is_active', 'password'], f.key)" :key="index" sm6 xs12>
               <label>{{ setCase(f.key) }}</label>
               <v-text-field
                 v-validate="f.rules"
                 v-model="formData[f.key]"
-                :multi-line="f.key == 'address' || f.key == 'description'"
                 :error-messages="errors.collect(f.key)"
                 :name="f.key"
                 :data-vv-name="f.key"
+              />
+            </v-flex>
+            <v-flex sm6 xs12>
+              <v-switch
+                v-model="switch1"
+                label="Active"
+                color="primary"
               />
             </v-flex>
           </v-layout>     
@@ -34,7 +41,7 @@
 
 <script>
 import { global } from "~/mixins"
-import { UNIVERSITY_URL } from "~/utils/apis"
+import { USER_URL } from "~/utils/apis"
 import axios from "axios"
 import Dialog from "~/components/Dialog"
 import catchError, { showNoty } from "~/utils/catchError"
@@ -49,20 +56,25 @@ export default {
     return {
       fillable: [
         { key: "name", value: "", rules: "required|max:50" },
-        { key: "phone", value: "", rules: "required|max:30" },
         { key: "email", value: "", rules: "required|email" },
-        { key: "contact_person", value: "", rules: "required|max:50" },
-        { key: "province", value: "", rules: "required|max:50" },
-        { key: "city", value: "", rules: "required|max:50" },
+        { key: "phone", value: "", rules: "required|max:30" },
+        { key: "password", value: "", rules: "required|min:6" },
+        { key: "is_active", value: "", rules: "required" },
         { key: "address", value: "", rules: "required|max:250" },
         { key: "description", value: "", rules: "max:250" }
       ],
+
       formData: {},
-      showNoty: false,
       showDialog: false,
-      notyText: "",
-      notyColor: "success",
-      toggle_multiple: [0, 1, 2, 3]
+      toggle_multiple: [0, 1, 2, 3],
+      switch1: false
+    }
+  },
+  watch: {
+    switch1() {
+      if (this.switch1 || !this.switch1) {
+        this.formData.is_active = this.switch1
+      }
     }
   },
   created() {
@@ -70,7 +82,7 @@ export default {
   },
   methods: {
     toHome() {
-      this.$router.push("/universities")
+      this.$router.push("/supervisors")
     },
     setFields() {
       this.errors.clear()
@@ -78,6 +90,7 @@ export default {
         this.fillable.forEach(
           data => (this.formData[data.key] = this.currentEdit[data.key])
         )
+        this.switch1 = this.formData.is_active
       }
     },
     submit() {
@@ -91,8 +104,9 @@ export default {
     async editData() {
       try {
         if (this.currentEdit) {
+          this.formData.role_id = 5
           const resp = await axios
-            .put(UNIVERSITY_URL + "/" + this.currentEdit.id, this.formData)
+            .put(USER_URL + "/" + this.currentEdit.id, this.formData)
             .then(res => res.data)
           this.$store.commit("currentEdit", resp.data)
           this.setFields()
@@ -104,18 +118,17 @@ export default {
       }
     },
     confirmDelete() {
-      this.showDialog = false
       this.showDialog = true
     },
     async removeData() {
       try {
         if (this.currentEdit) {
           const resp = await axios
-            .delete(UNIVERSITY_URL + "/" + this.currentEdit.id)
+            .delete(USER_URL + "/" + this.currentEdit.id)
             .then(res => res.data)
           if (resp.meta.status === 200) {
             showNoty("Data Deleted", "success")
-            this.$router.push("/universities")
+            this.$router.push("/supervisors")
           }
         }
       } catch (e) {
