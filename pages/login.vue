@@ -58,7 +58,7 @@ export default {
     validator: "new"
   },
   data: () => ({
-    email: "rihdo@rin.lr",
+    email: "bunhibbu@zitef.ug",
     password: "password",
     e1: false,
     loading: false
@@ -93,6 +93,7 @@ export default {
         }
       } catch (e) {
         this.loading = false
+        console.log(e.response)
         catchError(e)
       }
     }
