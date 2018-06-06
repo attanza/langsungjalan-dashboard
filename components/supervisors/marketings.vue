@@ -6,11 +6,24 @@
           <h2 class="primary--text mb-3">Marketings</h2>
         </div>
         <div class="header-right">
-          <v-btn color="primary" dark><v-icon>add</v-icon></v-btn>
+          <v-select
+            v-if="addMode && comboData"
+            :items="comboData"
+            v-model="marketings"
+            label="Select Marketing to add"
+            multiple
+            item-text="name"
+            item-value="id"
+            autocomplete
+            cache-items
+          />
+          <Tbtn v-if="!addMode" :bottom="true" color="primary" icon="add" text="Add Marketing" @onClick="addMode = true"/>      
+          <Tbtn v-if="addMode" :bottom="true" color="primary" icon="save" text="Add Marketing" @onClick="saveMarketing"/>          
+              
         </div>
       </div>
       
-      <v-layout row wrap>
+      <v-layout v-if="currentEdit" row wrap >
         <v-flex v-for="m in currentEdit.marketings" :key="m.id" md4 sm6 xs12>
           <v-card dark>
             <v-card-media v-if="m.photo" :src="m.photo" height="200px"/>
@@ -30,9 +43,41 @@
 
 <script>
 import { global } from "~/mixins"
+import { ADD_MARKETING_URL } from "~/utils/apis"
+import axios from "axios"
+import catchError, { showNoty } from "~/utils/catchError"
 
 export default {
-  mixins: [global]
+  mixins: [global],
+  data() {
+    return {
+      marketings: [],
+      addMode: false
+    }
+  },
+  methods: {
+    async saveMarketing() {
+      try {
+        if (this.marketings.length > 0 && this.currentEdit) {
+          let data = {
+            supervisor_id: this.currentEdit.id,
+            marketings: this.marketings
+          }
+          const resp = await axios
+            .post(ADD_MARKETING_URL, data)
+            .then(res => res.data)
+          this.$store.commit("currentEdit", resp.data)
+          this.$store.dispatch("populateComboData", "Marketing")
+          showNoty("Marketing added.", "success")
+          this.addMode = false
+        } else {
+          this.addMode = false
+        }
+      } catch (e) {
+        catchError(e)
+      }
+    }
+  }
 }
 </script>
 

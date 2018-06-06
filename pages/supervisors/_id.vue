@@ -23,13 +23,17 @@
 import { USER_URL } from "~/utils/apis"
 import axios from "axios"
 import { detail, dform, marketings } from "~/components/supervisors"
+import catchError from "~/utils/catchError"
+
 export default {
   async fetch({ store, params }) {
     try {
       let resp = await axios.get(USER_URL + "/" + params.id)
       store.commit("currentEdit", resp.data.data)
+      // Combo / Select Data
+      await store.dispatch("populateComboData", "Marketing")
     } catch (e) {
-      console.log(e)
+      catchError(e)
     }
   },
   components: { detail, dform, marketings }
