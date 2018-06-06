@@ -1,11 +1,17 @@
 <template>
   <div class="main-wrapper">
     <v-container fluid grid-list-sm>
-      <div class="header-wrapper">
-        <div class="header-left">
-          <h2 class="primary--text mb-3">Marketings</h2>
-        </div>
-        <div class="header-right">
+      <v-layout row class="mb-2">
+        <v-flex sm4 xs12>
+          <v-text-field
+            v-model="search"
+            append-icon="search"
+            label="Search"
+            single-line
+            hide-details
+          />
+        </v-flex>
+        <v-flex sm4 xs12>
           <v-select
             v-if="addMode && comboData"
             :items="comboData"
@@ -17,13 +23,14 @@
             autocomplete
             cache-items
           />
-          <Tbtn v-if="!addMode" :bottom="true" color="primary" icon="add" text="Add Marketing" @onClick="addMode = true"/>      
-          <Tbtn v-if="addMode" :bottom="true" color="primary" icon="save" text="Add Marketing" @onClick="saveMarketing"/>          
-              
-        </div>
-      </div>
+        </v-flex>  
+        <v-flex sm4 xs12 class="header-right">
+          <Tbtn v-if="!addMode" bottom icon-mode color="primary" icon="add" text="Add Marketing" @onClick="addMode = true"/>      
+          <Tbtn v-if="addMode" bottom icon-mode color="primary" icon="save" text="Save Marketing" @onClick="saveMarketing"/> 
+        </v-flex>             
+      </v-layout>
       
-      <v-layout v-if="currentEdit" row wrap >
+      <v-layout v-if="currentEdit && search == ''" row wrap >
         <v-flex v-for="m in currentEdit.marketings" :key="m.id" md4 sm6 xs12>
           <v-card dark>
             <v-card-media v-if="m.photo" :src="m.photo" height="200px"/>
@@ -52,7 +59,8 @@ export default {
   data() {
     return {
       marketings: [],
-      addMode: false
+      addMode: false,
+      search: ""
     }
   },
   methods: {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-tooltip top>
-      <v-btn slot="activator" :color="color" :flat="flat" @click="onClick">
+      <v-btn slot="activator" :color="color" :flat="flat" :block="block" :outline="outline" :icon="iconMode" @click="onClick">
         <v-icon>{{ icon }}</v-icon>
       </v-btn>
       <span>{{ text }}</span>
@@ -25,6 +25,21 @@ export default {
       required: true
     },
     flat: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    block: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    outline: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    iconMode: {
       type: Boolean,
       required: false,
       default: false
