@@ -44,15 +44,31 @@
           </v-card>
         </v-flex>
       </v-layout>
+
+      <v-layout v-if="currentEdit && search != ''" row wrap >
+        <v-flex v-for="m in results" :key="m.id" md4 sm6 xs12>
+          <v-card dark>
+            <v-card-media v-if="m.photo" :src="m.photo" height="200px"/>
+            <v-card-media v-else src="/images/user.png" height="200px"/>
+            <v-card-title primary-title>
+              <div>
+                <h3 class="headline mb-0">{{ m.name }}</h3>
+                <div>{{ m.email }}<br>{{ m.phone }}</div>
+              </div>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+      </v-layout>
     </v-container>
   </div>
 </template>
 
 <script>
 import { global } from "~/mixins"
-import { ADD_MARKETING_URL } from "~/utils/apis"
+import { ADD_MARKETING_URL, SEARCH_MARKETING_URL } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
+import _ from "lodash"
 
 export default {
   mixins: [global],
@@ -60,7 +76,15 @@ export default {
     return {
       marketings: [],
       addMode: false,
-      search: ""
+      search: "",
+      results: []
+    }
+  },
+  watch: {
+    search() {
+      if (this.search != "") {
+        this.searchMarketings()
+      }
     }
   },
   methods: {
@@ -84,6 +108,20 @@ export default {
       } catch (e) {
         catchError(e)
       }
+    },
+    searchMarketings: _.debounce(function() {
+      this.results = []
+      if (this.currentEdit) {
+        this.findMarketings(this.currentEdit.id)
+      }
+    }, 500),
+    async findMarketings(id) {
+      const resp = await axios
+        .get(
+          `${SEARCH_MARKETING_URL}?supervisor_id=${id}&search=${this.search}`
+        )
+        .then(res => res.data)
+      this.results = resp
     }
   }
 }
