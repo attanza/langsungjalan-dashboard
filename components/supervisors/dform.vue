@@ -102,7 +102,7 @@ export default {
     },
     async saveData() {
       try {
-        this.formData.role_id = 5
+        this.formData.role_id = 3
         const resp = await axios
           .post(USER_URL, this.formData)
           .then(res => res.data)

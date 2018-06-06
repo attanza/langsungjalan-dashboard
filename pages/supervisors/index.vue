@@ -107,7 +107,7 @@ export default {
         const { page, rowsPerPage, descending, sortBy } = this.pagination
         const endPoint = `${USER_URL}?page=${page}&limit=${rowsPerPage}&search=${
           this.search
-        }&role_id=5`
+        }&role_id=3`
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
         this.totalItems = res.meta.total

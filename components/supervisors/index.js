@@ -1,5 +1,5 @@
 import dform from "./dform"
 import detail from "./detail"
-import maps from "./maps"
+import marketings from "./marketings"
 
-export { dform, detail, maps }
+export { dform, detail, marketings }

@@ -6,15 +6,15 @@
       <v-tab href="#detail">
         Details
       </v-tab>
-      <v-tab href="#maps">
-        Maps
+      <v-tab href="#marketings">
+        Marketings
       </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
       </v-tab-item>
-      <!-- <v-tab-item :id="'maps'">
-        <maps/>
-      </v-tab-item> -->
+      <v-tab-item :id="'marketings'">
+        <marketings/>
+      </v-tab-item>
     </v-tabs>
   </div>
 </template>
@@ -22,7 +22,7 @@
 <script>
 import { USER_URL } from "~/utils/apis"
 import axios from "axios"
-import { detail, dform } from "~/components/supervisors"
+import { detail, dform, marketings } from "~/components/supervisors"
 export default {
   async fetch({ store, params }) {
     try {
@@ -32,7 +32,7 @@ export default {
       console.log(e)
     }
   },
-  components: { detail, dform }
+  components: { detail, dform, marketings }
 }
 </script>
 

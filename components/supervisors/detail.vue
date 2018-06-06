@@ -9,7 +9,6 @@
             <Tbtn color="primary" icon="refresh" text="Refresh" @onClick="setFields"/>  
             <Tbtn color="primary" icon="delete" text="Delete Supervisor" @onClick="confirmDelete"/>  
           </v-btn-toggle>
-          <hr >
         </div>    
         <form>
           <v-layout row wrap class="mt-3 px-2">
@@ -104,7 +103,7 @@ export default {
     async editData() {
       try {
         if (this.currentEdit) {
-          this.formData.role_id = 5
+          this.formData.role_id = 3
           const resp = await axios
             .put(USER_URL + "/" + this.currentEdit.id, this.formData)
             .then(res => res.data)
