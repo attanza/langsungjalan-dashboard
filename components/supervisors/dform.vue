@@ -10,15 +10,24 @@
             <form>
               <v-layout row wrap>
                 <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
-                  <label>{{ setCase(f.key) }}</label>
-                  <v-text-field
-                    v-validate="f.rules"
-                    v-model="formData[f.key]"
-                    :multi-line="f.key == 'address' || f.key == 'description'"
-                    :error-messages="errors.collect(f.key)"
-                    :name="f.key"
-                    :data-vv-name="f.key"
-                  />
+                  <div v-if="f.key !== 'is_active'">
+                    <label>{{ setCase(f.key) }}</label>
+                    <v-text-field
+                      v-validate="f.rules"
+                      v-model="formData[f.key]"
+                      :error-messages="errors.collect(f.key)"
+                      :name="f.key"
+                      :data-vv-name="f.key"
+                      :type="f.key == 'password' ? 'password' : 'text'"
+                    />
+                  </div>
+                  <div v-if="f.key == 'is_active'">
+                    <v-switch
+                      v-model="formData['is_active']"
+                      label="Active"
+                      color="primary"
+                    />
+                  </div>
                 </v-flex>
               </v-layout>     
             </form>
@@ -35,7 +44,7 @@
 </template>
 <script>
 import { global } from "~/mixins"
-import { UNIVERSITY_URL } from "~/utils/apis"
+import { USER_URL } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
 export default {
@@ -54,16 +63,15 @@ export default {
       dialog: false,
       fillable: [
         { key: "name", value: "", rules: "required|max:50" },
-        { key: "phone", value: "", rules: "required|max:30" },
         { key: "email", value: "", rules: "required|email" },
-        { key: "contact_person", value: "", rules: "required|max:50" },
-        { key: "province", value: "", rules: "required|max:50" },
-        { key: "city", value: "", rules: "required|max:50" },
+        { key: "phone", value: "", rules: "required|max:30" },
+        { key: "password", value: "", rules: "required|min:6" },
+        { key: "is_active", value: true, rules: "required|boolean" },
         { key: "address", value: "", rules: "required|max:250" },
         { key: "description", value: "", rules: "max:250" }
       ],
       formData: {},
-      formTitle: "Register new university"
+      formTitle: "Register New Supervisor"
     }
   },
   watch: {
@@ -94,10 +102,10 @@ export default {
     },
     async saveData() {
       try {
+        this.formData.role_id = 5
         const resp = await axios
-          .post(UNIVERSITY_URL, this.formData)
+          .post(USER_URL, this.formData)
           .then(res => res.data)
-        console.log(resp)
 
         if (resp.meta.status === 201) {
           showNoty("Data Saved", "success")

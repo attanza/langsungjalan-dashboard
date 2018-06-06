@@ -3,7 +3,7 @@
     <h2 class="primary--text mb-3">Supervisors</h2>
     <v-card dark>
       <v-card-title>
-        <Tbtn :bottom="true" color="primary" icon="add" text="Register new university" @onClick="showForm = true"/>
+        <Tbtn :bottom="true" color="primary" icon="add" text="Register New Supervisor" @onClick="showForm = true"/>
         <v-spacer/>
         <v-text-field
           v-model="search"
@@ -45,7 +45,7 @@
 import _ from "lodash"
 import { USER_URL } from "~/utils/apis"
 import { global } from "~/mixins"
-import { dform } from "~/components/university"
+import { dform } from "~/components/supervisors"
 import axios from "axios"
 export default {
   middleware: "auth",
@@ -70,13 +70,6 @@ export default {
       { text: "Status", align: "left", value: "is_active" },
       { text: "Actions", value: "name", sortable: false }
     ],
-
-    // name
-    // email
-    // phone
-    // Address
-    // is_active
-
     items: [],
     itemEdit: {},
     userIdDelete: "",
