@@ -44,7 +44,7 @@
 </template>
 <script>
 import { global } from "~/mixins"
-import { USER_URL } from "~/utils/apis"
+import { SUPERVISOR_URL } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
 export default {
@@ -104,7 +104,7 @@ export default {
       try {
         this.formData.role_id = 3
         const resp = await axios
-          .post(USER_URL, this.formData)
+          .post(SUPERVISOR_URL, this.formData)
           .then(res => res.data)
 
         if (resp.meta.status === 201) {

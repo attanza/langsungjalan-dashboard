@@ -161,7 +161,7 @@ export default {
             marketings: this.marketings
           }
           const resp = await axios
-            .post(DETACH_MARKETING_URL, data)
+            .put(DETACH_MARKETING_URL, data)
             .then(res => res.data)
           this.showDialog = false
           this.clearMarketings()

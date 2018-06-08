@@ -43,7 +43,7 @@
 </template>
 <script>
 import _ from "lodash"
-import { USER_URL } from "~/utils/apis"
+import { SUPERVISOR_URL } from "~/utils/apis"
 import { global } from "~/mixins"
 import { dform } from "~/components/supervisors"
 import axios from "axios"
@@ -105,7 +105,7 @@ export default {
       try {
         this.loading = true
         const { page, rowsPerPage, descending, sortBy } = this.pagination
-        const endPoint = `${USER_URL}?page=${page}&limit=${rowsPerPage}&search=${
+        const endPoint = `${SUPERVISOR_URL}?page=${page}&limit=${rowsPerPage}&search=${
           this.search
         }&role_id=3`
         const res = await axios.get(endPoint).then(res => res.data)

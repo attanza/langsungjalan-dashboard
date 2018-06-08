@@ -103,7 +103,12 @@ export default {
           to: "/universities",
           hasChild: true,
           children: [
-            { title: "Supervisor", icon: "perm_identity", to: "/supervisors" }
+            { title: "Supervisors", icon: "perm_identity", to: "/supervisors" },
+            {
+              title: "Marketings",
+              icon: "supervised_user_circle",
+              to: "/marketings"
+            }
           ]
         }
       ],

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="primary--text mb-3">Supervisors</h2>
+    <h2 class="primary--text mb-3">Marketings</h2>
     <v-card dark>
       <v-card-title>
         <Tbtn :bottom="true" color="primary" icon="add" text="Register New Supervisor" @onClick="showForm = true"/>
@@ -25,7 +25,10 @@
           <td>{{ props.item.name }}</td>
           <td>{{ props.item.email }}</td>
           <td>{{ props.item.phone }}</td>
-          <td>{{ props.item.address }}</td>
+          <td>
+            <span v-if="props.item.supervisors.length > 0">{{ props.item.supervisors[0].name }}</span>
+            <span v-else/>
+          </td>
           <td>
             <span v-if="props.item.is_active"><v-chip color="green" text-color="white">Active</v-chip></span>
             <span v-else><v-chip>Not Active</v-chip></span>
@@ -68,7 +71,7 @@ export default {
       { text: "Name", align: "left", value: "name" },
       { text: "Email", align: "left", value: "email" },
       { text: "Phone", align: "left", value: "phone" },
-      { text: "Address", align: "left", value: "address" },
+      { text: "Supervisor", align: "left", value: "supervisor_id" },
       { text: "Status", align: "left", value: "is_active" },
       { text: "Actions", value: "name", sortable: false }
     ],
@@ -107,7 +110,7 @@ export default {
         const { page, rowsPerPage, descending, sortBy } = this.pagination
         const endPoint = `${USER_URL}?page=${page}&limit=${rowsPerPage}&search=${
           this.search
-        }&role_id=3`
+        }&role_id=4`
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
         this.totalItems = res.meta.total

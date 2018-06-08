@@ -40,7 +40,7 @@
 
 <script>
 import { global } from "~/mixins"
-import { USER_URL } from "~/utils/apis"
+import { SUPERVISOR_URL } from "~/utils/apis"
 import axios from "axios"
 import Dialog from "~/components/Dialog"
 import catchError, { showNoty } from "~/utils/catchError"
@@ -105,7 +105,7 @@ export default {
         if (this.currentEdit) {
           this.formData.role_id = 3
           const resp = await axios
-            .put(USER_URL + "/" + this.currentEdit.id, this.formData)
+            .put(SUPERVISOR_URL + "/" + this.currentEdit.id, this.formData)
             .then(res => res.data)
           this.$store.commit("currentEdit", resp.data)
           this.setFields()
@@ -123,7 +123,7 @@ export default {
       try {
         if (this.currentEdit) {
           const resp = await axios
-            .delete(USER_URL + "/" + this.currentEdit.id)
+            .delete(SUPERVISOR_URL + "/" + this.currentEdit.id)
             .then(res => res.data)
           if (resp.meta.status === 200) {
             showNoty("Data Deleted", "success")
