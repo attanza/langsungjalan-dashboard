@@ -36,10 +36,15 @@
             <v-card-media v-if="m.photo" :src="m.photo" height="200px"/>
             <v-card-media v-else src="/images/user.png" height="200px"/>
             <v-card-title primary-title>
-              <div>
-                <h3 class="headline mb-0">{{ m.name }}</h3>
-                <div>{{ m.email }}<br>{{ m.phone }}</div>
-              </div>
+              <v-layout row wrap>
+                <v-flex xs10>
+                  <h3 class="headline mb-0">{{ m.name }}</h3>
+                  <div>{{ m.email }}<br>{{ m.phone }}</div>
+                </v-flex>
+                <v-flex xs2>
+                  <Tbtn color="primary" icon-mode icon="delete" text="Detach Marketing" @onClick="confirmDelete(m.id)"/>
+                </v-flex>
+              </v-layout>
             </v-card-title>
           </v-card>
         </v-flex>
@@ -51,33 +56,48 @@
             <v-card-media v-if="m.photo" :src="m.photo" height="200px"/>
             <v-card-media v-else src="/images/user.png" height="200px"/>
             <v-card-title primary-title>
-              <div>
-                <h3 class="headline mb-0">{{ m.name }}</h3>
-                <div>{{ m.email }}<br>{{ m.phone }}</div>
-              </div>
+              <v-layout row wrap>
+                <v-flex xs10>
+                  <h3 class="headline mb-0">{{ m.name }}</h3>
+                  <div>{{ m.email }}<br>{{ m.phone }}</div>
+                </v-flex>
+                <v-flex xs2>
+                  <Tbtn color="primary" icon-mode icon="delete" text="Detach Marketing" @onClick="confirmDelete(m)"/>
+                </v-flex>
+              </v-layout>
             </v-card-title>
           </v-card>
         </v-flex>
       </v-layout>
+      <Dialog :showDialog="showDialog" text="Are you sure want to detach ?" @onClose="showDialog = false" @onConfirmed="detachMarketing"/>
+      
     </v-container>
   </div>
 </template>
 
 <script>
 import { global } from "~/mixins"
-import { ADD_MARKETING_URL, SEARCH_MARKETING_URL } from "~/utils/apis"
+import {
+  ADD_MARKETING_URL,
+  SEARCH_MARKETING_URL,
+  DETACH_MARKETING_URL
+} from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
 import _ from "lodash"
+import Dialog from "~/components/Dialog"
 
 export default {
+  components: { Dialog },
   mixins: [global],
+
   data() {
     return {
       marketings: [],
       addMode: false,
       search: "",
-      results: []
+      results: [],
+      showDialog: false
     }
   },
   watch: {
@@ -122,6 +142,31 @@ export default {
         )
         .then(res => res.data)
       this.results = resp
+    },
+    confirmDelete(id) {
+      this.showDialog = true
+      this.marketings = []
+      this.marketings.push(id)
+    },
+    async detachMarketing() {
+      try {
+        if (this.marketings.length > 0 && this.currentEdit) {
+          let data = {
+            supervisor_id: this.currentEdit.id,
+            marketings: this.marketings
+          }
+          const resp = await axios
+            .post(DETACH_MARKETING_URL, data)
+            .then(res => res.data)
+          this.showDialog = false
+
+          this.$store.commit("currentEdit", resp.data)
+          this.$store.dispatch("populateComboData", "Marketing")
+          showNoty("Marketing Detached.", "success")
+        }
+      } catch (e) {
+        catchError(e)
+      }
     }
   }
 }

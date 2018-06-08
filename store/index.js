@@ -1,6 +1,7 @@
 const cookieparser = require("cookieparser")
 import axios from "axios"
 import { COMBO_DATA_URL } from "~/utils/apis"
+import catchError from "~/utils/catchError"
 
 export const state = () => ({
   sidebar: false,
@@ -45,15 +46,12 @@ export const actions = {
   },
   async populateComboData({ commit }, model) {
     try {
-      console.log('populateComboData') //eslint-disable-line
       const resp = await axios
         .get(COMBO_DATA_URL + "?model=" + model)
         .then(res => res.data)
-
-        console.log(resp) //eslint-disable-line
       commit("comboData", resp)
     } catch (e) {
-      console.log(e) //eslint-disable-line
+      catchError(e) //eslint-disable-line
     }
   }
 }
