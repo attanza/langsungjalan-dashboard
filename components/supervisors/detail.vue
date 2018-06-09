@@ -4,10 +4,10 @@
       <v-container grid-list-md>
         <div class="btn-group">
           <v-btn-toggle v-model="toggle_multiple" multiple>
-            <Tbtn color="primary" icon="chevron_left" text="Back to Supervisor List" @onClick="toHome"/>
+            <Tbtn color="primary" icon="chevron_left" text="Back to List" @onClick="toHome"/>
             <Tbtn color="primary" icon="save" text="Save" @onClick="submit"/>              
             <Tbtn color="primary" icon="refresh" text="Refresh" @onClick="setFields"/>  
-            <Tbtn color="primary" icon="delete" text="Delete Supervisor" @onClick="confirmDelete"/>  
+            <Tbtn color="primary" icon="delete" text="Delete" @onClick="confirmDelete"/>  
           </v-btn-toggle>
         </div>    
         <form>

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h2 class="primary--text mb-3">Supervisors</h2>
+    <h2 class="primary--text mb-3">{{ title }}s</h2>
     <v-card dark>
       <v-card-title>
-        <Tbtn :bottom="true" color="primary" icon="add" text="Register New Supervisor" @onClick="showForm = true"/>
+        <Tbtn :bottom="true" :text="'Register a '+title" color="primary" icon="add" @onClick="showForm = true"/>
         <v-spacer/>
         <v-text-field
           v-model="search"
@@ -32,7 +32,7 @@
           </td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <v-icon color="white">remove_red_eye</v-icon>
+              <Tbtn :text="'Show '+title" icon-mode flat color="white" icon="remove_red_eye" @onClick="toDetail(props.item)"/>
             </v-btn>
           </td>
         </template>
@@ -54,6 +54,7 @@ export default {
   components: { dform },
   mixins: [global],
   data: () => ({
+    title: "Supervisor",
     loading: false,
     showForm: false,
     totalItems: 0,

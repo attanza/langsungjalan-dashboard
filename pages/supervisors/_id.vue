@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="primary--text mb-2">Supervisor Detail</h2>    
+    <h2 class="primary--text mb-2">{{ title }} Detail</h2>    
     <v-tabs align-with-title color="primary" class="white elevation-1" dark>
       <v-tabs-slider color="white"/>
       <v-tab href="#detail">
@@ -36,7 +36,12 @@ export default {
       catchError(e)
     }
   },
-  components: { detail, dform, marketings }
+  components: { detail, dform, marketings },
+  data() {
+    return {
+      title: "Supervisor"
+    }
+  }
 }
 </script>
 
