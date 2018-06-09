@@ -44,7 +44,7 @@
 </template>
 <script>
 import { global } from "~/mixins"
-import { USER_URL } from "~/utils/apis"
+import { MARKETING_URL } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
 export default {
@@ -71,7 +71,7 @@ export default {
         { key: "description", value: "", rules: "max:250" }
       ],
       formData: {},
-      formTitle: "Register New Supervisor"
+      formTitle: "Register New Markeitng"
     }
   },
   watch: {
@@ -79,18 +79,20 @@ export default {
       this.dialog = this.showForm
     }
   },
-  created() {
-    this.setFields()
+  mounted() {
+    this.fillForms()
   },
   methods: {
+    fillForms() {
+      this.formData.name = "Test Marketing"
+      this.formData.email = "test.marketing@yahoo.com"
+      this.formData.phone = "0123456789"
+      this.formData.password = "password"
+      this.formData.is_active = "1"
+      this.formData.address = "Test"
+    },
     onClose() {
       this.$emit("onClose")
-    },
-    setFields() {
-      this.errors.clear()
-      if (this.currentEdit) {
-        this.fillable.forEach(data => (this.formData[data.key] = data.value))
-      }
     },
     submit() {
       this.$validator.validateAll().then(result => {
@@ -102,15 +104,13 @@ export default {
     },
     async saveData() {
       try {
-        this.formData.role_id = 3
+        this.formData.role_id = 4
         const resp = await axios
-          .post(USER_URL, this.formData)
+          .post(MARKETING_URL, this.formData)
           .then(res => res.data)
-
         if (resp.meta.status === 201) {
           showNoty("Data Saved", "success")
           this.$emit("onAdd", resp.data)
-          this.setFields()
         }
       } catch (e) {
         catchError(e)

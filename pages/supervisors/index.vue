@@ -3,7 +3,7 @@
     <h2 class="primary--text mb-3">{{ title }}s</h2>
     <v-card dark>
       <v-card-title>
-        <Tbtn :bottom="true" :text="'Register a '+title" color="primary" icon="add" @onClick="showForm = true"/>
+        <Tbtn :bottom="true" :text="'Register New '+title" color="primary" icon="add" @onClick="showForm = true"/>
         <v-spacer/>
         <v-text-field
           v-model="search"

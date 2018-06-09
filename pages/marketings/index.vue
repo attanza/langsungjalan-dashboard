@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h2 class="primary--text mb-3">Marketings</h2>
+    <h2 class="primary--text mb-3">{{ title }}s</h2>
     <v-card dark>
       <v-card-title>
-        <Tbtn :bottom="true" color="primary" icon="add" text="Register New Supervisor" @onClick="showForm = true"/>
+        <Tbtn :bottom="true" :text="'Register New ' + title " color="primary" icon="add" @onClick="showForm = true"/>
         <v-spacer/>
         <v-text-field
           v-model="search"
@@ -35,7 +35,7 @@
           </td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <v-icon color="white">remove_red_eye</v-icon>
+              <Tbtn :text="'Show '+title" icon-mode flat color="white" icon="remove_red_eye" @onClick="toDetail(props.item)"/>
             </v-btn>
           </td>
         </template>
@@ -46,9 +46,9 @@
 </template>
 <script>
 import _ from "lodash"
-import { USER_URL } from "~/utils/apis"
+import { MARKETING_URL } from "~/utils/apis"
 import { global } from "~/mixins"
-import { dform } from "~/components/supervisors"
+import { dform } from "~/components/marketings"
 import axios from "axios"
 import catchError from "~/utils/catchError"
 
@@ -57,6 +57,7 @@ export default {
   components: { dform },
   mixins: [global],
   data: () => ({
+    title: "Marketing",
     loading: false,
     showForm: false,
     totalItems: 0,
@@ -108,7 +109,7 @@ export default {
       try {
         this.loading = true
         const { page, rowsPerPage, descending, sortBy } = this.pagination
-        const endPoint = `${USER_URL}?page=${page}&limit=${rowsPerPage}&search=${
+        const endPoint = `${MARKETING_URL}?page=${page}&limit=${rowsPerPage}&search=${
           this.search
         }&role_id=4`
         const res = await axios.get(endPoint).then(res => res.data)
@@ -136,7 +137,7 @@ export default {
       }
     },
     toDetail(data) {
-      this.$router.push(`/supervisors/${data.id}`)
+      this.$router.push(`/marketings/${data.id}`)
     },
     addData(data) {
       this.items.unshift(data)
