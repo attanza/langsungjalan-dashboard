@@ -73,9 +73,50 @@
       <v-toolbar-side-icon @click="drawer = !drawer"/>
       <v-spacer/>
       <v-toolbar-items>
-        <v-btn icon @click="logout">
-          <v-icon>exit_to_app</v-icon>
-        </v-btn>
+        <!-- <v-menu>
+          <v-avatar slot="activator" class="mt-1">
+            <img :src="avatar" alt="John">
+          </v-avatar>
+          <v-list>
+            <v-list-tile v-for="(item, index) in righItems" :key="index">
+              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-menu> -->
+        <v-menu
+          origin="center center"
+          transition="scale-transition"
+          bottom
+        >
+          <v-btn slot="activator" icon large>
+            <v-avatar>
+              <img
+                :src="avatar"
+                :alt="user.name"
+              >
+            </v-avatar>
+          </v-btn>
+          <v-list>
+            <v-list-tile avatar color="primary">
+              <v-list-tile-avatar>
+                <img :src="avatar">
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title v-html="user.name"/>
+                <v-list-tile-sub-title v-html="user.email"/>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-divider/>
+            <v-list-tile v-for="(item, index) in righItems" :key="index" @click="itemActions(item.title)">
+              <v-list-tile-action>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
       </v-toolbar-items>
     </v-toolbar>
   </div>
@@ -115,7 +156,22 @@ export default {
       mini: false,
       right: true,
       rightDrawer: false,
-      title: "Langsung Jalan"
+      title: "Langsung Jalan",
+      righItems: [
+        { title: "Profile", icon: "account_box" },
+        { title: "Logout", icon: "exit_to_app" }
+      ]
+    }
+  },
+  computed: {
+    user() {
+      return this.$store.state.user
+    },
+    avatar() {
+      if (this.user && this.user.photo != "") {
+        return this.user.photo
+      }
+      return "/images/user.png"
     }
   },
   methods: {
@@ -124,6 +180,17 @@ export default {
       this.$store.commit("token", null)
       this.$store.commit("user", {})
       this.$router.push("/login")
+    },
+
+    itemActions(title) {
+      switch (title) {
+        case "Logout":
+          this.logout()
+          break
+
+        default:
+          break
+      }
     }
   }
 }

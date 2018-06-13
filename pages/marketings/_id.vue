@@ -6,15 +6,15 @@
       <v-tab href="#detail">
         Details
       </v-tab>
-      <v-tab href="#marketings">
+      <!-- <v-tab href="#marketings">
         Marketings
-      </v-tab>
+      </v-tab> -->
       <v-tab-item :id="'detail'">
         <detail/>
       </v-tab-item>
-      <v-tab-item :id="'marketings'">
+      <!-- <v-tab-item :id="'marketings'">
         <marketings/>
-      </v-tab-item>
+      </v-tab-item> -->
     </v-tabs>
   </div>
 </template>

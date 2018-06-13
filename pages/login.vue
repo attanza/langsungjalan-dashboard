@@ -58,7 +58,7 @@ export default {
     validator: "new"
   },
   data: () => ({
-    email: "ikahes@wuzcom.zw",
+    email: "ziva@waos.pg",
     password: "password",
     e1: false,
     loading: false

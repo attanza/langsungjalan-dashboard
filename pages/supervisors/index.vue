@@ -88,7 +88,7 @@ export default {
       deep: true
     },
     search() {
-      if (this.search != "") {
+      if (this.search == "" || this.search.length > 2) {
         this.searchQuery()
       }
     }

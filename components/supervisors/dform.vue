@@ -19,6 +19,7 @@
                       :name="f.key"
                       :data-vv-name="f.key"
                       :type="f.key == 'password' ? 'password' : 'text'"
+                      color="purple darken-2"                      
                     />
                   </div>
                   <div v-if="f.key == 'is_active'">
