@@ -55,7 +55,6 @@
               :key="i"
               :to="item.to"
               router
-              exact
             >
 
               <v-list-tile-content>
