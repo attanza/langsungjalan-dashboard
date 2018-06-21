@@ -14,6 +14,9 @@ export default e => {
   } else if (status && status === 400) {
     const { message } = e.response.data.meta
     showNoty(message, "error")
+  } else if (status && status === 403) {
+    const { message } = e.response.data.meta
+    showNoty(message, "error")
   }
 }
 

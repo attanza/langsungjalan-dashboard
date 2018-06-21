@@ -4,7 +4,7 @@
       <v-container grid-list-md>
         <div class="btn-group">
           <v-btn-toggle v-model="toggle_multiple" multiple>
-            <Tbtn color="primary" icon="chevron_left" text="Back to University List" @onClick="toHome"/>
+            <Tbtn color="primary" icon="chevron_left" text="Back to Product List" @onClick="toHome"/>
             <Tbtn color="primary" icon="save" text="Save" @onClick="submit"/>              
             <Tbtn color="primary" icon="refresh" text="Refresh" @onClick="setFields"/>  
             <Tbtn color="primary" icon="delete" text="Delete university" @onClick="confirmDelete"/>  
@@ -34,7 +34,7 @@
 
 <script>
 import { global } from "~/mixins"
-import { UNIVERSITY_URL } from "~/utils/apis"
+import { PRODUCT_URL } from "~/utils/apis"
 import axios from "axios"
 import Dialog from "~/components/Dialog"
 import catchError, { showNoty } from "~/utils/catchError"
@@ -48,13 +48,10 @@ export default {
   data() {
     return {
       fillable: [
+        { key: "code", value: "", rules: "required|max:30" },
         { key: "name", value: "", rules: "required|max:50" },
-        { key: "phone", value: "", rules: "required|max:30" },
-        { key: "email", value: "", rules: "required|email" },
-        { key: "contact_person", value: "", rules: "required|max:50" },
-        { key: "province", value: "", rules: "required|max:50" },
-        { key: "city", value: "", rules: "required|max:50" },
-        { key: "address", value: "", rules: "required|max:250" },
+        { key: "measurement", value: "", rules: "required|max:15" },
+        { key: "price", value: "", rules: "required|integer" },
         { key: "description", value: "", rules: "max:250" }
       ],
       formData: {},
@@ -70,7 +67,7 @@ export default {
   },
   methods: {
     toHome() {
-      this.$router.push("/universities")
+      this.$router.push("/products")
     },
     setFields() {
       this.errors.clear()
@@ -92,7 +89,7 @@ export default {
       try {
         if (this.currentEdit) {
           const resp = await axios
-            .put(UNIVERSITY_URL + "/" + this.currentEdit.id, this.formData)
+            .put(PRODUCT_URL + "/" + this.currentEdit.id, this.formData)
             .then(res => res.data)
           this.$store.commit("currentEdit", resp.data)
           this.setFields()
@@ -111,11 +108,11 @@ export default {
       try {
         if (this.currentEdit) {
           const resp = await axios
-            .delete(UNIVERSITY_URL + "/" + this.currentEdit.id)
+            .delete(PRODUCT_URL + "/" + this.currentEdit.id)
             .then(res => res.data)
           if (resp.meta.status === 200) {
             showNoty("Data Deleted", "success")
-            this.$router.push("/universities")
+            this.$router.push("/products")
           }
         }
       } catch (e) {
