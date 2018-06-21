@@ -41,7 +41,7 @@
 import _ from "lodash"
 import { PRODUCT_URL } from "~/utils/apis"
 import { global } from "~/mixins"
-import { dform } from "~/components/university"
+import { dform } from "~/components/products"
 import axios from "axios"
 export default {
   middleware: "auth",
