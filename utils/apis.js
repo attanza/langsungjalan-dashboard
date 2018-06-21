@@ -10,5 +10,5 @@ export const SUPERVISOR_URL = API_URL + "/supervisors"
 export const ADD_MARKETING_URL = API_URL + "/supervisor/attach-marketing"
 export const DETACH_MARKETING_URL = API_URL + "/supervisor/detach-marketing"
 export const SEARCH_MARKETING_URL = API_URL + "/supervisor/search-marketing"
-
 export const MARKETING_URL = API_URL + "/marketings"
+export const PRODUCT_URL = API_URL + "/products"

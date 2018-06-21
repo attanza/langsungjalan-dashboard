@@ -150,6 +150,11 @@ export default {
               to: "/marketings"
             }
           ]
+        },
+        {
+          title: "Products",
+          icon: "library_books",
+          to: "/products"
         }
       ],
       mini: false,
