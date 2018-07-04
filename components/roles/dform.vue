@@ -137,7 +137,6 @@ export default {
       try {
         let formData = {
           name: this.name,
-          slug: this.slug,
           description: this.description
         }
         const resp = await axios.post(ROLE_URL, formData).then(res => res.data)

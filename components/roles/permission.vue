@@ -26,6 +26,8 @@ import { global } from "~/mixins"
 import { ROLE_PERMISSIONS_URL } from "~/utils/apis"
 import axios from "axios"
 import Dialog from "~/components/Dialog"
+import catchError, { showNoty } from "~/utils/catchError"
+
 export default {
   components: { Dialog },
   mixins: [global],
@@ -47,16 +49,20 @@ export default {
       }
     },
     async attachPermissions() {
-      let formData = {
-        role_id: this.currentEdit.id,
-        permissions: this.permissionArray
+      try {
+        let formData = {
+          role_id: this.currentEdit.id,
+          permissions: this.permissionArray
+        }
+        const resp = await axios
+          .put(ROLE_PERMISSIONS_URL, formData)
+          .then(res => res.data)
+        this.$store.commit("permissions", resp.data)
+        showNoty("Data Saved", "success")
+        this.showDialog = false
+      } catch (e) {
+        catchError(e)
       }
-      const resp = await axios
-        .put(ROLE_PERMISSIONS_URL, formData)
-        .then(res => res.data)
-      this.$store.commit("permissions", resp.data)
-
-      this.showDialog = false
     }
   }
 }
