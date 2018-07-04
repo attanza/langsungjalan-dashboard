@@ -52,16 +52,19 @@ import Cookie from "js-cookie"
 import { LOGIN_URL } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
+import { global } from "~/mixins"
 export default {
   layout: "nonav",
   $_veeValidate: {
     validator: "new"
   },
+  mixins: [global],
   data: () => ({
-    email: "palenut@zunza.mv",
-    password: "password",
+    email: "super_administrator@langsungjalan.com",
+    password: "P4sw0rd@langsungjalan.com",
     e1: false,
-    loading: false
+    loading: false,
+    allowedLogin: ["super-administrator", "administrator"]
   }),
   methods: {
     submit() {
@@ -82,18 +85,27 @@ export default {
         const resp = await axios
           .post(LOGIN_URL, credential)
           .then(res => res.data)
-        if (resp.meta.status === 200 && resp.data.user.role_id < 3) {
-          Cookie.set("lj_token", JSON.stringify(resp.data), { expires: 1 })
-          this.$store.commit("user", resp.data.user)
-          this.$store.commit("token", resp.data.token)
-          this.$router.push("/")
+        if (resp.meta.status === 200) {
+          let allowed = false
+          let roles = resp.data.user.roles
+          roles.forEach(r => {
+            if (this.inArray(this.allowedLogin, r.slug)) allowed = true
+          })
+          if (allowed) {
+            Cookie.set("lj_token", JSON.stringify(resp.data), { expires: 1 })
+            this.$store.commit("user", resp.data.user)
+            this.$store.commit("token", resp.data.token)
+            this.$router.push("/")
+          } else {
+            this.loading = false
+            showNoty("You are not authorized", "error")
+          }
         } else {
           this.loading = false
-          showNoty("Login failed or unauthorized", "error")
+          showNoty("Login failed", "error")
         }
       } catch (e) {
         this.loading = false
-        console.log(e.response)
         catchError(e)
       }
     }

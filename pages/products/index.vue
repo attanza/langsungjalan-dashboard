@@ -25,7 +25,7 @@
           <td>{{ props.item.code }}</td>
           <td>{{ props.item.name }}</td>
           <td>{{ props.item.measurement }}</td>
-          <td>{{ props.item.price }}</td>
+          <td>{{ props.item.price.toLocaleString('id') }}</td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
               <v-icon color="white">remove_red_eye</v-icon>
