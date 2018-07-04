@@ -32,12 +32,12 @@ export default {
       store.commit("currentEdit", resp.data.data)
 
       let permissions = await axios.get(COMBO_DATA_URL + "Permission")
-      store.commit("permissions", permissions.data)
+      store.commit("comboData", permissions.data)
 
       let rolePermissions = await axios.get(
         API_URL + "/role/" + params.id + "/permissions"
       )
-      store.commit("comboData", rolePermissions.data.data)
+      store.commit("permissions", rolePermissions.data.data)
     } catch (e) {
       console.log(e)
     }
