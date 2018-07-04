@@ -6,8 +6,14 @@
       <v-tab href="#detail">
         Details
       </v-tab>
+      <v-tab href="#permissions">
+        Permissions
+      </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
+      </v-tab-item>
+      <v-tab-item :id="'permissions'">
+        <permission/>
       </v-tab-item>
     </v-tabs>
   </div>
@@ -16,7 +22,7 @@
 <script>
 import { ROLE_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
-import { detail, dform } from "~/components/roles"
+import { detail, dform, permission } from "~/components/roles"
 const API_URL = process.env.API_URL
 
 export default {
@@ -26,20 +32,17 @@ export default {
       store.commit("currentEdit", resp.data.data)
 
       let permissions = await axios.get(COMBO_DATA_URL + "Permission")
-      console.log(permissions)
-
       store.commit("permissions", permissions.data)
 
       let rolePermissions = await axios.get(
         API_URL + "/role/" + params.id + "/permissions"
       )
-
       store.commit("comboData", rolePermissions.data.data)
     } catch (e) {
       console.log(e)
     }
   },
-  components: { detail, dform }
+  components: { detail, dform, permission }
 }
 </script>
 
