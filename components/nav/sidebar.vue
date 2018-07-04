@@ -131,11 +131,19 @@ export default {
       drawer: true,
       items: [
         { title: "Dashboard", icon: "dashboard", to: "/" },
-        { title: "Universities", icon: "account_balance", to: "/universities" },
         {
-          title: "Studi Programs",
-          icon: "library_books",
-          to: "/study-programs"
+          title: "Roles and Permissions",
+          icon: "account_circle",
+          to: "/roles",
+          hasChild: true,
+          children: [
+            { title: "Roles", icon: "format_line_spacing", to: "/roles" },
+            {
+              title: "Permissions",
+              icon: "format_list_bulleted",
+              to: "/permissions"
+            }
+          ]
         },
         {
           title: "Users",
@@ -151,6 +159,13 @@ export default {
             }
           ]
         },
+        { title: "Universities", icon: "account_balance", to: "/universities" },
+        {
+          title: "Studi Programs",
+          icon: "library_books",
+          to: "/study-programs"
+        },
+
         {
           title: "Products",
           icon: "library_books",

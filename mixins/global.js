@@ -24,6 +24,9 @@ export default {
     },
     setCase(txt) {
       return changeCase.titleCase(txt)
+    },
+    setSnakeCase(txt) {
+      return changeCase.snakeCase(txt)
     }
   },
   computed: {
