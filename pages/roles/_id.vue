@@ -14,14 +14,27 @@
 </template>
 
 <script>
-import { ROLE_URL } from "~/utils/apis"
+import { ROLE_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import { detail, dform } from "~/components/roles"
+const API_URL = process.env.API_URL
+
 export default {
   async fetch({ store, params }) {
     try {
       let resp = await axios.get(ROLE_URL + "/" + params.id)
       store.commit("currentEdit", resp.data.data)
+
+      let permissions = await axios.get(COMBO_DATA_URL + "Permission")
+      console.log(permissions)
+
+      store.commit("permissions", permissions.data)
+
+      let rolePermissions = await axios.get(
+        API_URL + "/role/" + params.id + "/permissions"
+      )
+
+      store.commit("comboData", rolePermissions.data.data)
     } catch (e) {
       console.log(e)
     }

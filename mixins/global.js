@@ -30,6 +30,6 @@ export default {
     }
   },
   computed: {
-    ...mapState(["token", "currentEdit", "comboData"])
+    ...mapState(["token", "currentEdit", "comboData", "permissions"])
   }
 }
