@@ -3,7 +3,17 @@
     <v-card dark>
       <v-card-text>
         <v-container>
-          <h4>Permission List</h4>
+          <v-layout row wrap>
+            <v-flex xs6>
+              <h4>Permission List</h4>
+            </v-flex>
+            <v-flex xs6>
+              <div class="btn-group">
+                <Tbtn color="primary" icon="done" text="Select all" @onClick="selectAll"/>
+                <Tbtn color="primary" icon="clear" text="Unselect all" @onClick="clearAll"/>               
+              </div>
+            </v-flex>
+          </v-layout>
           <v-layout row wrap>
             <v-flex v-for="permission in comboData" :key="permission.id" md3 sm4 xs6>
               <v-checkbox v-model="permissionArray" :label="permission.name" :value="permission.id" color="primary"/>
@@ -33,6 +43,7 @@ export default {
   mixins: [global],
   data() {
     return {
+      toggle_multiple: [0, 1],
       showDialog: false,
       permissionArray: []
     }
@@ -63,10 +74,28 @@ export default {
       } catch (e) {
         catchError(e)
       }
+    },
+    selectAll() {
+      if (this.comboData) {
+        this.permissionArray = []
+        this.comboData.forEach(c => {
+          this.permissionArray.push(c.id)
+        })
+      }
+    },
+    clearAll() {
+      this.permissionArray = []
     }
   }
 }
 </script>
 
 <style scoped>
+.btn-group {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
 </style>

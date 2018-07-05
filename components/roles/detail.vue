@@ -119,7 +119,7 @@ export default {
             .then(res => res.data)
           if (resp.meta.status === 200) {
             showNoty("Data Deleted", "success")
-            this.$router.push("/products")
+            this.$router.push("/roles")
           }
         }
       } catch (e) {

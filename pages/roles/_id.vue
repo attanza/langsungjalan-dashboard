@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="primary--text mb-2">Role Detail</h2>    
+    <h2 class="primary--text mb-2">Role {{ currentEdit.name }}</h2>    
     <v-tabs align-with-title color="primary" class="white elevation-1" dark>
       <v-tabs-slider color="white"/>
       <v-tab href="#detail">
@@ -23,6 +23,7 @@
 import { ROLE_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import { detail, dform, permission } from "~/components/roles"
+import { global } from "~/mixins"
 const API_URL = process.env.API_URL
 
 export default {
@@ -42,7 +43,8 @@ export default {
       console.log(e)
     }
   },
-  components: { detail, dform, permission }
+  components: { detail, dform, permission },
+  mixins: [global]
 }
 </script>
 
