@@ -13,12 +13,21 @@
         </div>    
         <form>
           <v-layout row wrap class="mt-3 px-2">
-            <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
+            <v-flex v-for="(f, index) in fillable" v-if="f.key != 'description'" :key="index" sm6 xs12>
               <label>{{ setCase(f.key) }}</label>
               <v-text-field
                 v-validate="f.rules"
                 v-model="formData[f.key]"
-                :multi-line="f.key == 'address' || f.key == 'description'"
+                :error-messages="errors.collect(f.key)"
+                :name="f.key"
+                :data-vv-name="f.key"
+              />
+            </v-flex>
+            <v-flex v-for="(f, index) in fillable" v-if="f.key == 'description'" :key="index" sm6 xs12>
+              <label>{{ setCase(f.key) }}</label>
+              <v-textarea
+                v-validate="f.rules"
+                v-model="formData[f.key]"
                 :error-messages="errors.collect(f.key)"
                 :name="f.key"
                 :data-vv-name="f.key"

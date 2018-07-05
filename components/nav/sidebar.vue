@@ -165,10 +165,9 @@ export default {
           icon: "library_books",
           to: "/study-programs"
         },
-
         {
           title: "Products",
-          icon: "library_books",
+          icon: "donut_small",
           to: "/products"
         }
       ],
