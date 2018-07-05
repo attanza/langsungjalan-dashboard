@@ -12,7 +12,7 @@
           />
         </v-flex>
         <v-flex sm4 xs12>
-          <v-select
+          <v-autocomplete
             v-if="addMode && comboData"
             :items="comboData"
             v-model="marketings"
@@ -80,7 +80,8 @@ import { global } from "~/mixins"
 import {
   ADD_MARKETING_URL,
   SEARCH_MARKETING_URL,
-  DETACH_MARKETING_URL
+  DETACH_MARKETING_URL,
+  COMBO_DATA_URL
 } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
@@ -119,7 +120,7 @@ export default {
             .post(ADD_MARKETING_URL, data)
             .then(res => res.data)
           this.$store.commit("currentEdit", resp.data)
-          this.$store.dispatch("populateComboData", "Marketing")
+          this.repopulateComboData()
           showNoty("Marketing added.", "success")
           this.addMode = false
           this.clearMarketings()
@@ -174,6 +175,12 @@ export default {
       } catch (e) {
         catchError(e)
       }
+    },
+    async repopulateComboData() {
+      let combo = await axios
+        .get(COMBO_DATA_URL + "Marketing")
+        .then(res => res.data)
+      this.$store.commit("comboData", combo.data)
     }
   }
 }
