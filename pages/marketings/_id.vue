@@ -22,7 +22,7 @@
 <script>
 import { MARKETING_URL } from "~/utils/apis"
 import axios from "axios"
-import { detail, dform, marketings } from "~/components/marketings"
+import { detail, dform } from "~/components/marketings"
 import catchError from "~/utils/catchError"
 
 export default {
@@ -34,7 +34,7 @@ export default {
       catchError(e)
     }
   },
-  components: { detail, dform, marketings }
+  components: { detail, dform }
 }
 </script>
 

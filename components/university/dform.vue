@@ -9,12 +9,21 @@
           <v-container grid-list-md>
             <form>
               <v-layout row wrap>
-                <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
+                <v-flex v-for="(f, index) in fillable" v-if="!inArray(notIncluded, f.key)" :key="index" sm6 xs12>
                   <label>{{ setCase(f.key) }}</label>
                   <v-text-field
                     v-validate="f.rules"
                     v-model="formData[f.key]"
-                    :multi-line="f.key == 'address' || f.key == 'description'"
+                    :error-messages="errors.collect(f.key)"
+                    :name="f.key"
+                    :data-vv-name="f.key"
+                  />
+                </v-flex>
+                <v-flex v-for="(f, index) in fillable" v-if="inArray(notIncluded, f.key)" :key="index" sm6 xs12>
+                  <label>{{ setCase(f.key) }}</label>
+                  <v-textarea
+                    v-validate="f.rules"
+                    v-model="formData[f.key]"
                     :error-messages="errors.collect(f.key)"
                     :name="f.key"
                     :data-vv-name="f.key"
@@ -62,6 +71,7 @@ export default {
         { key: "address", value: "", rules: "required|max:250" },
         { key: "description", value: "", rules: "max:250" }
       ],
+      notIncluded: ["description", "address"],
       formData: {},
       formTitle: "Register new university"
     }
@@ -97,8 +107,6 @@ export default {
         const resp = await axios
           .post(UNIVERSITY_URL, this.formData)
           .then(res => res.data)
-        console.log(resp)
-
         if (resp.meta.status === 201) {
           showNoty("Data Saved", "success")
           this.$emit("onAdd", resp.data)
