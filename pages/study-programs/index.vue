@@ -54,7 +54,7 @@ export default {
     try {
       // Combo / Select Data
       let resp2 = await await axios
-        .get(COMBO_DATA_URL + "?model=University")
+        .get(COMBO_DATA_URL + "University")
         .then(res => res.data)
       store.commit("comboData", resp2)
     } catch (e) {

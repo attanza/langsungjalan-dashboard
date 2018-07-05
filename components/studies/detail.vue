@@ -14,41 +14,58 @@
         <form>
           <v-layout row wrap class="mt-3 px-2">
             <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
-              <div v-if="f.key != 'year' && f.key != 'university_id'">
+              <div v-if="!inArray(notIncluded, f.key)">
                 <label>{{ setCase(f.key) }}</label>
                 <v-text-field
                   v-validate="f.rules"
                   v-model="formData[f.key]"
-                  :multi-line="f.key == 'address' || f.key == 'description'"
                   :error-messages="errors.collect(f.key)"
                   :name="f.key"
                   :data-vv-name="f.key"
+                  :type="inArray(typeNumber, f.key) ? 'number': 'text'"
                 />
               </div>
               <div v-if="f.key == 'university_id' && comboData">
                 <label>University</label>                
-                <v-select
+                <v-autocomplete
+                  v-validate="'required|numeric'"
                   :items="comboData"
+                  :error-messages="errors.collect('university_id')"
+                  :data-vv-name="'university_id'"
                   v-model="formData['university_id']"
                   label="Select University"
                   single-line
                   item-text="name"
                   item-value="id"
-                  autocomplete
                   cache-items
                 />
               </div>
               <div v-if="f.key == 'year'">
                 <label>Year</label>                
-                <v-select
+                <v-autocomplete
+                  v-validate="'required|max:4'"
+                  :error-messages="errors.collect('year')"
+                  :data-vv-name="'year'"
                   :items="years"
                   v-model="formData['year']"
                   label="Select Year"
                   single-line
+                  cache-items
+                />
+              </div>
+              <div v-if="f.key == 'address' || f.key == 'description'">
+                <label>{{ setCase(f.key) }}</label>
+                <v-textarea
+                  v-validate="f.rules"
+                  v-model="formData[f.key]"
+                  :error-messages="errors.collect(f.key)"
+                  :name="f.key"
+                  :data-vv-name="f.key"
+                  :type="inArray(typeNumber, f.key) ? 'number': 'text'"
                 />
               </div>
             </v-flex>
-          </v-layout>     
+          </v-layout>       
         </form>
       </v-container>
     </v-card>
@@ -83,10 +100,12 @@ export default {
         { key: "address", value: "", rules: "max:250" },
         { key: "description", value: "", rules: "max:250" }
       ],
+      notIncluded: ["year", "university_id", "description", "address"],
       showDialog: false,
       formData: {},
       toggle_multiple: [0, 1, 2, 3],
-      years: []
+      years: [],
+      typeNumber: ["class_per_year", "students_per_class"]
     }
   },
   created() {
