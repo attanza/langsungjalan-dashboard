@@ -7,6 +7,7 @@ export const state = () => ({
   token: null,
   currentEdit: null,
   comboData: null,
+  comboData2: null,
   permissions: null
 })
 
@@ -25,6 +26,9 @@ export const mutations = {
   },
   comboData(state, p) {
     state.comboData = p
+  },
+  comboData2(state, p) {
+    state.comboData2 = p
   },
   permissions(state, p) {
     state.permissions = p

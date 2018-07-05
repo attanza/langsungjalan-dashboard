@@ -34,7 +34,8 @@ module.exports = {
   plugins: [
     "~/plugins/vuetify.js",
     "~/plugins/veevalidate.js",
-    "~/plugins/gmaps.js"
+    "~/plugins/gmaps.js",
+    "~/plugins/dateformat.js"
   ],
   css: [
     "~/assets/style/app.styl",

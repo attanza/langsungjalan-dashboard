@@ -169,6 +169,11 @@ export default {
           title: "Products",
           icon: "donut_small",
           to: "/products"
+        },
+        {
+          title: "Schedulles",
+          icon: "date_range",
+          to: "/schedulles"
         }
       ],
       mini: false,
