@@ -4,36 +4,172 @@
       <v-container grid-list-md>
         <div class="btn-group">
           <v-btn-toggle v-model="toggle_multiple" multiple>
-            <Tbtn color="primary" icon="chevron_left" text="Back to Product List" @onClick="toHome"/>
+            <Tbtn color="primary" icon="chevron_left" text="Back to Schedulle List" @onClick="toHome"/>
             <Tbtn color="primary" icon="save" text="Save" @onClick="submit"/>              
-            <Tbtn color="primary" icon="refresh" text="Refresh" @onClick="setFields"/>  
-            <Tbtn color="primary" icon="delete" text="Delete university" @onClick="confirmDelete"/>  
+            <!-- <Tbtn color="primary" icon="refresh" text="Refresh" @onClick="setFields"/>   -->
+            <Tbtn color="primary" icon="delete" text="Delete Schedulle" @onClick="confirmDelete"/>  
           </v-btn-toggle>
           <hr >
         </div>    
         <form>
           <v-layout row wrap class="mt-3 px-2">
-            <v-flex v-for="(f, index) in fillable" v-if="f.key != 'description'" :key="index" sm6 xs12>
-              <label>{{ setCase(f.key) }}</label>
+            <v-flex sm6 xs12>
+              <label>Marketing</label>
+              <v-autocomplete
+                v-validate="'required|numeric'"
+                :items="comboData"
+                :error-messages="errors.collect('marketing_id')"
+                :data-vv-name="'marketing_id'"
+                v-model="marketing_id"
+                label="Select Marketing"
+                single-line
+                item-text="name"
+                item-value="id"
+                cache-items
+              />
+            </v-flex>
+            <v-flex sm6 xs12>
+              <label>Study Program</label>
+              <v-autocomplete
+                v-validate="'required|numeric'"
+                :items="comboData2"
+                :error-messages="errors.collect('study_id')"
+                :data-vv-name="'study_id'"
+                v-model="study_id"
+                label="Select Study Program"
+                single-line
+                item-text="name"
+                item-value="id"
+                cache-items
+              />
+            </v-flex>
+            <v-flex sm6 xs12>
+              <label>Action</label>
               <v-text-field
-                v-validate="f.rules"
-                v-model="formData[f.key]"
-                :error-messages="errors.collect(f.key)"
-                :name="f.key"
-                :data-vv-name="f.key"
+                v-validate="'required|max:200'"
+                :error-messages="errors.collect('action')"
+                :data-vv-name="'action'"
+                v-model="action"
+                name="action"
               />
             </v-flex>
-            <v-flex v-for="(f, index) in fillable" v-if="f.key == 'description'" :key="index" sm6 xs12>
-              <label>{{ setCase(f.key) }}</label>
-              <v-textarea
-                v-validate="f.rules"
-                v-model="formData[f.key]"
-                :error-messages="errors.collect(f.key)"
-                :name="f.key"
-                :data-vv-name="f.key"
+            <v-flex sm6 xs12>
+              <label>Description</label>
+              <v-text-field
+                v-validate="'required|max:200'"
+                :error-messages="errors.collect('description')"
+                :data-vv-name="'description'"
+                v-model="description"
+                name="description"
               />
             </v-flex>
-          </v-layout>     
+            <v-flex xs12 sm6>
+              <label>Start Date</label>
+              <v-menu
+                ref="menu_start_date"
+                :close-on-content-click="false"
+                v-model="menu_start_date"
+                :nudge-right="40"
+                :return-value.sync="start_date"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+              >
+                <v-text-field
+                  v-validate="'required'"
+                  slot="activator"
+                  v-model="start_date"
+                  :error-messages="errors.collect('start_date')"
+                  :data-vv-name="'start_date'"
+                  name="start_date"
+                  readonly
+                />
+                <v-date-picker v-model="start_date" @input="$refs.menu_start_date.save(start_date)"/>
+              </v-menu>
+            </v-flex>
+            <v-flex xs12 sm6>
+              <label>Start Time</label>
+              <v-menu
+                ref="menu_start_time"
+                :close-on-content-click="false"
+                v-model="menu_start_time"
+                :nudge-right="40"
+                :return-value.sync="start_time"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                max-width="290px"
+                min-width="290px"
+              >
+                <v-text-field
+                  v-validate="'required'"
+                  slot="activator"
+                  v-model="start_time"
+                  :error-messages="errors.collect('start_time')"
+                  :data-vv-name="'start_time'"
+                  name="start_time"
+                  readonly
+                />
+                <v-time-picker v-model="start_time" @change="$refs.menu_start_time.save(start_time)"/>
+              </v-menu>
+            </v-flex>
+            <v-flex xs12 sm6>
+              <label>End Date</label>
+              <v-menu
+                ref="menu_end_date"
+                :close-on-content-click="false"
+                v-model="menu_end_date"
+                :nudge-right="40"
+                :return-value.sync="end_date"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+              >
+                <v-text-field
+                  v-validate="'required'"
+                  slot="activator"
+                  v-model="end_date"
+                  :error-messages="errors.collect('end_date')"
+                  :data-vv-name="'end_date'"
+                  name="end_date"
+                  readonly
+                />
+                <v-date-picker v-model="end_date" @input="$refs.menu_end_date.save(end_date)"/>
+              </v-menu>
+            </v-flex>
+            <v-flex xs12 sm6>
+              <label>End Time</label>
+              <v-menu
+                ref="menu_end_time"
+                :close-on-content-click="false"
+                v-model="menu_end_time"
+                :nudge-right="40"
+                :return-value.sync="end_time"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                max-width="290px"
+                min-width="290px"
+              >
+                <v-text-field
+                  v-validate="'required'"
+                  slot="activator"
+                  v-model="end_time"
+                  :error-messages="errors.collect('end_time')"
+                  :data-vv-name="'end_time'"
+                  name="end_time"
+                  readonly
+                />
+                <v-time-picker v-model="end_time" @change="$refs.menu_end_time.save(end_time)"/>
+              </v-menu>
+            </v-flex>
+          </v-layout>       
         </form>
       </v-container>
     </v-card>
@@ -43,11 +179,10 @@
 
 <script>
 import { global } from "~/mixins"
-import { PRODUCT_URL } from "~/utils/apis"
+import { SCHEDULLE_URL } from "~/utils/apis"
 import axios from "axios"
 import Dialog from "~/components/Dialog"
 import catchError, { showNoty } from "~/utils/catchError"
-
 export default {
   $_veeValidate: {
     validator: "new"
@@ -56,44 +191,40 @@ export default {
   mixins: [global],
   data() {
     return {
-      fillable: [
-        { key: "marketing_id", value: "", rules: "required|integer" },
-        { key: "action", value: "", rules: "required|max:200" },
-        { key: "study_id", value: "", rules: "required|integer" },
-        {
-          key: "start_date",
-          value: "",
-          rules: "required|date_format:YYYY-MM-DD"
-        },
-        {
-          key: "end_date",
-          value: "",
-          rules: "required|date_format:YYYY-MM-DD"
-        },
-        { key: "description", value: "", rules: "max:250" }
-      ],
-      formData: {},
-      showNoty: false,
+      study_id: "",
+      marketing_id: "",
+      action: "",
+      description: "",
+      start_date: null,
+      start_time: null,
+      end_date: null,
+      end_time: null,
+      menu_start_date: false,
+      menu_end_date: false,
+      menu_start_time: false,
+      menu_end_time: false,
+
       showDialog: false,
-      notyText: "",
-      notyColor: "success",
       toggle_multiple: [0, 1, 2, 3]
     }
   },
   created() {
-    this.setFields()
+    this.setField()
   },
   methods: {
-    toHome() {
-      this.$router.push("/products")
-    },
-    setFields() {
-      this.errors.clear()
+    setField() {
       if (this.currentEdit) {
-        this.fillable.forEach(
-          data => (this.formData[data.key] = this.currentEdit[data.key])
-        )
+        const data = this.currentEdit
+        this.study_id = data.study_id
+        this.marketing_id = data.marketing_id
+        this.action = data.action
+        this.description = data.description
+        this.start_date = data.start_date
+        this.end_date = data.end_date
       }
+    },
+    toHome() {
+      this.$router.push("/schedulles")
     },
     submit() {
       this.$validator.validateAll().then(result => {
@@ -107,15 +238,25 @@ export default {
       try {
         if (this.currentEdit) {
           const resp = await axios
-            .put(PRODUCT_URL + "/" + this.currentEdit.id, this.formData)
+            .put(SCHEDULLE_URL + "/" + this.currentEdit.id, this.getData())
             .then(res => res.data)
           this.$store.commit("currentEdit", resp.data)
-          this.setFields()
+          this.setField()
           showNoty("Data Updated", "success")
         }
       } catch (e) {
         console.log(e)
-        catchError(e)
+        // catchError(e)
+      }
+    },
+    getData() {
+      return {
+        study_id: this.study_id,
+        marketing_id: this.marketing_id,
+        action: this.action,
+        description: this.description,
+        start_date: this.start_date + " " + this.start_time,
+        end_date: this.end_date + " " + this.end_time
       }
     },
     confirmDelete() {
@@ -126,11 +267,11 @@ export default {
       try {
         if (this.currentEdit) {
           const resp = await axios
-            .delete(PRODUCT_URL + "/" + this.currentEdit.id)
+            .delete(SCHEDULLE_URL + "/" + this.currentEdit.id)
             .then(res => res.data)
           if (resp.meta.status === 200) {
             showNoty("Data Deleted", "success")
-            this.$router.push("/products")
+            this.$router.push("/schedulles")
           }
         }
       } catch (e) {

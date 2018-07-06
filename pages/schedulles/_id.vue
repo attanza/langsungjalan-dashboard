@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { SCHEDULLE_URL } from "~/utils/apis"
+import { SCHEDULLE_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import { detail, dform } from "~/components/schedulles"
 export default {
@@ -22,6 +22,16 @@ export default {
     try {
       let resp = await axios.get(SCHEDULLE_URL + "/" + params.id)
       store.commit("currentEdit", resp.data.data)
+      // Marketing Combo Data
+      let marketing = await axios
+        .get(COMBO_DATA_URL + "Marketing")
+        .then(res => res.data)
+      store.commit("comboData", marketing)
+      // Study Program Combo Data
+      let study = await axios
+        .get(COMBO_DATA_URL + "StudyProgram")
+        .then(res => res.data)
+      store.commit("comboData2", study)
     } catch (e) {
       console.log(e)
     }
