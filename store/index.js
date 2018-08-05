@@ -6,6 +6,7 @@ export const state = () => ({
   user: {},
   token: null,
   currentEdit: null,
+  currentEdit2: null,
   comboData: null,
   comboData2: null,
   permissions: null
@@ -22,6 +23,9 @@ export const mutations = {
     state.token = p
   },
   currentEdit(state, p) {
+    state.currentEdit = p
+  },
+  currentEdit2(state, p) {
     state.currentEdit = p
   },
   comboData(state, p) {
@@ -42,9 +46,11 @@ export const actions = {
 
     if (req.headers.cookie) {
       let parsed = cookieparser.parse(req.headers.cookie)
-      let data = JSON.parse(parsed.lj_token)
-      token = data.token
-      user = data.user
+      if (parsed.lj_token) {
+        let data = JSON.parse(parsed.lj_token)
+        token = data.token
+        user = data.user
+      }
     }
     commit("token", token)
     commit("user", user)

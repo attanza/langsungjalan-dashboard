@@ -1,7 +1,7 @@
 import Noty from "noty"
 import Cookie from "js-cookie"
 
-export default e => {
+export default (e, redirect) => {
   const { status } = e.response
   if (status && status === 422) {
     const { details } = e.response.data
@@ -10,7 +10,7 @@ export default e => {
     })
   } else if (status && status === 401) {
     Cookie.remove("lj_token")
-    this.$router.push("/login")
+    redirect("/login")
   } else if (status && status === 400) {
     const { message } = e.response.data.meta
     showNoty(message, "error")

@@ -27,6 +27,16 @@ export default {
     },
     setSnakeCase(txt) {
       return changeCase.snakeCase(txt)
+    },
+    showNoty(text, type) {
+      return new Noty({
+        layout: "topRight",
+        text,
+        theme: "metroui",
+        timeout: 5000,
+        progressBar: true,
+        type
+      }).show()
     }
   },
   computed: {

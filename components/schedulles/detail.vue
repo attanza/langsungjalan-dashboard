@@ -183,6 +183,7 @@ import { SCHEDULLE_URL } from "~/utils/apis"
 import axios from "axios"
 import Dialog from "~/components/Dialog"
 import catchError, { showNoty } from "~/utils/catchError"
+import moment from "moment"
 export default {
   $_veeValidate: {
     validator: "new"
@@ -219,8 +220,10 @@ export default {
         this.marketing_id = data.marketing_id
         this.action = data.action
         this.description = data.description
-        this.start_date = data.start_date
-        this.end_date = data.end_date
+        this.start_date = moment(data.start_date).format("YYYY-MM-DD")
+        this.start_time = moment(data.start_date).format("HH:mm")
+        this.end_date = moment(data.end_date).format("YYYY-MM-DD")
+        this.end_time = moment(data.end_date).format("HH:mm")
       }
     },
     toHome() {
@@ -245,8 +248,7 @@ export default {
           showNoty("Data Updated", "success")
         }
       } catch (e) {
-        console.log(e)
-        // catchError(e)
+        catchError(e)
       }
     },
     getData() {

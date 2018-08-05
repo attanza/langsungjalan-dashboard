@@ -2,7 +2,7 @@
   <v-content>
     <v-container fluid fill-height>
       <v-layout align-center justify-center>
-        <v-flex xs12 sm8 md4>
+        <v-flex xs12 sm8 md6>
           <v-card class="elevation-12">
             <v-toolbar dark color="primary">
               <v-toolbar-title>Login form</v-toolbar-title>
@@ -23,8 +23,7 @@
                 <v-text-field
                   v-validate="'required'"
                   v-model="password"
-                  :append-icon="e1 ? 'visibility' : 'visibility_off'"
-                  :append-icon-cb="() => (e1 = !e1)"
+                  :append-icon="e1 ? 'visibility_off' : 'visibility'"
                   :type="e1 ? 'text' : 'password'"
                   :error-messages="errors.collect('password')"
                   prepend-icon="lock"

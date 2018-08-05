@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h2 class="primary--text mb-3">Study Programs</h2>
     <v-card dark>
       <v-card-title>
         <Tbtn :bottom="true" color="primary" icon="add" text="Register new Study Program" @onClick="showForm = true"/>
@@ -22,38 +21,46 @@
         class="elevation-1"
       >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.studyName.name }}</td>
-          <td>{{ props.item.university.name }}</td>
-          <td>{{ props.item.address }}</td>
-          <td>{{ props.item.contact_person }}</td>
-          <td>{{ props.item.phone }}</td>
-          <td>{{ props.item.email }}</td>
-          <td class="justify-center layout px-0">
+          <td>{{ props.item.year }}</td>
+          <td>{{ props.item.class_per_year }}</td>
+          <td>{{ props.item.students_per_class }}</td>
+          <td>
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
               <v-icon color="white">remove_red_eye</v-icon>
+            </v-btn>
+            <v-btn icon class="mx-0" @click="showConfirm(props.item)">
+              <v-icon color="white">delete</v-icon>
             </v-btn>
           </td>
         </template>
       </v-data-table>
     </v-card>
-    <dform :show-form="showForm" @onClose="showForm = false" @onAdd="addData"/>
+    <dform :show-form="showForm" :is-edit="isEdit" :year-edit="yearEdit" @onClose="showForm = false" @onAdd="addData" @onEdit="editData"/>
+    <Dialog :showDialog="showDialog" text="Are you sure want to delete ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
+
   </div>
 </template>
 <script>
 import _ from "lodash"
-import { STUDIES_URL } from "~/utils/apis"
+import { STUDY_YEARS_URL } from "~/utils/apis"
 import { global } from "~/mixins"
-import { dform } from "~/components/studies"
+import Dialog from "~/components/Dialog"
 import axios from "axios"
+import dform from "./dform"
+import catchError, { showNoty } from "~/utils/catchError"
+
 export default {
   middleware: "auth",
-  components: { dform },
+  components: { dform, Dialog },
   mixins: [global],
   data: () => ({
     loading: false,
     showForm: false,
+    isEdit: false,
+    yearEdit: null,
     totalItems: 0,
     search: "",
+    dataToDelete: null,
     pagination: {
       sortBy: "",
       descending: false,
@@ -61,19 +68,14 @@ export default {
       rowsPerPage: 10
     },
     headers: [
-      { text: "Name", align: "left", value: "study_name_id" },
-      { text: "University", align: "left", value: "name" },
-      { text: "Address", value: "address", align: "left" },
-      { text: "Contact Person", value: "contact_person", align: "left" },
-      { text: "Phone", value: "phone", align: "left" },
-      { text: "Email", value: "email", align: "left" },
+      { text: "Year", align: "left", value: "year" },
+      { text: "Class per Year", align: "left", value: "class_per_year" },
+      { text: "Studdents per Class", value: "students_per_class" },
       { text: "Actions", value: "name", sortable: false }
     ],
     items: [],
-    itemEdit: {},
-    userIdDelete: "",
     confirmMessage: "Are you sure want to delete this ?",
-    showConfirm: false
+    showDialog: false
   }),
 
   watch: {
@@ -102,9 +104,9 @@ export default {
       try {
         this.loading = true
         const { page, rowsPerPage, descending, sortBy } = this.pagination
-        const endPoint = `${STUDIES_URL}?page=${page}&limit=${rowsPerPage}&search=${
+        const endPoint = `${STUDY_YEARS_URL}?page=${page}&limit=${rowsPerPage}&search=${
           this.search
-        }`
+        }&study_program_id=${this.currentEdit.id}`
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
         this.totalItems = res.meta.total
@@ -130,11 +132,41 @@ export default {
       }
     },
     toDetail(data) {
-      this.$router.push(`/study-programs/${data.id}`)
+      this.yearEdit = data
+      this.isEdit = true
+      this.showForm = true
     },
     addData(data) {
       this.items.unshift(data)
       this.showForm = false
+    },
+    editData(data) {
+      let index = _.findIndex(this.items, item => item.id == data.id)
+      this.items.splice(index, 1, data)
+      this.yearEdit = null
+      this.isEdit = false
+      this.showForm = false
+    },
+    showConfirm(data) {
+      this.showDialog = true
+      this.dataToDelete = data
+    },
+    removeData() {
+      axios
+        .delete(STUDY_YEARS_URL + "/" + this.dataToDelete.id)
+        .then(resp => {
+          if (resp.status === 200) {
+            let index = _.findIndex(
+              this.items,
+              item => item.id == this.dataToDelete.id
+            )
+            this.items.splice(index, 1)
+            showNoty("Data deleted", "success")
+            this.showDialog = false
+            this.dataToDelete = null
+          }
+        })
+        .catch(e => catchError(e))
     }
   }
 }

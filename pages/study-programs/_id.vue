@@ -6,11 +6,17 @@
       <v-tab href="#detail">
         Details
       </v-tab>
+      <v-tab href="#years">
+        Years
+      </v-tab>
       <v-tab href="#maps">
         Maps
       </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
+      </v-tab-item>
+      <v-tab-item :id="'years'">
+        <list/>
       </v-tab-item>
       <v-tab-item :id="'maps'">
         <maps/>
@@ -23,6 +29,8 @@
 import { STUDIES_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import { detail, dform, maps } from "~/components/studies"
+import { list } from "~/components/studies/years"
+
 import catchError from "~/utils/catchError"
 export default {
   async fetch({ store, params }) {
@@ -34,12 +42,18 @@ export default {
       let resp2 = await await axios
         .get(COMBO_DATA_URL + "University")
         .then(res => res.data)
+        .catch(e => catchError(e))
       store.commit("comboData", resp2)
+
+      let resp3 = await await axios
+        .get(COMBO_DATA_URL + "StudyName")
+        .then(res => res.data)
+      store.commit("comboData2", resp3)
     } catch (e) {
       catchError(e)
     }
   },
-  components: { detail, dform, maps }
+  components: { detail, dform, maps, list }
 }
 </script>
 
