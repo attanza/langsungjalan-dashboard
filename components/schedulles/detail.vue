@@ -4,17 +4,17 @@
       <v-container grid-list-md>
         <div class="btn-group">
           <v-btn-toggle v-model="toggle_multiple" multiple>
-            <Tbtn color="primary" icon="chevron_left" text="Back to Schedulle List" @onClick="toHome"/>
+            <Tbtn color="primary" icon="chevron_left" text="Back to List" @onClick="toHome"/>
             <Tbtn color="primary" icon="save" text="Save" @onClick="submit"/>              
             <!-- <Tbtn color="primary" icon="refresh" text="Refresh" @onClick="setFields"/>   -->
-            <Tbtn color="primary" icon="delete" text="Delete Schedulle" @onClick="confirmDelete"/>  
+            <Tbtn color="primary" icon="delete" text="Delete" @onClick="confirmDelete"/>  
           </v-btn-toggle>
           <hr >
         </div>    
         <form>
           <v-layout row wrap class="mt-3 px-2">
-            <v-flex sm6 xs12>
-              <label>Marketing</label>
+            <v-flex v-if="comboData" sm6 xs12>
+              <label>Marketing</label>                
               <v-autocomplete
                 v-validate="'required|numeric'"
                 :items="comboData"
@@ -28,8 +28,23 @@
                 cache-items
               />
             </v-flex>
-            <v-flex sm6 xs12>
-              <label>Study Program</label>
+            <v-flex v-if="comboData3" sm6 xs12>
+              <label>Marketing Action</label>                
+              <v-autocomplete
+                v-validate="'required|numeric'"
+                :items="comboData3"
+                :error-messages="errors.collect('marketing_action_id')"
+                :data-vv-name="'marketing_action_id'"
+                v-model="marketing_action_id"
+                label="Select Marketing Action"
+                single-line
+                item-text="name"
+                item-value="id"
+                cache-items
+              />
+            </v-flex>
+            <v-flex v-if="comboData2" sm6 xs12>
+              <label>Study Program</label>                
               <v-autocomplete
                 v-validate="'required|numeric'"
                 :items="comboData2"
@@ -44,31 +59,11 @@
               />
             </v-flex>
             <v-flex sm6 xs12>
-              <label>Action</label>
-              <v-text-field
-                v-validate="'required|max:200'"
-                :error-messages="errors.collect('action')"
-                :data-vv-name="'action'"
-                v-model="action"
-                name="action"
-              />
-            </v-flex>
-            <v-flex sm6 xs12>
-              <label>Description</label>
-              <v-text-field
-                v-validate="'required|max:200'"
-                :error-messages="errors.collect('description')"
-                :data-vv-name="'description'"
-                v-model="description"
-                name="description"
-              />
-            </v-flex>
-            <v-flex xs12 sm6>
-              <label>Start Date</label>
+              <label>Start Date</label>                
               <v-menu
-                ref="menu_start_date"
+                ref="menu"
                 :close-on-content-click="false"
-                v-model="menu_start_date"
+                v-model="menu"
                 :nudge-right="40"
                 :return-value.sync="start_date"
                 lazy
@@ -77,51 +72,31 @@
                 full-width
                 min-width="290px"
               >
+
                 <v-text-field
                   v-validate="'required'"
                   slot="activator"
-                  v-model="start_date"
                   :error-messages="errors.collect('start_date')"
+
                   :data-vv-name="'start_date'"
-                  name="start_date"
+                  v-model="start_date"
+                  label="Pick a Start Date"
                   readonly
                 />
-                <v-date-picker v-model="start_date" @input="$refs.menu_start_date.save(start_date)"/>
+                <v-date-picker v-model="start_date" no-title scrollable>
+                  <v-spacer/>
+                  <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
+                  <v-btn flat color="primary" @click="$refs.menu.save(start_date)">OK</v-btn>
+                </v-date-picker>
               </v-menu>
             </v-flex>
-            <v-flex xs12 sm6>
-              <label>Start Time</label>
+
+            <v-flex sm6 xs12>
+              <label>End Date</label>                
               <v-menu
-                ref="menu_start_time"
+                ref="menu2"
                 :close-on-content-click="false"
-                v-model="menu_start_time"
-                :nudge-right="40"
-                :return-value.sync="start_time"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                max-width="290px"
-                min-width="290px"
-              >
-                <v-text-field
-                  v-validate="'required'"
-                  slot="activator"
-                  v-model="start_time"
-                  :error-messages="errors.collect('start_time')"
-                  :data-vv-name="'start_time'"
-                  name="start_time"
-                  readonly
-                />
-                <v-time-picker v-model="start_time" @change="$refs.menu_start_time.save(start_time)"/>
-              </v-menu>
-            </v-flex>
-            <v-flex xs12 sm6>
-              <label>End Date</label>
-              <v-menu
-                ref="menu_end_date"
-                :close-on-content-click="false"
-                v-model="menu_end_date"
+                v-model="menu2"
                 :nudge-right="40"
                 :return-value.sync="end_date"
                 lazy
@@ -130,44 +105,34 @@
                 full-width
                 min-width="290px"
               >
+
                 <v-text-field
                   v-validate="'required'"
                   slot="activator"
-                  v-model="end_date"
                   :error-messages="errors.collect('end_date')"
+
                   :data-vv-name="'end_date'"
-                  name="end_date"
+                  v-model="end_date"
+                  label="Pick an End Date"
                   readonly
                 />
-                <v-date-picker v-model="end_date" @input="$refs.menu_end_date.save(end_date)"/>
+                <v-date-picker v-model="end_date" no-title scrollable>
+                  <v-spacer/>
+                  <v-btn flat color="primary" @click="menu2 = false">Cancel</v-btn>
+                  <v-btn flat color="primary" @click="$refs.menu2.save(end_date)">OK</v-btn>
+                </v-date-picker>
               </v-menu>
             </v-flex>
-            <v-flex xs12 sm6>
-              <label>End Time</label>
-              <v-menu
-                ref="menu_end_time"
-                :close-on-content-click="false"
-                v-model="menu_end_time"
-                :nudge-right="40"
-                :return-value.sync="end_time"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                max-width="290px"
-                min-width="290px"
-              >
-                <v-text-field
-                  v-validate="'required'"
-                  slot="activator"
-                  v-model="end_time"
-                  :error-messages="errors.collect('end_time')"
-                  :data-vv-name="'end_time'"
-                  name="end_time"
-                  readonly
-                />
-                <v-time-picker v-model="end_time" @change="$refs.menu_end_time.save(end_time)"/>
-              </v-menu>
+
+            <v-flex sm12>
+              <label>Description</label>
+              <v-textarea
+                v-validate="'max:250'"
+                v-model="description"
+                :error-messages="errors.collect('description')"
+                name="description"
+                data-vv-name="description"
+              />
             </v-flex>
           </v-layout>       
         </form>
@@ -192,18 +157,14 @@ export default {
   mixins: [global],
   data() {
     return {
-      study_id: "",
+      menu: false,
+      menu2: false,
       marketing_id: "",
-      action: "",
-      description: "",
+      marketing_action_id: "",
+      study_id: "",
       start_date: null,
-      start_time: null,
       end_date: null,
-      end_time: null,
-      menu_start_date: false,
-      menu_end_date: false,
-      menu_start_time: false,
-      menu_end_time: false,
+      description: "",
 
       showDialog: false,
       toggle_multiple: [0, 1, 2, 3]
@@ -218,12 +179,10 @@ export default {
         const data = this.currentEdit
         this.study_id = data.study_id
         this.marketing_id = data.marketing_id
-        this.action = data.action
+        this.marketing_action_id = data.marketing_action_id
         this.description = data.description
         this.start_date = moment(data.start_date).format("YYYY-MM-DD")
-        this.start_time = moment(data.start_date).format("HH:mm")
         this.end_date = moment(data.end_date).format("YYYY-MM-DD")
-        this.end_time = moment(data.end_date).format("HH:mm")
       }
     },
     toHome() {
@@ -253,12 +212,12 @@ export default {
     },
     getData() {
       return {
-        study_id: this.study_id,
         marketing_id: this.marketing_id,
-        action: this.action,
-        description: this.description,
-        start_date: this.start_date + " " + this.start_time,
-        end_date: this.end_date + " " + this.end_time
+        marketing_action_id: this.marketing_action_id,
+        study_id: this.study_id,
+        start_date: this.start_date,
+        end_date: this.end_date,
+        description: this.description
       }
     },
     confirmDelete() {

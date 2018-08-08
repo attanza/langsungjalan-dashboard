@@ -166,6 +166,11 @@ export default {
           to: "/marketing-actions"
         },
         {
+          title: "Marketing Schedulles",
+          icon: "date_range",
+          to: "/schedulles"
+        },
+        {
           title: "Studi Programs",
           icon: "library_books",
           to: "/study-programs"
@@ -174,11 +179,6 @@ export default {
           title: "Products",
           icon: "donut_small",
           to: "/products"
-        },
-        {
-          title: "Schedulles",
-          icon: "date_range",
-          to: "/schedulles"
         }
       ],
       mini: false,

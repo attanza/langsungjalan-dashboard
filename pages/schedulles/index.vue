@@ -23,8 +23,8 @@
       >
         <template slot="items" slot-scope="props">
           <td>{{ props.item.marketing.name }}</td>
-          <td>{{ props.item.action }}</td>
-          <td>{{ props.item.study.name }}</td>
+          <td>{{ props.item.action.name }}</td>
+          <td>{{ props.item.study.studyName.name }}</td>
           <td>{{ props.item.start_date | moment("DD MMM YYYY") }}</td>
           <td>{{ props.item.end_date | moment("DD MMM YYYY") }}</td>
           <td>{{ props.item.description }}</td>
@@ -63,12 +63,12 @@ export default {
     },
     headers: [
       { text: "Marketing", align: "left", value: "marketing_id" },
-      { text: "Action", align: "left", value: "action" },
+      { text: "Action", align: "left", value: "marketing_action_id" },
       { text: "Study Programs", align: "left", value: "study_id" },
       { text: "Start Date", align: "left", value: "start_date" },
       { text: "End Date", align: "left", value: "end_date" },
       { text: "Description", align: "left", value: "description" },
-      { text: "Actions", value: "", sortable: false }
+      { text: "Actions", value: "", align: "center", sortable: false }
     ],
     items: [],
     itemEdit: {},
@@ -76,7 +76,6 @@ export default {
     confirmMessage: "Are you sure want to delete this ?",
     showConfirm: false
   }),
-
   watch: {
     pagination: {
       handler() {

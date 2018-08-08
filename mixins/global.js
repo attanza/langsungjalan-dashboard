@@ -35,6 +35,7 @@ export default {
       "currentEdit",
       "comboData",
       "comboData2",
+      "comboData3",
       "permissions"
     ])
   }

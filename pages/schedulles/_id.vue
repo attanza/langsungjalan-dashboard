@@ -22,16 +22,22 @@ export default {
     try {
       let resp = await axios.get(SCHEDULLE_URL + "/" + params.id)
       store.commit("currentEdit", resp.data.data)
+
       // Marketing Combo Data
       let marketing = await axios
-        .get(COMBO_DATA_URL + "Marketing")
+        .get(COMBO_DATA_URL + "MarketingAll")
         .then(res => res.data)
       store.commit("comboData", marketing)
       // Study Program Combo Data
       let study = await axios
         .get(COMBO_DATA_URL + "StudyProgram")
-        .then(res => res.data)
+        .then(res => res.data.data)
       store.commit("comboData2", study)
+      // Marketing Action Combo Data
+      let action = await axios
+        .get(COMBO_DATA_URL + "Action")
+        .then(res => res.data)
+      store.commit("comboData3", action)
     } catch (e) {
       console.log(e)
     }
