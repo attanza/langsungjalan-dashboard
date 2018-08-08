@@ -80,7 +80,7 @@ export default {
     }
   },
   mounted() {
-    this.fillForms()
+    // this.fillForms()
   },
   methods: {
     fillForms() {

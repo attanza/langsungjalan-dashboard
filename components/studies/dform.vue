@@ -18,7 +18,6 @@
                       :error-messages="errors.collect(f.key)"
                       :name="f.key"
                       :data-vv-name="f.key"
-                      :type="inArray(typeNumber, f.key) ? 'number': 'text'"
                     />
                   </div>
                   <div v-if="f.key == 'university_id' && comboData">
@@ -36,19 +35,6 @@
                       cache-items
                     />
                   </div>
-                  <div v-if="f.key == 'year'">
-                    <label>Year</label>                
-                    <v-autocomplete
-                      v-validate="'required|max:4'"
-                      :error-messages="errors.collect('year')"
-                      :data-vv-name="'year'"
-                      :items="years"
-                      v-model="formData['year']"
-                      label="Select Year"
-                      single-line
-                      cache-items
-                    />
-                  </div>
                   <div v-if="f.key == 'address' || f.key == 'description'">
                     <label>{{ setCase(f.key) }}</label>
                     <v-textarea
@@ -57,11 +43,10 @@
                       :error-messages="errors.collect(f.key)"
                       :name="f.key"
                       :data-vv-name="f.key"
-                      :type="inArray(typeNumber, f.key) ? 'number': 'text'"
                     />
                   </div>
                 </v-flex>
-              </v-layout>       
+              </v-layout>      
             </form>
           </v-container>
         </v-card-text>
@@ -99,18 +84,13 @@ export default {
         { key: "phone", value: "", rules: "required|max:30" },
         { key: "email", value: "", rules: "required|email" },
         { key: "contact_person", value: "", rules: "required|max:50" },
-        { key: "year", value: "", rules: "required|max:4" },
-        { key: "class_per_year", value: "", rules: "required|integer" },
-        { key: "students_per_class", value: "", rules: "required|integer" },
         { key: "address", value: "", rules: "max:250" },
         { key: "description", value: "", rules: "max:250" }
       ],
-      notIncluded: ["year", "university_id", "description", "address"],
-
+      notIncluded: ["description", "address", "university_id"],
       formData: {},
       formTitle: "Register New Study Programs",
-      years: [],
-      typeNumber: ["class_per_year", "students_per_class"]
+      years: []
     }
   },
   watch: {

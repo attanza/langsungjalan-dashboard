@@ -9,26 +9,6 @@
           <v-container grid-list-md>
             <form>
               <v-layout row wrap>
-                <!-- <v-flex v-for="(f, index) in fillable" v-if="f.key != 'description'" :key="index" sm6 xs12>
-                  <label>{{ setCase(f.key) }}</label>
-                  <v-text-field
-                    v-validate="f.rules"
-                    v-model="formData[f.key]"
-                    :error-messages="errors.collect(f.key)"
-                    :name="f.key"
-                    :data-vv-name="f.key"
-                  />
-                </v-flex>
-                <v-flex v-for="(f, index) in fillable" v-if="f.key == 'description'" :key="index" sm6 xs12>
-                  <label>{{ setCase(f.key) }}</label>
-                  <v-textarea
-                    v-validate="f.rules"
-                    v-model="formData[f.key]"
-                    :error-messages="errors.collect(f.key)"
-                    :name="f.key"
-                    :data-vv-name="f.key"
-                  />
-                </v-flex> -->
                 <v-flex sm6 xs12>
                   <label>Name</label>
                   <v-text-field
@@ -135,11 +115,12 @@ export default {
     },
     async saveData() {
       try {
-        let formData = {
+        let data = {
           name: this.name,
+          slug: this.slug,
           description: this.description
         }
-        const resp = await axios.post(ROLE_URL, formData).then(res => res.data)
+        const resp = await axios.post(ROLE_URL, data).then(res => res.data)
         if (resp.meta.status === 201) {
           showNoty("Data Saved", "success")
           this.$emit("onAdd", resp.data)

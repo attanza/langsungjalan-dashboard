@@ -13,7 +13,7 @@
         </div>    
         <form>
           <v-layout row wrap class="mt-3 px-2">
-            <v-flex v-for="(f, index) in fillable" v-if="f.key != 'description'" :key="index" sm6 xs12>
+            <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
               <label>{{ setCase(f.key) }}</label>
               <v-text-field
                 v-validate="f.rules"
@@ -23,7 +23,7 @@
                 :data-vv-name="f.key"
               />
             </v-flex>
-            <v-flex v-for="(f, index) in fillable" v-if="f.key == 'description'" :key="index" sm6 xs12>
+            <!-- <v-flex v-for="(f, index) in fillable" v-if="f.key == 'description'" :key="index" sm6 xs12>
               <label>{{ setCase(f.key) }}</label>
               <v-textarea
                 v-validate="f.rules"
@@ -32,7 +32,7 @@
                 :name="f.key"
                 :data-vv-name="f.key"
               />
-            </v-flex>
+            </v-flex> -->
           </v-layout>     
         </form>
       </v-container>
@@ -58,7 +58,7 @@ export default {
     return {
       fillable: [
         { key: "name", value: "", rules: "required|max:50" },
-        { key: "slug", value: "", rules: "required|max:100" },
+        // { key: "slug", value: "", rules: "required|max:100" },
         { key: "description", value: "", rules: "max:250" }
       ],
       formData: {},
@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     toHome() {
-      this.$router.push("/roles")
+      this.$router.push("/permissions")
     },
     setFields() {
       this.errors.clear()
@@ -119,7 +119,7 @@ export default {
             .then(res => res.data)
           if (resp.meta.status === 200) {
             showNoty("Data Deleted", "success")
-            this.$router.push("/roles")
+            this.$router.push("/permissions")
           }
         }
       } catch (e) {

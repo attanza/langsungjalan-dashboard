@@ -5,7 +5,7 @@ module.exports = {
     node: true
   },
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: "babel-eslint"
   },
   extends: [
     "eslint:recommended",
@@ -15,14 +15,12 @@ module.exports = {
     "plugin:prettier/recommended"
   ],
   // required to lint *.vue files
-  plugins: [
-    'vue'
-  ],
+  plugins: ["vue"],
   // add your custom rules here
   rules: {
-    "semi": [2, "never"],
+    semi: [2, "never"],
     "no-console": "off",
     "vue/max-attributes-per-line": "off",
-    "prettier/prettier": ["error", { "semi": false }]
+    "prettier/prettier": ["error", { semi: false }]
   }
-}
+};

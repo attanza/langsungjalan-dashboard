@@ -23,7 +23,7 @@
       >
         <template slot="items" slot-scope="props">
           <td>{{ props.item.name }}</td>
-          <td class="text-xs-left">{{ props.item.address }}</td>
+          <!-- <td class="text-xs-left">{{ props.item.address }}</td> -->
           <td class="text-xs-left">{{ props.item.contact_person }}</td>
           <td class="text-xs-left">{{ props.item.phone }}</td>
           <td class="text-xs-left">{{ props.item.email }}</td>
@@ -62,7 +62,7 @@ export default {
     },
     headers: [
       { text: "Name", align: "left", value: "name" },
-      { text: "Address", value: "address", align: "left" },
+      // { text: "Address", value: "address", align: "left" },
       { text: "Contact Person", value: "contact_person", align: "left" },
       { text: "Phone", value: "phone", align: "left" },
       { text: "Email", value: "email", align: "left" },

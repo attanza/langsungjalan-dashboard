@@ -161,6 +161,11 @@ export default {
         },
         { title: "Universities", icon: "account_balance", to: "/universities" },
         {
+          title: "Marketing Actions",
+          icon: "list",
+          to: "/marketing-actions"
+        },
+        {
           title: "Studi Programs",
           icon: "library_books",
           to: "/study-programs"

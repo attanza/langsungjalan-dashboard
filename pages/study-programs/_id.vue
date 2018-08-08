@@ -38,17 +38,11 @@ export default {
       // Current Edit
       let resp = await axios.get(STUDIES_URL + "/" + params.id)
       store.commit("currentEdit", resp.data.data)
-      // Combo / Select Data
-      let resp2 = await await axios
-        .get(COMBO_DATA_URL + "University")
-        .then(res => res.data)
-        .catch(e => catchError(e))
-      store.commit("comboData", resp2)
 
-      let resp3 = await await axios
+      let resp2 = await await axios
         .get(COMBO_DATA_URL + "StudyName")
         .then(res => res.data)
-      store.commit("comboData2", resp3)
+      store.commit("comboData2", resp2)
     } catch (e) {
       catchError(e)
     }

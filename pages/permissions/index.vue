@@ -23,7 +23,7 @@
       >
         <template slot="items" slot-scope="props">
           <td>{{ props.item.name }}</td>
-          <td>{{ props.item.slug }}</td>
+          <!-- <td>{{ props.item.slug }}</td> -->
           <td>{{ props.item.description }}</td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
@@ -60,9 +60,9 @@ export default {
     },
     headers: [
       { text: "Name", align: "left", value: "name" },
-      { text: "Slug", align: "left", value: "slug" },
+      // { text: "Slug", align: "left", value: "slug" },
       { text: "Desctiption", align: "left", value: "description" },
-      { text: "Actions", value: "", sortable: false }
+      { text: "Actions", value: "", align: "center", sortable: false }
     ],
     items: [],
     itemEdit: {},

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h2 class="primary--text mb-3">Study Programs</h2>
+    <h2 class="primary--text mb-3">{{ title }}s</h2>
     <v-card dark>
       <v-card-title>
-        <Tbtn :bottom="true" color="primary" icon="add" text="Register new Study Program" @onClick="showForm = true"/>
+        <Tbtn :bottom="true" :text="'Register New ' + title " color="primary" icon="add" @onClick="showForm = true"/>
         <v-spacer/>
         <v-text-field
           v-model="search"
@@ -22,15 +22,11 @@
         class="elevation-1"
       >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.studyName.name }}</td>
-          <td>{{ props.item.university.name }}</td>
-          <td>{{ props.item.address }}</td>
-          <td>{{ props.item.contact_person }}</td>
-          <td>{{ props.item.phone }}</td>
-          <td>{{ props.item.email }}</td>
+          <td>{{ props.item.name }}</td>
+          <td>{{ props.item.description }}</td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <v-icon color="white">remove_red_eye</v-icon>
+              <Tbtn :text="'Show '+title" icon-mode flat color="white" icon="remove_red_eye" @onClick="toDetail(props.item)"/>
             </v-btn>
           </td>
         </template>
@@ -41,25 +37,18 @@
 </template>
 <script>
 import _ from "lodash"
-import { STUDIES_URL, COMBO_DATA_URL } from "~/utils/apis"
+import { MARKETING_ACTION_URL } from "~/utils/apis"
 import { global } from "~/mixins"
-import { dform } from "~/components/studies"
+import { dform } from "~/components/marketing-actions"
 import axios from "axios"
 import catchError from "~/utils/catchError"
+
 export default {
-  async fetch({ store }) {
-    let resp = await await axios
-      .get(COMBO_DATA_URL + "University")
-      .then(res => res.data)
-      .catch(e => catchError(e))
-    if (resp.length > 0) {
-      store.commit("comboData", resp)
-    }
-  },
   middleware: "auth",
   components: { dform },
   mixins: [global],
   data: () => ({
+    title: "Marketing Action",
     loading: false,
     showForm: false,
     totalItems: 0,
@@ -71,17 +60,11 @@ export default {
       rowsPerPage: 10
     },
     headers: [
-      { text: "Name", align: "left", value: "study_name_id" },
-      { text: "University", align: "left", value: "university_id" },
-      { text: "Address", value: "address", align: "left" },
-      { text: "Contact Person", value: "contact_person", align: "left" },
-      { text: "Phone", value: "phone", align: "left" },
-      { text: "Email", value: "email", align: "left" },
-      { text: "Actions", value: "", sortable: false }
+      { text: "Name", align: "left", value: "name" },
+      { text: "Description", align: "left", value: "description" },
+      { text: "Actions", value: "", align: "center", sortable: false }
     ],
     items: [],
-    itemEdit: {},
-    userIdDelete: "",
     confirmMessage: "Are you sure want to delete this ?",
     showConfirm: false
   }),
@@ -94,7 +77,7 @@ export default {
       deep: true
     },
     search() {
-      if (this.search != "") {
+      if (this.search == "" || this.search.length > 2) {
         this.searchQuery()
       }
     }
@@ -112,7 +95,7 @@ export default {
       try {
         this.loading = true
         const { page, rowsPerPage, descending, sortBy } = this.pagination
-        const endPoint = `${STUDIES_URL}?page=${page}&limit=${rowsPerPage}&search=${
+        const endPoint = `${MARKETING_ACTION_URL}?page=${page}&limit=${rowsPerPage}&search=${
           this.search
         }`
         const res = await axios.get(endPoint).then(res => res.data)
@@ -136,11 +119,11 @@ export default {
         }
         this.loading = false
       } catch (e) {
-        console.log("error fetching Study Program", e)
+        catchError(e)
       }
     },
     toDetail(data) {
-      this.$router.push(`/study-programs/${data.id}`)
+      this.$router.push(`/marketing-actions/${data.id}`)
     },
     addData(data) {
       this.items.unshift(data)
