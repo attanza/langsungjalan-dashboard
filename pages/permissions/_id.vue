@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="primary--text mb-2">Permission {{ currentEdit.name }}</h2>    
+    <h2 v-if="currentEdit" class="primary--text mb-2">Permission {{ currentEdit.name }}</h2>    
     <v-tabs align-with-title color="primary" class="white elevation-1" dark>
       <v-tabs-slider color="white"/>
       <v-tab href="#detail">
@@ -18,14 +18,15 @@ import { PERMISSION_URL } from "~/utils/apis"
 import axios from "axios"
 import { detail, dform } from "~/components/permissions"
 import { global } from "~/mixins"
+import catchError from "~/utils/catchError"
 
 export default {
   async fetch({ store, params }) {
     try {
       let resp = await axios.get(PERMISSION_URL + "/" + params.id)
-      store.commit("currentEdit", resp.data.data)
+      if (resp) store.commit("currentEdit", resp.data.data)
     } catch (e) {
-      console.log(e)
+      catchError(e)
     }
   },
   components: { detail, dform },

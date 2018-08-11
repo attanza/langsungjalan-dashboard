@@ -1,31 +1,30 @@
 <template>
   <div>
     <v-card dark>
-      <v-card-text>
-        <v-container>
-          <v-layout row wrap>
-            <v-flex xs6>
-              <h4>Permission List</h4>
-            </v-flex>
-            <v-flex xs6>
-              <div class="btn-group">
-                <Tbtn color="primary" icon="done" text="Select all" @onClick="selectAll"/>
-                <Tbtn color="primary" icon="clear" text="Unselect all" @onClick="clearAll"/>               
-              </div>
-            </v-flex>
-          </v-layout>
-          <v-layout row wrap>
-            <v-flex v-for="permission in comboData" :key="permission.id" md3 sm4 xs6>
+      <v-container fluid>
+        <v-toolbar color="transparent" card>
+          <v-text-field
+            v-model="search"
+            append-icon="search"
+            label="Search"
+            single-line
+            hide-details
+          />
+          <v-spacer/>
+          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Back to Role List" @onClick="toHome"/>
+          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Save" @onClick="showDialog = true"/>              
+
+          <Tbtn color="primary" tooltip-text="Select all" icon-mode icon="check_box" @onClick="selectAll"/>
+          <Tbtn color="primary" tooltip-text="Unselect all" icon-mode icon="check_box_outline_blank" @onClick="clearAll"/> 
+        </v-toolbar>
+        <v-card-text>
+          <v-layout v-if="items" row wrap>
+            <v-flex v-for="permission in items" :key="permission.id" md3 sm4 xs6>
               <v-checkbox v-model="permissionArray" :label="permission.name" :value="permission.id" color="primary"/>
             </v-flex>
           </v-layout>
-          <v-layout row wrap>
-            <v-flex xs12>
-              <v-btn color="primary" @click="showDialog = true">Update Permissions</v-btn>
-            </v-flex>
-          </v-layout>
-        </v-container>
-      </v-card-text>
+        </v-card-text>
+      </v-container>
     </v-card>
     <Dialog :showDialog="showDialog" text="Are you sure want to update ?" @onClose="showDialog = false" @onConfirmed="attachPermissions"/>
   </div>
@@ -37,7 +36,7 @@ import { ROLE_PERMISSIONS_URL } from "~/utils/apis"
 import axios from "axios"
 import Dialog from "~/components/Dialog"
 import catchError, { showNoty } from "~/utils/catchError"
-
+import debounce from "lodash/debounce"
 export default {
   components: { Dialog },
   mixins: [global],
@@ -45,13 +44,24 @@ export default {
     return {
       toggle_multiple: [0, 1],
       showDialog: false,
-      permissionArray: []
+      permissionArray: [],
+      search: "",
+      items: []
     }
   },
-  created() {
+  watch: {
+    search() {
+      if (this.search !== "") this.searchPermissions()
+    }
+  },
+  mounted() {
+    this.items = this.$store.getters.getPermissions("")
     this.setPermissionArray()
   },
   methods: {
+    toHome() {
+      this.$router.push("/roles")
+    },
     setPermissionArray() {
       if (this.permissions) {
         this.permissions.forEach(p => {
@@ -76,16 +86,20 @@ export default {
       }
     },
     selectAll() {
-      if (this.comboData) {
+      if (this.items) {
         this.permissionArray = []
-        this.comboData.forEach(c => {
+        this.items.forEach(c => {
           this.permissionArray.push(c.id)
         })
       }
     },
     clearAll() {
       this.permissionArray = []
-    }
+    },
+    searchPermissions: debounce(function() {
+      let results = this.$store.getters.getPermissions(this.search)
+      this.items = results
+    }, 300)
   }
 }
 </script>

@@ -9,7 +9,7 @@
           <v-container grid-list-md>
             <form>
               <v-layout row wrap>
-                <v-flex sm6 xs12>
+                <v-flex xs12>
                   <label>Name</label>
                   <v-text-field
                     v-validate="'required|max:50'"
@@ -19,7 +19,7 @@
                     data-vv-name="name"
                   />
                 </v-flex>
-                <v-flex sm6 xs12>
+                <v-flex xs12>
                   <label>Slug</label>
                   <v-text-field
                     v-validate="'required|max:80'"
@@ -127,6 +127,7 @@ export default {
           this.setFields()
         }
       } catch (e) {
+        this.dialog = false
         catchError(e)
       }
     },

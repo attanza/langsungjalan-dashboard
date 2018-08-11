@@ -104,6 +104,8 @@ export default {
           showNoty("Login failed", "error")
         }
       } catch (e) {
+        console.log(e)
+
         this.loading = false
         catchError(e)
       }

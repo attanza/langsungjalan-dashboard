@@ -3,7 +3,7 @@
     <h2 class="primary--text mb-3">{{ title }}'s</h2>
     <v-card dark>
       <v-card-title>
-        <Tbtn :bottom="true" :text="'Register New ' + title " color="primary" icon="add" @onClick="showForm = true"/>
+        <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " color="primary" icon="add" @onClick="showForm = true"/>
         <v-spacer/>
         <v-text-field
           v-model="search"
@@ -13,7 +13,8 @@
           hide-details
         />
       </v-card-title>
-      <v-data-table
+      <v-data-table 
+        v-if="items"
         :headers="headers"
         :items="items"
         :loading="loading"
@@ -41,6 +42,7 @@ import _ from "lodash"
 import { ROLE_URL } from "~/utils/apis"
 import { global } from "~/mixins"
 import { dform } from "~/components/roles"
+import catchError from "~/utils/catchError"
 import axios from "axios"
 export default {
   middleware: "auth",
@@ -62,7 +64,7 @@ export default {
       { text: "Name", align: "left", value: "name" },
       { text: "Slug", align: "left", value: "slug" },
       { text: "Desctiption", align: "left", value: "description" },
-      { text: "Actions", value: "", sortable: false }
+      { text: "Actions", value: "", align: "center", sortable: false }
     ],
     items: [],
     itemEdit: {},
@@ -94,31 +96,38 @@ export default {
       this.pupulateTable()
     }, 500),
     async pupulateTable() {
-      this.loading = true
-      const { page, rowsPerPage, descending, sortBy } = this.pagination
-      const endPoint = `${ROLE_URL}?page=${page}&limit=${rowsPerPage}&search=${
-        this.search
-      }`
-      const res = await axios.get(endPoint).then(res => res.data)
-      this.items = res.data
-      this.totalItems = res.meta.total
-      if (this.pagination.sortBy) {
-        this.items = this.items.sort((a, b) => {
-          const sortA = a[sortBy]
-          const sortB = b[sortBy]
+      try {
+        this.loading = true
+        const { page, rowsPerPage, descending, sortBy } = this.pagination
+        const endPoint = `${ROLE_URL}?page=${page}&limit=${rowsPerPage}&search=${
+          this.search
+        }`
+        const res = await axios.get(endPoint).then(res => res.data)
+        this.items = res.data
 
-          if (descending) {
-            if (sortA < sortB) return 1
-            if (sortA > sortB) return -1
-            return 0
-          } else {
-            if (sortA < sortB) return -1
-            if (sortA > sortB) return 1
-            return 0
-          }
-        })
+        this.totalItems = res.meta.total
+        if (this.pagination.sortBy) {
+          this.items = this.items.sort((a, b) => {
+            const sortA = a[sortBy]
+            const sortB = b[sortBy]
+
+            if (descending) {
+              if (sortA < sortB) return 1
+              if (sortA > sortB) return -1
+              return 0
+            } else {
+              if (sortA < sortB) return -1
+              if (sortA > sortB) return 1
+              return 0
+            }
+          })
+        }
+        this.loading = false
+      } catch (e) {
+        this.loading = false
+        this.showForm = false
+        catchError(e, null, this.$router)
       }
-      this.loading = false
     },
     toDetail(data) {
       this.$router.push(`/roles/${data.id}`)

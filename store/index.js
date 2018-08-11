@@ -61,3 +61,16 @@ export const actions = {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
   }
 }
+
+export const getters = {
+  getPermissions: state => name => {
+    return state.comboData.filter(
+      item => item.name.toLowerCase().indexOf(name) > -1
+    )
+  }
+}
+// var test = _.filter(items, function (item) {
+//   return _.some(item.tags, function (tag) {
+//     return _.startsWith(tag, input.val());
+//   });
+// });

@@ -1,24 +1,47 @@
 import Noty from "noty"
 import Cookie from "js-cookie"
+// import store from "../store"
 
-export default (e, redirect, router) => {
-  const { status } = e.response
-  if (status && status === 422) {
-    const { details } = e.response.data
-    details.forEach(d => {
-      showNoty(d.message, "error")
-    })
-  } else if (status && status === 401) {
-    Cookie.remove("lj_token")
-    if (redirect) redirect("/login")
-    if (router) router.push("/login")
-  } else if (status && status === 400) {
+export default e => {
+  if (e.response) {
+    const status = e.response.status
     const { message } = e.response.data.meta
-    showNoty(message, "error")
-  } else if (status && status === 403) {
-    const { message } = e.response.data.meta
-    showNoty(message, "error")
+    switch (status) {
+      case 400:
+        showNoty(message, "error")
+        break
+      case 422:
+        {
+          const { details } = e.response.data
+          details.forEach(d => {
+            showNoty(d.message, "error")
+          })
+        }
+        break
+      case 401:
+        toLogin()
+        break
+
+      case 403:
+        showNoty(message, "error")
+        break
+
+      default:
+        showNoty(
+          "Internal Server Error, please contact our Administrator",
+          "error"
+        )
+        break
+    }
+  } else {
+    toLogin("Internal Server Error, please contact our Administrator")
   }
+}
+
+function toLogin(message) {
+  if (message) alert(message)
+  Cookie.remove("lj_token")
+  window.location = "/login"
 }
 
 export function showNoty(text, type) {

@@ -103,7 +103,6 @@ export default {
           showNoty("Data Updated", "success")
         }
       } catch (e) {
-        console.log(e)
         catchError(e)
       }
     },

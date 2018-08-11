@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="primary--text mb-2">Role {{ currentEdit.name }}</h2>    
+    <h2 v-if="currentEdit" class="primary--text mb-2">Role {{ currentEdit.name }}</h2>    
     <v-tabs align-with-title color="primary" class="white elevation-1" dark>
       <v-tabs-slider color="white"/>
       <v-tab href="#detail">
@@ -24,23 +24,26 @@ import { ROLE_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import { detail, dform, permission } from "~/components/roles"
 import { global } from "~/mixins"
+import catchError from "~/utils/catchError"
+
 const API_URL = process.env.API_URL
 
 export default {
   async fetch({ store, params }) {
     try {
       let resp = await axios.get(ROLE_URL + "/" + params.id)
-      store.commit("currentEdit", resp.data.data)
+      if (resp) store.commit("currentEdit", resp.data.data)
 
       let permissions = await axios.get(COMBO_DATA_URL + "Permission")
-      store.commit("comboData", permissions.data)
+      if (permissions) store.commit("comboData", permissions.data)
 
       let rolePermissions = await axios.get(
         API_URL + "/role/" + params.id + "/permissions"
       )
-      store.commit("permissions", rolePermissions.data.data)
+      if (rolePermissions)
+        store.commit("permissions", rolePermissions.data.data)
     } catch (e) {
-      console.log(e)
+      catchError(e)
     }
   },
   components: { detail, dform, permission },

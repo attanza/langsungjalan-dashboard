@@ -1,10 +1,14 @@
 <template>
   <div>
     <v-tooltip top>
-      <v-btn slot="activator" :color="color" :flat="flat" :block="block" :outline="outline" :icon="iconMode" @click="onClick">
-        <v-icon>{{ icon }}</v-icon>
+      <v-btn slot="activator" 
+             :color="color" :flat="flat" :block="block" :outline="outline" :icon="iconMode" :text="text"
+             :tooltip-text="tooltipText" @click="onClick"
+      >
+        <v-icon v-if="icon != ''">{{ icon }}</v-icon>
+        <span v-if="text">{{ text }}</span>
       </v-btn>
-      <span>{{ text }}</span>
+      <span v-if="tooltipText" >{{ tooltipText }}</span>
     </v-tooltip>
   </div>
 </template>
@@ -18,11 +22,18 @@ export default {
     },
     icon: {
       type: String,
-      required: true
+      required: false,
+      default: ""
+    },
+    tooltipText: {
+      type: String,
+      required: false,
+      default: ""
     },
     text: {
       type: String,
-      required: true
+      required: false,
+      default: ""
     },
     flat: {
       type: Boolean,

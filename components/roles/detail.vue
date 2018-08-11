@@ -1,41 +1,41 @@
 <template>
   <div>
     <v-card dark>
-      <v-container grid-list-md>
-        <div class="btn-group">
-          <v-btn-toggle v-model="toggle_multiple" multiple>
-            <Tbtn color="primary" icon="chevron_left" text="Back to Role List" @onClick="toHome"/>
-            <Tbtn color="primary" icon="save" text="Save" @onClick="submit"/>              
-            <Tbtn color="primary" icon="refresh" text="Refresh" @onClick="setFields"/>  
-            <Tbtn color="primary" icon="delete" text="Delete role" @onClick="confirmDelete"/>  
-          </v-btn-toggle>
-          <hr >
-        </div>    
-        <form>
-          <v-layout row wrap class="mt-3 px-2">
-            <v-flex v-for="(f, index) in fillable" v-if="f.key != 'description'" :key="index" sm6 xs12>
-              <label>{{ setCase(f.key) }}</label>
-              <v-text-field
-                v-validate="f.rules"
-                v-model="formData[f.key]"
-                :error-messages="errors.collect(f.key)"
-                :name="f.key"
-                :data-vv-name="f.key"
-              />
-            </v-flex>
-            <v-flex v-for="(f, index) in fillable" v-if="f.key == 'description'" :key="index" sm6 xs12>
-              <label>{{ setCase(f.key) }}</label>
-              <v-textarea
-                v-validate="f.rules"
-                v-model="formData[f.key]"
-                :error-messages="errors.collect(f.key)"
-                :name="f.key"
-                :data-vv-name="f.key"
-              />
-            </v-flex>
-          </v-layout>     
-        </form>
-      </v-container>
+      <v-container grid-list-md fluid style="padding: 0px;">
+        <v-toolbar color="transparent" card>
+          <v-spacer/>
+          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Back to Role List" @onClick="toHome"/>
+          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Save" @onClick="submit"/>              
+          <Tbtn color="primary" icon="refresh" icon-mode tooltip-text="Refresh" @onClick="setFields"/>  
+          <Tbtn color="primary" icon="delete" icon-mode tooltip-text="Delete role" @onClick="confirmDelete"/>  
+        </v-toolbar>
+        <v-card-text>
+          <form>
+            <v-layout row wrap class="mt-3 px-2">
+              <v-flex v-for="(f, index) in fillable" v-if="f.key != 'description'" :key="index" sm6 xs12>
+                <label>{{ setCase(f.key) }}</label>
+                <v-text-field
+                  v-validate="f.rules"
+                  v-model="formData[f.key]"
+                  :error-messages="errors.collect(f.key)"
+                  :name="f.key"
+                  :data-vv-name="f.key"
+                />
+              </v-flex>
+              <v-flex v-for="(f, index) in fillable" v-if="f.key == 'description'" :key="index" sm6 xs12>
+                <label>{{ setCase(f.key) }}</label>
+                <v-textarea
+                  v-validate="f.rules"
+                  v-model="formData[f.key]"
+                  :error-messages="errors.collect(f.key)"
+                  :name="f.key"
+                  :data-vv-name="f.key"
+                />
+              </v-flex>
+            </v-layout>   
+          </form>
+        </v-card-text>
+      </v-container> 
     </v-card>
     <Dialog :showDialog="showDialog" text="Are you sure want to delete ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
   </div>
@@ -103,7 +103,6 @@ export default {
           showNoty("Data Updated", "success")
         }
       } catch (e) {
-        console.log(e)
         catchError(e)
       }
     },
