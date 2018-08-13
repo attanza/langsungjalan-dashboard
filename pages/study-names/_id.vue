@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="primary--text mb-2">Product Detail</h2>    
+    <h2 class="primary--text mb-2">Study Program Name Detail</h2>    
     <v-tabs align-with-title color="primary" class="white elevation-1" dark>
       <v-tabs-slider color="white"/>
       <v-tab href="#detail">
@@ -14,15 +14,15 @@
 </template>
 
 <script>
-import { PRODUCT_URL } from "~/utils/apis"
+import { STUDY_NAME_URL } from "~/utils/apis"
 import axios from "axios"
-import { detail, dform } from "~/components/products"
+import { detail, dform } from "~/components/study-names"
 import catchError from "~/utils/catchError"
 
 export default {
   async fetch({ store, params }) {
     try {
-      let resp = await axios.get(PRODUCT_URL + "/" + params.id)
+      let resp = await axios.get(STUDY_NAME_URL + "/" + params.id)
       store.commit("currentEdit", resp.data.data)
     } catch (e) {
       catchError(e)

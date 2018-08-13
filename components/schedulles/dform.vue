@@ -149,33 +149,12 @@ import { SCHEDULLE_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
 export default {
-  async fetch({ store }) {
-    try {
-      // Marketing Combo Data
-      let marketing = await axios
-        .get(COMBO_DATA_URL + "MarketingAll")
-        .then(res => res.data)
-      store.commit("comboData", marketing)
-      // Study Program Combo Data
-      let study = await axios
-        .get(COMBO_DATA_URL + "StudyProgram")
-        .then(res => res.data.data)
-      store.commit("comboData2", study)
-      // Marketing Action Combo Data
-      let action = await axios
-        .get(COMBO_DATA_URL + "Action")
-        .then(res => res.data)
-      store.commit("comboData3", action)
-    } catch (e) {
-      console.log(e)
-    }
-  },
   $_veeValidate: {
     validator: "new"
   },
   mixins: [global],
   props: {
-    showForm: {
+    show: {
       type: Boolean,
       required: true
     }
@@ -195,9 +174,20 @@ export default {
     }
   },
   watch: {
-    showForm() {
-      this.dialog = this.showForm
+    show() {
+      this.dialog = this.show
     }
+  },
+  async mounted() {
+    // Marketing Combo Data
+    let marketings = await axios.get(COMBO_DATA_URL + "MarketingAll")
+    if (marketings) this.$store.commit("comboData", marketings.data)
+    // Study Program Combo Data
+    let studies = await axios.get(COMBO_DATA_URL + "StudyProgram")
+    if (studies) this.$store.commit("comboData2", studies.data)
+    // Marketing Action Combo Data
+    let actions = await axios.get(COMBO_DATA_URL + "Action")
+    if (actions) this.$store.commit("comboData3", actions.data)
   },
   methods: {
     onClose() {

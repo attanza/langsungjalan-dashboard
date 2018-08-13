@@ -9,19 +9,9 @@
           <v-container grid-list-md>
             <form>
               <v-layout row wrap>
-                <v-flex v-for="(f, index) in fillable" v-if="f.key != 'description'" :key="index" sm6 xs12>
+                <v-flex v-for="(f, index) in fillable" :key="index" xs12>
                   <label>{{ setCase(f.key) }}</label>
                   <v-text-field
-                    v-validate="f.rules"
-                    v-model="formData[f.key]"
-                    :error-messages="errors.collect(f.key)"
-                    :name="f.key"
-                    :data-vv-name="f.key"
-                  />
-                </v-flex>
-                <v-flex v-for="(f, index) in fillable" v-if="f.key == 'description'" :key="index" sm6 xs12>
-                  <label>{{ setCase(f.key) }}</label>
-                  <v-textarea
                     v-validate="f.rules"
                     v-model="formData[f.key]"
                     :error-messages="errors.collect(f.key)"
@@ -44,7 +34,7 @@
 </template>
 <script>
 import { global } from "~/mixins"
-import { PRODUCT_URL } from "~/utils/apis"
+import { STUDY_NAME_URL } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
 export default {
@@ -62,14 +52,11 @@ export default {
     return {
       dialog: false,
       fillable: [
-        { key: "code", value: "", rules: "required|max:30" },
         { key: "name", value: "", rules: "required|max:50" },
-        { key: "measurement", value: "", rules: "required|max:15" },
-        { key: "price", value: "", rules: "required|integer" },
         { key: "description", value: "", rules: "max:250" }
       ],
       formData: {},
-      formTitle: "Register New Product"
+      formTitle: "Register New Study Program Name"
     }
   },
   watch: {
@@ -77,18 +64,9 @@ export default {
       this.dialog = this.show
     }
   },
-  created() {
-    this.setFields()
-  },
   methods: {
     onClose() {
       this.$emit("onClose")
-    },
-    setFields() {
-      this.errors.clear()
-      if (this.currentEdit) {
-        this.fillable.forEach(data => (this.formData[data.key] = data.value))
-      }
     },
     submit() {
       this.$validator.validateAll().then(result => {
@@ -100,13 +78,14 @@ export default {
     },
     async saveData() {
       try {
+        this.formData.role_id = 4
         const resp = await axios
-          .post(PRODUCT_URL, this.formData)
+          .post(STUDY_NAME_URL, this.formData)
           .then(res => res.data)
         if (resp.meta.status === 201) {
+          this.formData = {}
           showNoty("Data Saved", "success")
           this.$emit("onAdd", resp.data)
-          this.setFields()
         }
       } catch (e) {
         catchError(e)

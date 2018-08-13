@@ -36,13 +36,13 @@ export default {
   async fetch({ store, params }) {
     try {
       // Current Edit
-      let resp = await axios.get(STUDIES_URL + "/" + params.id)
-      if (resp) store.commit("currentEdit", resp.data.data)
+      let currentEdit = await axios.get(STUDIES_URL + "/" + params.id)
+      if (currentEdit) store.commit("currentEdit", currentEdit.data.data)
 
-      let resp2 = await await axios
-        .get(COMBO_DATA_URL + "StudyName")
-        .then(res => res.data)
-      if (resp2) store.commit("comboData2", resp2)
+      let resp = await axios.get(COMBO_DATA_URL + "University")
+      if (resp) store.commit("comboData", resp.data)
+      let resp2 = await axios.get(COMBO_DATA_URL + "StudyName")
+      if (resp2) store.commit("comboData2", resp2.data)
     } catch (e) {
       catchError(e)
     }

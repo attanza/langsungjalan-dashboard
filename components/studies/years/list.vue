@@ -1,44 +1,47 @@
 <template>
   <div>
     <v-card dark>
-      <v-card-title>
-        <Tbtn :bottom="true" color="primary" icon="add" text="Register new Study Program" @onClick="showForm = true"/>
-        <v-spacer/>
-        <v-text-field
-          v-model="search"
-          append-icon="search"
-          label="Search"
-          single-line
-          hide-details
-        />
-      </v-card-title>
-      <v-data-table
-        :headers="headers"
-        :items="items"
-        :loading="loading"
-        :pagination.sync="pagination"
-        :total-items="totalItems"
-        class="elevation-1"
-      >
-        <template slot="items" slot-scope="props">
-          <td>{{ props.item.year }}</td>
-          <td>{{ props.item.class_per_year }}</td>
-          <td>{{ props.item.students_per_class }}</td>
-          <td>
-            <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <v-icon color="white">remove_red_eye</v-icon>
-            </v-btn>
-            <v-btn icon class="mx-0" @click="showConfirm(props.item)">
-              <v-icon color="white">delete</v-icon>
-            </v-btn>
-          </td>
-        </template>
-      </v-data-table>
-    </v-card>
-    <dform :show-form="showForm" :is-edit="isEdit" :year-edit="yearEdit" @onClose="showForm = false" @onAdd="addData" @onEdit="editData"/>
-    <Dialog :showDialog="showDialog" text="Are you sure want to delete ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
+      <v-card dark class="pt-3">
+        <v-toolbar card color="transparent">
+          <v-text-field
+            v-model="search"
+            append-icon="search"
+            label="Search"
+            single-line
+            hide-details
+          />
+          <v-spacer/>
+          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Back to List" @onClick="toHome"/>
+          <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
+          
+        </v-toolbar>
+        <v-data-table
+          :headers="headers"
+          :items="items"
+          :loading="loading"
+          :pagination.sync="pagination"
+          :total-items="totalItems"
+          class="elevation-1"
+        >
+          <template slot="items" slot-scope="props">
+            <td>{{ props.item.year }}</td>
+            <td>{{ props.item.class_per_year }}</td>
+            <td>{{ props.item.students_per_class }}</td>
+            <td>
+              <v-btn icon class="mx-0" @click="toDetail(props.item)">
+                <v-icon color="white">remove_red_eye</v-icon>
+              </v-btn>
+              <v-btn icon class="mx-0" @click="showConfirm(props.item)">
+                <v-icon color="white">delete</v-icon>
+              </v-btn>
+            </td>
+          </template>
+        </v-data-table>
+      </v-card>
+      <dform :form="showForm" :is-edit="isEdit" :year-edit="yearEdit" @onClose="showForm = false" @onAdd="addData" @onEdit="editData"/>
+      <Dialog :showDialog="showDialog" text="Are you sure want to delete ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
 
-  </div>
+  </v-card></div>
 </template>
 <script>
 import _ from "lodash"
@@ -54,19 +57,7 @@ export default {
   components: { dform, Dialog },
   mixins: [global],
   data: () => ({
-    loading: false,
-    showForm: false,
-    isEdit: false,
-    yearEdit: null,
-    totalItems: 0,
-    search: "",
-    dataToDelete: null,
-    pagination: {
-      sortBy: "",
-      descending: false,
-      page: 1,
-      rowsPerPage: 10
-    },
+    title: "Year",
     headers: [
       { text: "Year", align: "left", value: "year" },
       { text: "Class per Year", align: "left", value: "class_per_year" },
@@ -75,7 +66,9 @@ export default {
     ],
     items: [],
     confirmMessage: "Are you sure want to delete this ?",
-    showDialog: false
+    showDialog: false,
+    isEdit: false,
+    yearEdit: {}
   }),
 
   watch: {
@@ -97,6 +90,9 @@ export default {
   },
 
   methods: {
+    toHome() {
+      this.$router.push("/study-programs")
+    },
     searchQuery: _.debounce(function() {
       this.pupulateTable()
     }, 500),

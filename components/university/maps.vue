@@ -15,7 +15,7 @@
         </gmap-map>
       </div>
       <v-card-actions>
-        <Tbtn color="primary" icon="chevron_left" tooltip-text="Back to University List" @onClick="toHome"/>
+        <Tbtn color="primary" icon="chevron_left" tooltip-text="Back to List" @onClick="toHome"/>
         <v-spacer/>
         <v-tooltip top>
           <gmap-autocomplete slot="activator" @place_changed="setPlace"/>

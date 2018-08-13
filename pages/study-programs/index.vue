@@ -22,9 +22,9 @@
         class="elevation-1"
       >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.studyName.name }}</td>
-          <td>{{ props.item.university.name }}</td>
-          <td>{{ props.item.address }}</td>
+          <td v-if="props.item.studyName">{{ props.item.studyName.name }}</td>
+          <td v-if="props.item.university">{{ props.item.university.name }}</td>
+          <!-- <td>{{ props.item.address }}</td> -->
           <td>{{ props.item.contact_person }}</td>
           <td>{{ props.item.phone }}</td>
           <td>{{ props.item.email }}</td>
@@ -41,21 +41,12 @@
 </template>
 <script>
 import _ from "lodash"
-import { STUDIES_URL, COMBO_DATA_URL } from "~/utils/apis"
+import { STUDIES_URL } from "~/utils/apis"
 import { global } from "~/mixins"
 import { dform } from "~/components/studies"
 import axios from "axios"
 import catchError from "~/utils/catchError"
 export default {
-  async fetch({ store }) {
-    let resp = await await axios
-      .get(COMBO_DATA_URL + "University")
-      .then(res => res.data)
-      .catch(e => catchError(e))
-    if (resp.length > 0) {
-      store.commit("comboData", resp)
-    }
-  },
   middleware: "auth",
   components: { dform },
   mixins: [global],
@@ -65,7 +56,7 @@ export default {
     headers: [
       { text: "Name", align: "left", value: "study_name_id" },
       { text: "University", align: "left", value: "university_id" },
-      { text: "Address", value: "address", align: "left" },
+      // { text: "Address", value: "address", align: "left" },
       { text: "Contact Person", value: "contact_person", align: "left" },
       { text: "Phone", value: "phone", align: "left" },
       { text: "Email", value: "email", align: "left" },
@@ -129,6 +120,7 @@ export default {
         this.loading = false
       } catch (e) {
         console.log("error fetching Study Program", e)
+        catchError(e)
       }
     },
     toDetail(data) {

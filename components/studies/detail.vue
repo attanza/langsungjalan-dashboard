@@ -1,16 +1,14 @@
 <template>
   <div>
     <v-card dark>
-      <v-container grid-list-md>
-        <div class="btn-group">
-          <v-btn-toggle v-model="toggle_multiple" multiple>
-            <Tbtn color="primary" icon="chevron_left" text="Back to Study Programs List" @onClick="toHome"/>
-            <Tbtn color="primary" icon="save" text="Save" @onClick="submit"/>              
-            <Tbtn color="primary" icon="refresh" text="Refresh" @onClick="setFields"/>  
-            <Tbtn color="primary" icon="delete" text="Delete Study Program" @onClick="confirmDelete"/>  
-          </v-btn-toggle>
-          <hr >
-        </div>    
+      <v-container grid-list-md fluid style="padding-top: 5px;">
+        <v-toolbar color="transparent" card>
+          <v-spacer/>
+          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Back to List" @onClick="toHome"/>
+          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Save" @onClick="submit"/>              
+          <Tbtn color="primary" icon="refresh" icon-mode tooltip-text="Refresh" @onClick="setFields"/>  
+          <Tbtn color="primary" icon="delete" icon-mode tooltip-text="Delete" @onClick="confirmDelete"/>  
+        </v-toolbar>
         <form>
           <v-layout row wrap class="mt-3 px-2">
             <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
@@ -102,13 +100,10 @@ export default {
         "university_id",
         "description",
         "address",
-        "study_name_id",
-        "class_per_year",
-        "students_per_class"
+        "study_name_id"
       ],
       showDialog: false,
       formData: {},
-      toggle_multiple: [0, 1, 2, 3],
       years: []
     }
   },

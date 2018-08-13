@@ -47,7 +47,7 @@ export default {
   },
   mixins: [global],
   props: {
-    showForm: {
+    form: {
       type: Boolean,
       required: true
     },
@@ -77,8 +77,8 @@ export default {
     }
   },
   watch: {
-    showForm() {
-      this.dialog = this.showForm
+    form() {
+      this.dialog = this.form
     },
     isEdit() {
       if (this.isEdit) {

@@ -9,7 +9,7 @@
           <v-container grid-list-md>
             <form>
               <v-layout row wrap class="mt-3 px-2">
-                <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
+                <v-flex v-for="(f, index) in fillable" :key="index" xs12>
                   <div v-if="!inArray(notIncluded, f.key)">
                     <label>{{ setCase(f.key) }}</label>
                     <v-text-field
@@ -18,6 +18,21 @@
                       :error-messages="errors.collect(f.key)"
                       :name="f.key"
                       :data-vv-name="f.key"
+                    />
+                  </div>
+                  <div v-if="f.key == 'study_name_id' && comboData2">
+                    <label>Study Program Name</label>                
+                    <v-autocomplete
+                      v-validate="'required|numeric'"
+                      :items="comboData2"
+                      :error-messages="errors.collect('study_name_id')"
+                      :data-vv-name="'study_name_id'"
+                      v-model="formData['study_name_id']"
+                      label="Select Study Program Name"
+                      single-line
+                      item-text="name"
+                      item-value="id"
+                      cache-items
                     />
                   </div>
                   <div v-if="f.key == 'university_id' && comboData">
@@ -61,7 +76,7 @@
 </template>
 <script>
 import { global } from "~/mixins"
-import { STUDIES_URL } from "~/utils/apis"
+import { STUDIES_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
 export default {
@@ -79,7 +94,7 @@ export default {
     return {
       dialog: false,
       fillable: [
-        { key: "name", value: "", rules: "required|max:50" },
+        { key: "study_name_id", value: "", rules: "required|integer" },
         { key: "university_id", value: "", rules: "required|integer" },
         { key: "phone", value: "", rules: "required|max:30" },
         { key: "email", value: "", rules: "required|email" },
@@ -87,7 +102,7 @@ export default {
         { key: "address", value: "", rules: "max:250" },
         { key: "description", value: "", rules: "max:250" }
       ],
-      notIncluded: ["description", "address", "university_id"],
+      notIncluded: ["description", "address", "university_id", "study_name_id"],
       formData: {},
       formTitle: "Register New Study Programs",
       years: []
@@ -98,9 +113,18 @@ export default {
       this.dialog = this.show
     }
   },
-  created() {
-    this.setFields()
-    this.setYears()
+  async created() {
+    try {
+      this.setAuth()
+      let resp = await axios.get(COMBO_DATA_URL + "University")
+      if (resp) this.$store.commit("comboData", resp.data)
+      let resp2 = await axios.get(COMBO_DATA_URL + "StudyName")
+      if (resp2) this.$store.commit("comboData2", resp2.data)
+      this.setFields()
+      this.setYears()
+    } catch (e) {
+      catchError(e)
+    }
   },
   methods: {
     onClose() {

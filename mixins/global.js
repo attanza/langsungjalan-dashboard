@@ -21,10 +21,7 @@ export default {
     }
   },
   mounted() {
-    if (this.token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${this.token}`
-      axios.defaults.headers.post["Content-Type"] = "application/json"
-    }
+    this.setAuth()
   },
   methods: {
     inArray(keys, searchedKey) {
@@ -41,6 +38,12 @@ export default {
     },
     setSnakeCase(txt) {
       return changeCase.snakeCase(txt)
+    },
+    setAuth() {
+      if (this.token) {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${this.token}`
+        axios.defaults.headers.post["Content-Type"] = "application/json"
+      }
     }
   },
   computed: {

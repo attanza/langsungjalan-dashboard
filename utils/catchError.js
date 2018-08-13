@@ -1,6 +1,5 @@
 import Noty from "noty"
 import Cookie from "js-cookie"
-// import store from "../store"
 
 export default e => {
   if (e.response) {
@@ -47,7 +46,7 @@ export default e => {
 
 function toLogin() {
   Cookie.remove("lj_token")
-  if (window && window.location) window.location.href = "/href"
+  if (window && window.location) window.location.href = "/login"
 }
 
 export function showNoty(text, type) {

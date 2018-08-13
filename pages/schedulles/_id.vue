@@ -20,24 +20,18 @@ import { detail, dform } from "~/components/schedulles"
 export default {
   async fetch({ store, params }) {
     try {
-      let resp = await axios.get(SCHEDULLE_URL + "/" + params.id)
-      store.commit("currentEdit", resp.data.data)
+      let currentEdit = await axios.get(SCHEDULLE_URL + "/" + params.id)
+      if (currentEdit) store.commit("currentEdit", currentEdit.data.data)
 
       // Marketing Combo Data
-      let marketing = await axios
-        .get(COMBO_DATA_URL + "MarketingAll")
-        .then(res => res.data)
-      store.commit("comboData", marketing)
+      let marketings = await axios.get(COMBO_DATA_URL + "MarketingAll")
+      if (marketings) store.commit("comboData", marketings.data)
       // Study Program Combo Data
-      let study = await axios
-        .get(COMBO_DATA_URL + "StudyProgram")
-        .then(res => res.data.data)
-      store.commit("comboData2", study)
+      let studies = await axios.get(COMBO_DATA_URL + "StudyProgram")
+      if (studies) store.commit("comboData2", studies.data)
       // Marketing Action Combo Data
-      let action = await axios
-        .get(COMBO_DATA_URL + "Action")
-        .then(res => res.data)
-      store.commit("comboData3", action)
+      let actions = await axios.get(COMBO_DATA_URL + "Action")
+      if (actions) store.commit("comboData3", actions.data)
     } catch (e) {
       console.log(e)
     }

@@ -8,32 +8,24 @@
           <Tbtn color="primary" icon="save" icon-mode tooltip-text="Save" @onClick="submit"/>              
           <Tbtn color="primary" icon="refresh" icon-mode tooltip-text="Refresh" @onClick="setFields"/>  
           <Tbtn color="primary" icon="delete" icon-mode tooltip-text="Delete" @onClick="confirmDelete"/>  
-        </v-toolbar>  
+        </v-toolbar>
         <form>
-          <v-layout row wrap class="mt-3 px-2">
-            <v-flex v-for="(f, index) in fillable" v-if="f.key != 'description'" :key="index" sm6 xs12>
-              <label>{{ setCase(f.key) }}</label>
-              <v-text-field
-                v-validate="f.rules"
-                v-model="formData[f.key]"
-                :error-messages="errors.collect(f.key)"
-                :name="f.key"
-                :data-vv-name="f.key"
-              />
-            </v-flex>
-            <v-flex v-for="(f, index) in fillable" v-if="f.key == 'description'" :key="index" sm6 xs12>
-              <label>{{ setCase(f.key) }}</label>
-              <v-textarea
-                v-validate="f.rules"
-                v-model="formData[f.key]"
-                :error-messages="errors.collect(f.key)"
-                :name="f.key"
-                :data-vv-name="f.key"
-              />
-            </v-flex>
-          </v-layout>     
-        </form>
-      </v-container>
+          <form>
+            <v-layout row wrap class="mt-3 px-2">
+            
+              <v-flex v-for="(f, index) in fillable" :key="index" xs12>
+                <label>{{ setCase(f.key) }}</label>
+                <v-text-field
+                  v-validate="f.rules"
+                  v-model="formData[f.key]"
+                  :error-messages="errors.collect(f.key)"
+                  :name="f.key"
+                  :data-vv-name="f.key"
+                />
+              </v-flex>
+            </v-layout>     
+          </form>
+      </form></v-container>
     </v-card>
     <Dialog :showDialog="showDialog" text="Are you sure want to delete ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
   </div>
@@ -41,7 +33,7 @@
 
 <script>
 import { global } from "~/mixins"
-import { PRODUCT_URL } from "~/utils/apis"
+import { STUDY_NAME_URL } from "~/utils/apis"
 import axios from "axios"
 import Dialog from "~/components/Dialog"
 import catchError, { showNoty } from "~/utils/catchError"
@@ -55,18 +47,12 @@ export default {
   data() {
     return {
       fillable: [
-        { key: "code", value: "", rules: "required|max:30" },
         { key: "name", value: "", rules: "required|max:50" },
-        { key: "measurement", value: "", rules: "required|max:15" },
-        { key: "price", value: "", rules: "required|integer" },
         { key: "description", value: "", rules: "max:250" }
       ],
+
       formData: {},
-      showNoty: false,
-      showDialog: false,
-      notyText: "",
-      notyColor: "success",
-      toggle_multiple: [0, 1, 2, 3]
+      showDialog: false
     }
   },
   created() {
@@ -74,7 +60,7 @@ export default {
   },
   methods: {
     toHome() {
-      this.$router.push("/products")
+      this.$router.push("/study-names")
     },
     setFields() {
       this.errors.clear()
@@ -82,6 +68,7 @@ export default {
         this.fillable.forEach(
           data => (this.formData[data.key] = this.currentEdit[data.key])
         )
+        this.switch1 = this.formData.is_active
       }
     },
     submit() {
@@ -95,35 +82,33 @@ export default {
     async editData() {
       try {
         if (this.currentEdit) {
+          this.formData.role_id = 3
           const resp = await axios
-            .put(PRODUCT_URL + "/" + this.currentEdit.id, this.formData)
+            .put(STUDY_NAME_URL + "/" + this.currentEdit.id, this.formData)
             .then(res => res.data)
           this.$store.commit("currentEdit", resp.data)
           this.setFields()
           showNoty("Data Updated", "success")
         }
       } catch (e) {
-        console.log(e)
         catchError(e)
       }
     },
     confirmDelete() {
-      this.showDialog = false
       this.showDialog = true
     },
     async removeData() {
       try {
         if (this.currentEdit) {
           const resp = await axios
-            .delete(PRODUCT_URL + "/" + this.currentEdit.id)
+            .delete(STUDY_NAME_URL + "/" + this.currentEdit.id)
             .then(res => res.data)
           if (resp.meta.status === 200) {
             showNoty("Data Deleted", "success")
-            this.$router.push("/products")
+            this.toHome()
           }
         }
       } catch (e) {
-        console.log(e)
         catchError(e)
       }
     }

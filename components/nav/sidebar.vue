@@ -72,16 +72,6 @@
       <v-toolbar-side-icon @click="drawer = !drawer"/>
       <v-spacer/>
       <v-toolbar-items>
-        <!-- <v-menu>
-          <v-avatar slot="activator" class="mt-1">
-            <img :src="avatar" alt="John">
-          </v-avatar>
-          <v-list>
-            <v-list-tile v-for="(item, index) in righItems" :key="index">
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-            </v-list-tile>
-          </v-list>
-        </v-menu> -->
         <v-menu
           origin="center center"
           transition="scale-transition"
@@ -133,7 +123,7 @@ export default {
         { title: "Dashboard", icon: "dashboard", to: "/" },
         {
           title: "Roles and Permissions",
-          icon: "account_circle",
+          icon: "pan_tool",
           to: "/roles",
           hasChild: true,
           children: [
@@ -148,7 +138,7 @@ export default {
         {
           title: "Users",
           icon: "account_circle",
-          to: "/universities",
+          to: "/users",
           hasChild: true,
           children: [
             { title: "Supervisors", icon: "perm_identity", to: "/supervisors" },
@@ -159,7 +149,29 @@ export default {
             }
           ]
         },
-        { title: "Universities", icon: "account_balance", to: "/universities" },
+        {
+          title: "Campus",
+          icon: "account_balance",
+          to: "/universities",
+          hasChild: true,
+          children: [
+            {
+              title: "Universities",
+              icon: "account_balance",
+              to: "/universities"
+            },
+            {
+              title: "Study Names",
+              icon: "description",
+              to: "/study-names"
+            },
+            {
+              title: "Study Programs",
+              icon: "library_books",
+              to: "/study-programs"
+            }
+          ]
+        },
         {
           title: "Marketing Actions",
           icon: "list",
@@ -169,11 +181,6 @@ export default {
           title: "Marketing Schedulles",
           icon: "date_range",
           to: "/schedulles"
-        },
-        {
-          title: "Studi Programs",
-          icon: "library_books",
-          to: "/study-programs"
         },
         {
           title: "Products",
