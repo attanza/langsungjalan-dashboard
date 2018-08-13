@@ -5,7 +5,9 @@ import Cookie from "js-cookie"
 export default e => {
   if (e.response) {
     const status = e.response.status
-    const { message } = e.response.data.meta
+    let message = ""
+    if (e.response.data && e.response.data.meta)
+      message = e.response.data.meta.message
     switch (status) {
       case 400:
         showNoty(message, "error")
@@ -19,7 +21,10 @@ export default e => {
         }
         break
       case 401:
-        toLogin()
+        {
+          console.log('401') //eslint-disable-line
+          toLogin()
+        }
         break
 
       case 403:
@@ -31,17 +36,18 @@ export default e => {
           "Internal Server Error, please contact our Administrator",
           "error"
         )
+        console.log('Unknown Status') //eslint-disable-line
         break
     }
   } else {
+    console.log('default error') //eslint-disable-line
     toLogin("Internal Server Error, please contact our Administrator")
   }
 }
 
-function toLogin(message) {
-  if (message) alert(message)
+function toLogin() {
   Cookie.remove("lj_token")
-  window.location = "/login"
+  if (window && window.location) window.location.href = "/href"
 }
 
 export function showNoty(text, type) {

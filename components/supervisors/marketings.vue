@@ -14,7 +14,7 @@
             <v-autocomplete
               v-if="addMode && comboData"
               :items="comboData"
-              v-model="marketings"
+              v-model="marketingsToAdd"
               label="Select Marketing to add"
               multiple
               item-text="name"
@@ -27,7 +27,9 @@
           <v-spacer/>
           <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Back to List" @onClick="toHome"/>
           <Tbtn v-if="!addMode" color="primary" icon="add" icon-mode tooltip-text="Add Marketing" @onClick="addMode = true"/>  
-          <Tbtn v-if="addMode" color="primary" icon="save" icon-mode tooltip-text="Save" @onClick="addMode = false"/>              
+          <Tbtn v-if="addMode" color="primary" icon="save" icon-mode tooltip-text="Save" @onClick="addMarketing"/>      
+          <Tbtn color="primary" icon="refresh" icon-mode tooltip-text="refresh" @onClick="repopulateData"/>              
+
         </v-toolbar>
         <v-layout row wrap>
           <v-flex
@@ -55,7 +57,7 @@
 
               <v-card-actions>
                 <v-spacer/>
-                <v-btn icon>
+                <v-btn icon @click="prepareForDelete(marketing.id)">
                   <v-icon>delete</v-icon>
                 </v-btn>
               </v-card-actions>
@@ -64,22 +66,36 @@
         </v-layout>
       </v-container>
     </v-card>
+    <Dialog :showDialog="showDialog" text="Are you sure want to delete ?" @onClose="clear" @onConfirmed="detachMarketing"/>
+    <Loader :loading="loading"/>
+
   </div>
 </template>
 
 <script>
 import { global } from "~/mixins"
-import { MARKETING_URL, ADD_MARKETING_URL } from "~/utils/apis"
+import {
+  MARKETING_URL,
+  ADD_MARKETING_URL,
+  DETACH_MARKETING_URL,
+  COMBO_DATA_URL
+} from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
 import debounce from "lodash/debounce"
+import Dialog from "~/components/Dialog"
+import Loader from "~/components/Loader"
+
 export default {
+  components: { Dialog, Loader },
   mixins: [global],
   data() {
     return {
-      showForm: false,
+      showDialog: false,
       marketings: [],
-      addMode: false
+      addMode: false,
+      marketingsToAdd: [],
+      marketingsToDelete: []
     }
   },
   watch: {
@@ -107,7 +123,7 @@ export default {
           const resp = await axios.get(endPoint).then(res => res.data)
           this.marketings = resp.data
           this.totalItems = resp.meta.total
-          this.loading = true
+          this.loading = false
         }
       } catch (error) {
         this.loading = false
@@ -119,29 +135,70 @@ export default {
       this.getMarketings()
     }, 300),
 
-    async addMarketing() {
-      try {
-        this.loading = true
-        if (this.marketings.length > 0 && this.currentEdit) {
-          let data = {
-            supervisor_id: this.currentEdit.id,
-            marketings: this.marketings
-          }
-          const resp = await axios
-            .post(ADD_MARKETING_URL, data)
-            .then(res => res.data)
-          this.$store.commit("currentEdit", resp.data)
-          this.getMarketings()
-          showNoty("Marketing added.", "success")
-          this.addMode = false
-        } else {
-          this.addMode = false
+    addMarketing() {
+      this.loading = true
+      if (this.marketingsToAdd.length > 0 && this.currentEdit) {
+        let data = {
+          supervisor_id: this.currentEdit.id,
+          marketings: this.marketingsToAdd
         }
-      } catch (e) {
-        this.loading = false
-        this.addMode = false
-        catchError(e)
+        axios
+          .post(ADD_MARKETING_URL, data)
+          .then(resp => {
+            if (resp.status === 200) {
+              showNoty("Marketing added.", "success")
+              this.clear()
+              this.repopulateData()
+            } else this.clear()
+          })
+          .catch(e => {
+            this.clear()
+            catchError(e)
+          })
       }
+    },
+    prepareForDelete(id) {
+      this.marketingsToDelete.push(id)
+      this.showDialog = true
+    },
+    async detachMarketing() {
+      this.loading = true
+      if (this.marketingsToDelete.length > 0 && this.currentEdit) {
+        let data = {
+          supervisor_id: this.currentEdit.id,
+          marketings: this.marketingsToDelete
+        }
+        axios
+          .put(DETACH_MARKETING_URL, data)
+          .then(resp => {
+            if (resp.status === 200) {
+              showNoty("Marketing detached.", "success")
+              this.clear()
+              this.repopulateData()
+            } else this.clear()
+          })
+          .catch(e => {
+            this.clear()
+            catchError(e)
+          })
+      }
+    },
+
+    repopulateData() {
+      this.getMarketings()
+      axios.get(COMBO_DATA_URL + "Marketing").then(resp => {
+        if (resp.status === 200) {
+          this.$store.commit("comboData", resp.data)
+        }
+      })
+    },
+
+    clear() {
+      this.marketingsToAdd = []
+      this.marketingsToDelete = []
+      this.loading = false
+      this.addMode = false
+      this.showDialog = false
     }
   }
 }

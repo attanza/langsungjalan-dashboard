@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="primary--text mb-3">{{ title }}s</h2>
-    <v-card dark>
+    <v-card dark class="pt-3">
       <v-toolbar card color="transparent">
         <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
         <v-spacer/>
@@ -122,7 +122,6 @@ export default {
       } catch (e) {
         this.loading = false
         this.showForm = false
-        catchError(e, null, this.$router)
         catchError(e)
       }
     },

@@ -31,8 +31,10 @@ export default {
       let resp = await axios.get(SUPERVISOR_URL + "/" + params.id)
       if (resp) store.commit("currentEdit", resp.data.data)
       // Combo / Select Data
-      let combo = await axios.get(COMBO_DATA_URL + "Marketing")
-      if (combo) store.commit("comboData", combo.data)
+      let combo = await axios
+        .get(COMBO_DATA_URL + "Marketing")
+        .then(res => res.data)
+      if (combo) store.commit("comboData", combo)
     } catch (e) {
       catchError(e)
     }
