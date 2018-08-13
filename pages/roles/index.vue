@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="primary--text mb-3">{{ title }}s</h2>
-    <v-card dark>
+    <v-card dark class="pt-3">
       <v-toolbar card color="transparent">
         <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
         <v-spacer/>
@@ -34,7 +34,7 @@
         </template>
       </v-data-table>
     </v-card>
-    <dform :show-form="showForm" @onClose="showForm = false" @onAdd="addData"/>
+    <dform :show="showForm" @onClose="showForm = false" @onAdd="addData"/>
   </div>
 </template>
 <script>
@@ -50,16 +50,6 @@ export default {
   mixins: [global],
   data: () => ({
     title: "Role",
-    loading: false,
-    showForm: false,
-    totalItems: 0,
-    search: "",
-    pagination: {
-      sortBy: "",
-      descending: false,
-      page: 1,
-      rowsPerPage: 10
-    },
     headers: [
       { text: "Name", align: "left", value: "name" },
       { text: "Slug", align: "left", value: "slug" },

@@ -43,7 +43,7 @@ export default {
   },
   mixins: [global],
   props: {
-    showForm: {
+    show: {
       type: Boolean,
       required: true
     }
@@ -60,8 +60,8 @@ export default {
     }
   },
   watch: {
-    showForm() {
-      this.dialog = this.showForm
+    show() {
+      this.dialog = this.show
     }
   },
   methods: {

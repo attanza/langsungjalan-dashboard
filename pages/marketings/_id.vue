@@ -6,15 +6,9 @@
       <v-tab href="#detail">
         Details
       </v-tab>
-      <!-- <v-tab href="#marketings">
-        Marketings
-      </v-tab> -->
       <v-tab-item :id="'detail'">
         <detail/>
       </v-tab-item>
-      <!-- <v-tab-item :id="'marketings'">
-        <marketings/>
-      </v-tab-item> -->
     </v-tabs>
   </div>
 </template>
@@ -29,7 +23,7 @@ export default {
   async fetch({ store, params }) {
     try {
       let resp = await axios.get(MARKETING_URL + "/" + params.id)
-      store.commit("currentEdit", resp.data.data)
+      if (resp) store.commit("currentEdit", resp.data.data)
     } catch (e) {
       catchError(e)
     }

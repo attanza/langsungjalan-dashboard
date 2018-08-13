@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h2 class="primary--text mb-3">Study Programs</h2>
-    <v-card dark>
-      <v-card-title>
-        <Tbtn :bottom="true" color="primary" icon="add" text="Register new Study Program" @onClick="showForm = true"/>
+    <h2 class="primary--text mb-3">{{ title }}s</h2>
+    <v-card dark class="pt-3">
+      <v-toolbar card color="transparent">
+        <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
         <v-spacer/>
         <v-text-field
           v-model="search"
@@ -12,7 +12,7 @@
           single-line
           hide-details
         />
-      </v-card-title>
+      </v-toolbar>
       <v-data-table
         :headers="headers"
         :items="items"
@@ -30,13 +30,13 @@
           <td>{{ props.item.email }}</td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <v-icon color="white">remove_red_eye</v-icon>
+              <Tbtn :tooltip-text="'Show '+title" icon-mode flat color="white" icon="remove_red_eye" @onClick="toDetail(props.item)"/>
             </v-btn>
           </td>
         </template>
       </v-data-table>
     </v-card>
-    <dform :show-form="showForm" @onClose="showForm = false" @onAdd="addData"/>
+    <dform :show="showForm" @onClose="showForm = false" @onAdd="addData"/>
   </div>
 </template>
 <script>
@@ -60,16 +60,8 @@ export default {
   components: { dform },
   mixins: [global],
   data: () => ({
-    loading: false,
-    showForm: false,
-    totalItems: 0,
-    search: "",
-    pagination: {
-      sortBy: "",
-      descending: false,
-      page: 1,
-      rowsPerPage: 10
-    },
+    title: "Study Program",
+
     headers: [
       { text: "Name", align: "left", value: "study_name_id" },
       { text: "University", align: "left", value: "university_id" },

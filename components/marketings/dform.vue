@@ -53,7 +53,7 @@ export default {
   },
   mixins: [global],
   props: {
-    showForm: {
+    show: {
       type: Boolean,
       required: true
     }
@@ -71,12 +71,12 @@ export default {
         { key: "description", value: "", rules: "max:250" }
       ],
       formData: {},
-      formTitle: "Register New Markeitng"
+      formTitle: "Register New Marketing"
     }
   },
   watch: {
-    showForm() {
-      this.dialog = this.showForm
+    show() {
+      this.dialog = this.show
     }
   },
   mounted() {

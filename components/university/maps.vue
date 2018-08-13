@@ -15,13 +15,13 @@
         </gmap-map>
       </div>
       <v-card-actions>
-        <Tbtn color="primary" icon="chevron_left" text="Back to University List" @onClick="toHome"/>
+        <Tbtn color="primary" icon="chevron_left" tooltip-text="Back to University List" @onClick="toHome"/>
         <v-spacer/>
         <v-tooltip top>
           <gmap-autocomplete slot="activator" @place_changed="setPlace"/>
           <span>Type to search for locations</span>
         </v-tooltip>
-        <Tbtn :flat="true" color="primary" icon="save" text="Save Location Map" @onClick="setLocation"/>
+        <Tbtn :flat="true" color="primary" icon="save" tooltip-text="Save Location Map" @onClick="setLocation"/>
       </v-card-actions>
     </v-card>
   </div>

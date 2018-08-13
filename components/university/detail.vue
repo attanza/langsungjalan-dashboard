@@ -1,16 +1,14 @@
 <template>
   <div>
-    <v-card dark>
-      <v-container grid-list-md>
-        <div class="btn-group">
-          <v-btn-toggle v-model="toggle_multiple" multiple>
-            <Tbtn color="primary" icon="chevron_left" text="Back to University List" @onClick="toHome"/>
-            <Tbtn color="primary" icon="save" text="Save" @onClick="submit"/>              
-            <Tbtn color="primary" icon="refresh" text="Refresh" @onClick="setFields"/>  
-            <Tbtn color="primary" icon="delete" text="Delete university" @onClick="confirmDelete"/>  
-          </v-btn-toggle>
-          <hr >
-        </div>    
+    <v-card dark class="pt-3">
+      <v-container grid-list-md fluid style="padding-top: 0px;">
+        <v-toolbar color="transparent" card>
+          <v-spacer/>
+          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Back to List" @onClick="toHome"/>
+          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Save" @onClick="submit"/>              
+          <Tbtn color="primary" icon="refresh" icon-mode tooltip-text="Refresh" @onClick="setFields"/>  
+          <Tbtn color="primary" icon="delete" icon-mode tooltip-text="Delete" @onClick="confirmDelete"/>  
+        </v-toolbar>  
         <form>
           <v-layout row wrap class="mt-3 px-2">
             <v-flex v-for="(f, index) in fillable" v-if="!inArray(notIncluded, f.key)" :key="index" sm6 xs12>

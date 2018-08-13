@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card dark>
-      <v-container grid-list-md fluid style="padding-top: 0px;">
+      <v-container grid-list-md fluid style="padding-top: 5px;">
         <v-toolbar color="transparent" card>
           <v-spacer/>
           <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Back to List" @onClick="toHome"/>
