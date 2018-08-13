@@ -13,7 +13,8 @@
     "lintfix": "eslint --fix --ext .js,.vue --ignore-path .gitignore .",
     "test:unit": "TEST=unit yarn ava ./test/specs/*.js --verbose",
     "test:e2e": "TEST=e2e yarn ava ./test/e2e/*.js --verbose",
-    "test": "yarn test:unit & yarn test:e2e"
+    "test": "yarn test:unit & yarn test:e2e",
+    "prod": "pm2 start npm ecosystem.config.js --name nuxt -- start"
   },
   "ava": {
     "require": [
