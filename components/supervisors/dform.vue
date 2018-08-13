@@ -9,7 +9,7 @@
           <v-container grid-list-md>
             <form>
               <v-layout row wrap>
-                <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
+                <v-flex v-for="(f, index) in fillable" :key="index" xs12>
                   <div v-if="f.key !== 'is_active'">
                     <label>{{ setCase(f.key) }}</label>
                     <v-text-field
@@ -54,7 +54,7 @@ export default {
   },
   mixins: [global],
   props: {
-    showForm: {
+    show: {
       type: Boolean,
       required: true
     }
@@ -76,8 +76,8 @@ export default {
     }
   },
   watch: {
-    showForm() {
-      this.dialog = this.showForm
+    show() {
+      this.dialog = this.show
     }
   },
   created() {
@@ -114,6 +114,7 @@ export default {
           this.setFields()
         }
       } catch (e) {
+        this.dialog = false
         catchError(e)
       }
     }

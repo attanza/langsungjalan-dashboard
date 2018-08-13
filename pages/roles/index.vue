@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h2 class="primary--text mb-3">{{ title }}'s</h2>
+    <h2 class="primary--text mb-3">{{ title }}s</h2>
     <v-card dark>
-      <v-card-title>
-        <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " color="primary" icon="add" @onClick="showForm = true"/>
+      <v-toolbar card color="transparent">
+        <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
         <v-spacer/>
         <v-text-field
           v-model="search"
@@ -12,7 +12,7 @@
           single-line
           hide-details
         />
-      </v-card-title>
+      </v-toolbar>
       <v-data-table 
         v-if="items"
         :headers="headers"
@@ -38,7 +38,7 @@
   </div>
 </template>
 <script>
-import _ from "lodash"
+import debounce from "lodash/debounce"
 import { ROLE_URL } from "~/utils/apis"
 import { global } from "~/mixins"
 import { dform } from "~/components/roles"
@@ -67,8 +67,6 @@ export default {
       { text: "Actions", value: "", align: "center", sortable: false }
     ],
     items: [],
-    itemEdit: {},
-    userIdDelete: "",
     confirmMessage: "Are you sure want to delete this ?",
     showConfirm: false
   }),
@@ -92,7 +90,7 @@ export default {
   },
 
   methods: {
-    searchQuery: _.debounce(function() {
+    searchQuery: debounce(function() {
       this.pupulateTable()
     }, 500),
     async pupulateTable() {

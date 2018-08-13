@@ -23,18 +23,18 @@
 import { SUPERVISOR_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import { detail, dform, marketings } from "~/components/supervisors"
-// import catchError from "~/utils/catchError"
+import catchError from "~/utils/catchError"
 
 export default {
   async fetch({ store, params }) {
     try {
       let resp = await axios.get(SUPERVISOR_URL + "/" + params.id)
-      store.commit("currentEdit", resp.data.data)
+      if (resp) store.commit("currentEdit", resp.data.data)
       // Combo / Select Data
       let combo = await axios.get(COMBO_DATA_URL + "Marketing")
-      store.commit("comboData", combo.data)
+      if (combo) store.commit("comboData", combo.data)
     } catch (e) {
-      console.log(e)
+      catchError(e)
     }
   },
   components: { detail, dform, marketings },

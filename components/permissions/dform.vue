@@ -19,16 +19,6 @@
                     data-vv-name="name"
                   />
                 </v-flex>
-                <!-- <v-flex sm6 xs12>
-                  <label>Slug</label>
-                  <v-text-field
-                    v-validate="'required|max:80'"
-                    v-model="slug"
-                    :error-messages="errors.collect('slug')"
-                    name="slug"
-                    data-vv-name="slug"
-                  />
-                </v-flex> -->
                 <v-flex sm12>
                   <label>Description</label>
                   <v-textarea

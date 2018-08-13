@@ -1,116 +1,127 @@
 <template>
-  <div class="main-wrapper">
-    <v-container fluid grid-list-sm>
-      <v-layout row class="mb-2">
-        <v-flex sm4 xs12>
-          <v-text-field
-            v-model="search"
-            append-icon="search"
-            label="Search"
-            single-line
-            hide-details
-          />
-        </v-flex>
-        <v-flex sm4 xs12>
-          <v-autocomplete
-            v-if="addMode && comboData"
-            :items="comboData"
-            v-model="marketings"
-            label="Select Marketing to add"
-            multiple
-            item-text="name"
-            item-value="id"
-            autocomplete
-            cache-items
-          />
-        </v-flex>  
-        <v-flex sm4 xs12 class="header-right">
-          <Tbtn v-if="!addMode" bottom icon-mode color="primary" icon="add" text="Add Marketing" @onClick="addMode = true"/>      
-          <Tbtn v-if="addMode" bottom icon-mode color="primary" icon="save" text="Save Marketing" @onClick="saveMarketing"/> 
-        </v-flex>             
-      </v-layout>
-      
-      <v-layout v-if="currentEdit && search == ''" row wrap >
-        <v-flex v-for="m in currentEdit.marketings" :key="m.id" md4 sm6 xs12>
-          <v-card dark>
-            <v-card-media v-if="m.photo" :src="m.photo" height="200px"/>
-            <v-card-media v-else src="/images/user.png" height="200px"/>
-            <v-card-title primary-title>
-              <v-layout row wrap>
-                <v-flex xs10>
-                  <h3 class="headline mb-0">{{ m.name }}</h3>
-                  <div>{{ m.email }}<br>{{ m.phone }}</div>
-                </v-flex>
-                <v-flex xs2>
-                  <Tbtn color="primary" icon-mode icon="delete" text="Detach Marketing" @onClick="confirmDelete(m.id)"/>
-                </v-flex>
-              </v-layout>
-            </v-card-title>
-          </v-card>
-        </v-flex>
-      </v-layout>
+  <div>
+    <v-card dark>
+      <v-container fluid grid-list-md style="padding-top: 5px;">
+        <v-toolbar card color="transparent">
+          <v-toolbar-items>
+            <v-text-field
+              v-model="search"
+              append-icon="search"
+              label="Search"
+              single-line
+              hide-details
+            />
+            <v-autocomplete
+              v-if="addMode && comboData"
+              :items="comboData"
+              v-model="marketings"
+              label="Select Marketing to add"
+              multiple
+              item-text="name"
+              item-value="id"
+              autocomplete
+              cache-items
+              class="ml-1"
+            />
+          </v-toolbar-items>
+          <v-spacer/>
+          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Back to List" @onClick="toHome"/>
+          <Tbtn v-if="!addMode" color="primary" icon="add" icon-mode tooltip-text="Add Marketing" @onClick="addMode = true"/>  
+          <Tbtn v-if="addMode" color="primary" icon="save" icon-mode tooltip-text="Save" @onClick="addMode = false"/>              
+        </v-toolbar>
+        <v-layout row wrap>
+          <v-flex
+            v-for="marketing in marketings"
+            :key="marketing.id"
+            md4 sm6 xs12
+          >
+            <v-card color="primary">
+              <v-card-media
+                :src="marketing.photo !== '' ? marketing.photo: '/images/user.png'"
+                height="200px"
+              >
+                <v-container
+                  fill-height
+                  fluid
+                  pa-2
+                >
+                  <v-layout fill-height>
+                    <v-flex xs12 align-end flexbox>
+                      <span class="headline primary--text" v-text="marketing.name"/>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-card-media>
 
-      <v-layout v-if="currentEdit && search != ''" row wrap >
-        <v-flex v-for="m in results" :key="m.id" md4 sm6 xs12>
-          <v-card dark>
-            <v-card-media v-if="m.photo" :src="m.photo" height="200px"/>
-            <v-card-media v-else src="/images/user.png" height="200px"/>
-            <v-card-title primary-title>
-              <v-layout row wrap>
-                <v-flex xs10>
-                  <h3 class="headline mb-0">{{ m.name }}</h3>
-                  <div>{{ m.email }}<br>{{ m.phone }}</div>
-                </v-flex>
-                <v-flex xs2>
-                  <Tbtn color="primary" icon-mode icon="delete" text="Detach Marketing" @onClick="confirmDelete(m)"/>
-                </v-flex>
-              </v-layout>
-            </v-card-title>
-          </v-card>
-        </v-flex>
-      </v-layout>
-      <Dialog :showDialog="showDialog" text="Are you sure want to detach ?" @onClose="showDialog = false" @onConfirmed="detachMarketing"/>
-      
-    </v-container>
+              <v-card-actions>
+                <v-spacer/>
+                <v-btn icon>
+                  <v-icon>delete</v-icon>
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-card>
   </div>
 </template>
 
 <script>
 import { global } from "~/mixins"
-import {
-  ADD_MARKETING_URL,
-  SEARCH_MARKETING_URL,
-  DETACH_MARKETING_URL,
-  COMBO_DATA_URL
-} from "~/utils/apis"
+import { MARKETING_URL, ADD_MARKETING_URL } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
-import _ from "lodash"
-import Dialog from "~/components/Dialog"
-
+import debounce from "lodash/debounce"
 export default {
-  components: { Dialog },
   mixins: [global],
-
   data() {
     return {
+      showForm: false,
       marketings: [],
-      addMode: false,
-      search: "",
-      results: [],
-      showDialog: false
+      addMode: false
     }
   },
   watch: {
     search() {
       if (this.search != "") {
-        this.searchMarketings()
+        this.searchMarketing()
       }
     }
   },
+  mounted() {
+    this.getMarketings()
+  },
   methods: {
-    async saveMarketing() {
+    toHome() {
+      this.$router.push("/supervisors")
+    },
+    async getMarketings() {
       try {
+        if (this.currentEdit) {
+          this.loading = true
+          const { page, rowsPerPage } = this.pagination
+          const endPoint = `${MARKETING_URL}?page=${page}&limit=${rowsPerPage}&search=${
+            this.search
+          }&role_id=3&supervisor_id=${this.currentEdit.id}`
+          const resp = await axios.get(endPoint).then(res => res.data)
+          this.marketings = resp.data
+          this.totalItems = resp.meta.total
+          this.loading = true
+        }
+      } catch (error) {
+        this.loading = false
+        catchError(error)
+      }
+    },
+
+    searchMarketing: debounce(function() {
+      this.getMarketings()
+    }, 300),
+
+    async addMarketing() {
+      try {
+        this.loading = true
         if (this.marketings.length > 0 && this.currentEdit) {
           let data = {
             supervisor_id: this.currentEdit.id,
@@ -120,91 +131,21 @@ export default {
             .post(ADD_MARKETING_URL, data)
             .then(res => res.data)
           this.$store.commit("currentEdit", resp.data)
-          this.repopulateComboData()
+          this.getMarketings()
           showNoty("Marketing added.", "success")
           this.addMode = false
-          this.clearMarketings()
         } else {
           this.addMode = false
-          this.clearMarketings()
         }
       } catch (e) {
+        this.loading = false
+        this.addMode = false
         catchError(e)
       }
-    },
-    clearMarketings() {
-      this.marketings = []
-    },
-    searchMarketings: _.debounce(function() {
-      this.results = []
-      if (this.currentEdit) {
-        this.findMarketings(this.currentEdit.id)
-      }
-    }, 500),
-    async findMarketings(id) {
-      const resp = await axios
-        .get(
-          `${SEARCH_MARKETING_URL}?supervisor_id=${id}&search=${this.search}`
-        )
-        .then(res => res.data)
-      this.results = resp
-    },
-    confirmDelete(id) {
-      this.showDialog = true
-      this.marketings = []
-      this.marketings.push(id)
-    },
-    async detachMarketing() {
-      try {
-        if (this.marketings.length > 0 && this.currentEdit) {
-          let data = {
-            supervisor_id: this.currentEdit.id,
-            marketings: this.marketings
-          }
-          const resp = await axios
-            .put(DETACH_MARKETING_URL, data)
-            .then(res => res.data)
-          this.showDialog = false
-          this.clearMarketings()
-          this.$store.commit("currentEdit", resp.data)
-          this.$store.dispatch("populateComboData", "Marketing")
-          showNoty("Marketing Detached.", "success")
-        } else {
-          this.clearMarketings()
-        }
-      } catch (e) {
-        catchError(e)
-      }
-    },
-    async repopulateComboData() {
-      let combo = await axios
-        .get(COMBO_DATA_URL + "Marketing")
-        .then(res => res.data)
-      this.$store.commit("comboData", combo.data)
     }
   }
 }
 </script>
 
 <style scoped>
-/* .main-wrapper {
-  background-color: #444444;
-} */
-.header-wrapper {
-  min-height: 50px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-.header-left {
-  display: flex;
-  width: 50%;
-  justify-content: flex-start;
-}
-.header-right {
-  display: flex;
-  width: 50%;
-  justify-content: flex-end;
-}
 </style>

@@ -4,10 +4,10 @@
       <v-container grid-list-md fluid style="padding: 0px;">
         <v-toolbar color="transparent" card>
           <v-spacer/>
-          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Back to Role List" @onClick="toHome"/>
+          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Back to List" @onClick="toHome"/>
           <Tbtn color="primary" icon="save" icon-mode tooltip-text="Save" @onClick="submit"/>              
           <Tbtn color="primary" icon="refresh" icon-mode tooltip-text="Refresh" @onClick="setFields"/>  
-          <Tbtn color="primary" icon="delete" icon-mode tooltip-text="Delete role" @onClick="confirmDelete"/>  
+          <Tbtn color="primary" icon="delete" icon-mode tooltip-text="Delete" @onClick="confirmDelete"/>  
         </v-toolbar>
         <v-card-text>
           <form>
