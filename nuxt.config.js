@@ -1,7 +1,7 @@
 module.exports = {
   env: {
-    API_URL: process.env.API_URL || "http://localhost:4444/api/v1",
-    AUTH_URL: process.env.AUTH_URL || "http://localhost:4444/api/auth"
+    // API_URL: process.env.API_URL || "http://localhost:4444/api/v1",
+    API_URL: process.env.API_URL || "http://13.251.123.94:4444/"
   },
 
   /*
