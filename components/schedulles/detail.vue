@@ -56,6 +56,8 @@
                 cache-items
               />
             </v-flex>
+          </v-layout>
+          <v-layout row wrap>
             <v-flex sm6 xs12>
               <label>Start Date</label>                
               <v-menu
@@ -70,22 +72,49 @@
                 full-width
                 min-width="290px"
               >
-
                 <v-text-field
                   v-validate="'required'"
                   slot="activator"
                   :error-messages="errors.collect('start_date')"
-
                   :data-vv-name="'start_date'"
                   v-model="start_date"
                   label="Pick a Start Date"
                   readonly
                 />
-                <v-date-picker v-model="start_date" no-title scrollable>
-                  <v-spacer/>
-                  <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-                  <v-btn flat color="primary" @click="$refs.menu.save(start_date)">OK</v-btn>
-                </v-date-picker>
+                <v-date-picker v-model="start_date" @input="$refs.menu.save(start_date)"/>
+
+              </v-menu>
+            </v-flex>
+
+            <v-flex sm6 xs12>
+              <label>Start Time</label>                
+              <v-menu
+                ref="menuTime"
+                :close-on-content-click="false"
+                v-model="menuTime"
+                :nudge-right="40"
+                :return-value.sync="start_time"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                max-width="290px"
+                min-width="290px"
+              >
+                <v-text-field
+                  v-validate="'required'"
+                  slot="activator"
+                  :error-messages="errors.collect('start_time')"
+                  :data-vv-name="'start_time'"
+                  v-model="start_time"
+                  label="Pick a Start Time"
+                  readonly
+                />
+                <v-time-picker
+                  v-if="menuTime"
+                  v-model="start_time"
+                  @change="$refs.menuTime.save(start_time)"
+                />
               </v-menu>
             </v-flex>
 
@@ -103,25 +132,51 @@
                 full-width
                 min-width="290px"
               >
-
                 <v-text-field
                   v-validate="'required'"
                   slot="activator"
                   :error-messages="errors.collect('end_date')"
-
                   :data-vv-name="'end_date'"
                   v-model="end_date"
-                  label="Pick an End Date"
+                  label="Pick a Start Date"
                   readonly
                 />
-                <v-date-picker v-model="end_date" no-title scrollable>
-                  <v-spacer/>
-                  <v-btn flat color="primary" @click="menu2 = false">Cancel</v-btn>
-                  <v-btn flat color="primary" @click="$refs.menu2.save(end_date)">OK</v-btn>
-                </v-date-picker>
+                <v-date-picker v-model="end_date" @input="$refs.menu2.save(end_date)"/>
+
               </v-menu>
             </v-flex>
 
+            <v-flex sm6 xs12>
+              <label>End Time</label>                
+              <v-menu
+                ref="menuTime2"
+                :close-on-content-click="false"
+                v-model="menuTime2"
+                :nudge-right="40"
+                :return-value.sync="end_time"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                max-width="290px"
+                min-width="290px"
+              >
+                <v-text-field
+                  v-validate="'required'"
+                  slot="activator"
+                  :error-messages="errors.collect('end_time')"
+                  :data-vv-name="'end_time'"
+                  v-model="end_time"
+                  label="Pick a Start Time"
+                  readonly
+                />
+                <v-time-picker
+                  v-if="menuTime2"
+                  v-model="end_time"
+                  @change="$refs.menuTime2.save(end_time)"
+                />
+              </v-menu>
+            </v-flex>
             <v-flex sm12>
               <label>Description</label>
               <v-textarea
@@ -136,7 +191,7 @@
         </form>
       </v-container>
     </v-card>
-    <Dialog :showDialog="showDialog" text="Are you sure want to delete ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
+    <Dialog :showDialog="dialog" text="Are you sure want to delete ?" @onClose="dialog = false" @onConfirmed="removeData"/>
   </div>
 </template>
 
@@ -155,15 +210,19 @@ export default {
   mixins: [global],
   data() {
     return {
+      dialog: false,
       menu: false,
       menu2: false,
+      menuTime: false,
+      menuTime2: false,
       marketing_id: "",
       marketing_action_id: "",
       study_id: "",
       start_date: null,
       end_date: null,
-      description: "",
-      showDialog: false
+      start_time: null,
+      end_time: null,
+      description: ""
     }
   },
   created() {
@@ -178,7 +237,9 @@ export default {
         this.marketing_action_id = data.marketing_action_id
         this.description = data.description
         this.start_date = moment(data.start_date).format("YYYY-MM-DD")
+        this.start_time = moment(data.start_date).format("HH:mm:ss")
         this.end_date = moment(data.end_date).format("YYYY-MM-DD")
+        this.end_time = moment(data.end_date).format("HH:mm:ss")
       }
     },
     toHome() {
@@ -211,8 +272,8 @@ export default {
         marketing_id: this.marketing_id,
         marketing_action_id: this.marketing_action_id,
         study_id: this.study_id,
-        start_date: this.start_date,
-        end_date: this.end_date,
+        start_date: this.start_date + " " + this.start_time,
+        end_date: this.end_date + " " + this.end_time,
         description: this.description
       }
     },
@@ -232,7 +293,6 @@ export default {
           }
         }
       } catch (e) {
-        console.log(e)
         catchError(e)
       }
     }

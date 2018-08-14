@@ -62,11 +62,7 @@ export default {
       // { text: "Description", align: "left", value: "description" },
       { text: "Actions", value: "", align: "center", sortable: false }
     ],
-    items: [],
-    itemEdit: {},
-    userIdDelete: "",
-    confirmMessage: "Are you sure want to delete this ?",
-    showConfirm: false
+    items: []
   }),
   watch: {
     pagination: {
