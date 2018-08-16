@@ -10,6 +10,7 @@
               label="Search"
               single-line
               hide-details
+              class="mt-2"
             />
             <v-autocomplete
               v-if="addMode && comboData"
@@ -21,7 +22,7 @@
               item-value="id"
               autocomplete
               cache-items
-              class="ml-1"
+              class="ml-1 mt-2"
             />
           </v-toolbar-items>
           <v-spacer/>
