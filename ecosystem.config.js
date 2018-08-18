@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "nuxt",
+      name: "dashboard",
       script: "./node_modules/nuxt/bin/nuxt-start",
       env: {
         HOST: "0.0.0.0",
