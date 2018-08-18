@@ -263,7 +263,6 @@ export default {
     },
     async saveData() {
       try {
-        console.log(this.getData())
         const resp = await axios
           .post(SCHEDULLE_URL, this.getData())
           .then(res => res.data)

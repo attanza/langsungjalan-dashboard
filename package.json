@@ -14,7 +14,13 @@
     "test:unit": "TEST=unit yarn ava ./test/specs/*.js --verbose",
     "test:e2e": "TEST=e2e yarn ava ./test/e2e/*.js --verbose",
     "test": "yarn test:unit & yarn test:e2e",
-    "prod": "pm2 start npm ecosystem.config.js --name nuxt -- start"
+    "prod": "pm2 start npm ecosystem.config.js --name dashboard -- start"
+  },
+  "config": {
+    "nuxt": {
+      "host": "0.0.0.0",
+      "port": "3333"
+    }
   },
   "ava": {
     "require": [

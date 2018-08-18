@@ -5,13 +5,9 @@
       <v-toolbar card color="transparent">
         <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
         <v-spacer/>
-        <v-text-field
-          v-model="search"
-          append-icon="search"
-          label="Search"
-          single-line
-          hide-details
-        />
+        <Tbtn :bottom="true" :tooltip-text="'Refresh Table'" color="primary" icon="refresh" @onClick="pupulateTable"/>
+        <Tbtn :bottom="true" :tooltip-text="'Search'" color="primary" icon="search" @onClick="showSearch = true"/>
+
       </v-toolbar>
       <v-data-table
         :headers="headers"
@@ -25,8 +21,8 @@
           <td v-if="props.item.marketing">{{ props.item.marketing.name }}</td>
           <td v-if="props.item.action">{{ props.item.action.name }}</td>
           <td v-if="props.item.study.studyName">{{ props.item.study.studyName.name }}</td>
-          <td>{{ props.item.start_date | moment("DD MMM YYYY") }}</td>
-          <td>{{ props.item.end_date | moment("DD MMM YYYY") }}</td>
+          <td>{{ props.item.start_date | moment("DD MMM YYYY HH:mm:ss") }}</td>
+          <td>{{ props.item.end_date | moment("DD MMM YYYY HH:mm:ss") }}</td>
           <!-- <td>{{ props.item.description }}</td> -->
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
@@ -37,19 +33,20 @@
       </v-data-table>
     </v-card>
     <dform :show="showForm" @onClose="showForm = false" @onAdd="addData"/>
+    <searchForm :show-search="showSearch" @onClose="showSearch = false" @onSearch="onSearch"/>
+
   </div>
 </template>
 <script>
-import debounce from "lodash/debounce"
 import { SCHEDULLE_URL } from "~/utils/apis"
 import { global } from "~/mixins"
-import { dform } from "~/components/schedulles"
+import { dform, searchForm } from "~/components/schedulles"
 import axios from "axios"
 import catchError from "~/utils/catchError"
 
 export default {
   middleware: "auth",
-  components: { dform },
+  components: { dform, searchForm },
   mixins: [global],
   data: () => ({
     title: "Schedulle",
@@ -62,7 +59,12 @@ export default {
       // { text: "Description", align: "left", value: "description" },
       { text: "Actions", value: "", align: "center", sortable: false }
     ],
-    items: []
+    items: [],
+    showSearch: false,
+    search_by: "",
+    search_query: "",
+    start_date: "",
+    end_date: ""
   }),
   watch: {
     pagination: {
@@ -70,11 +72,6 @@ export default {
         this.pupulateTable()
       },
       deep: true
-    },
-    search() {
-      if (this.search != "") {
-        this.searchQuery()
-      }
     }
   },
 
@@ -83,16 +80,15 @@ export default {
   },
 
   methods: {
-    searchQuery: debounce(function() {
-      this.pupulateTable()
-    }, 500),
     async pupulateTable() {
       try {
         this.loading = true
         const { page, rowsPerPage, descending, sortBy } = this.pagination
-        const endPoint = `${SCHEDULLE_URL}?page=${page}&limit=${rowsPerPage}&search=${
-          this.search
-        }`
+        const endPoint = `${SCHEDULLE_URL}?page=${page}&limit=${rowsPerPage}&search_by=${
+          this.search_by
+        }&search_query=${this.search_query}&start_date=${
+          this.start_date
+        }&end_date=${this.end_date}`
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
         this.totalItems = res.meta.total
@@ -124,6 +120,18 @@ export default {
     addData(data) {
       this.items.unshift(data)
       this.showForm = false
+    },
+    onSearch(data) {
+      this.search_by = data.search_by
+      this.search_query = data.search_query
+      this.start_date = data.start_date
+      this.end_date = data.end_date
+      this.showSearch = false
+      this.pupulateTable()
+      this.search_by = ""
+      this.search_query = ""
+      this.start_date = ""
+      this.end_date = ""
     }
   }
 }
