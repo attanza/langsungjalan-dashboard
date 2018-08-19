@@ -53,7 +53,8 @@ export default {
       "comboData",
       "comboData2",
       "comboData3",
-      "permissions"
+      "permissions",
+      "user"
     ])
   }
 }

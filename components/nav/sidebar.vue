@@ -216,11 +216,16 @@ export default {
       this.$store.commit("user", {})
       this.$router.push("/login")
     },
-
+    toProfile() {
+      this.$router.push("profile")
+    },
     itemActions(title) {
       switch (title) {
         case "Logout":
           this.logout()
+          break
+        case "Profile":
+          this.toProfile()
           break
 
         default:
