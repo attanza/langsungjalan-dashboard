@@ -278,8 +278,10 @@ export default {
       }
     },
     confirmDelete() {
-      this.showDialog = false
-      this.showDialog = true
+      console.log("confirm delete")
+
+      this.dialog = false
+      this.dialog = true
     },
     async removeData() {
       try {

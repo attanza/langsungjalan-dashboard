@@ -135,7 +135,7 @@
                       :error-messages="errors.collect('end_date')"
                       :data-vv-name="'end_date'"
                       v-model="end_date"
-                      label="Pick a Start Date"
+                      label="Pick an End Date"
                       readonly
                     />
                     <v-date-picker v-model="end_date" @input="$refs.menu2.save(end_date)"/>
@@ -164,7 +164,7 @@
                       :error-messages="errors.collect('end_time')"
                       :data-vv-name="'end_time'"
                       v-model="end_time"
-                      label="Pick a Start Time"
+                      label="Pick an End Time"
                       readonly
                     />
                     <v-time-picker
