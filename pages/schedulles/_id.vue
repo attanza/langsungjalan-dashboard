@@ -14,26 +14,18 @@
 </template>
 
 <script>
-import { SCHEDULLE_URL, COMBO_DATA_URL } from "~/utils/apis"
+import { SCHEDULLE_URL } from "~/utils/apis"
 import axios from "axios"
 import { detail, dform } from "~/components/schedulles"
+import catchError from "~/utils/catchError"
+
 export default {
   async fetch({ store, params }) {
     try {
       let currentEdit = await axios.get(SCHEDULLE_URL + "/" + params.id)
       if (currentEdit) store.commit("currentEdit", currentEdit.data.data)
-
-      // Marketing Combo Data
-      let marketings = await axios.get(COMBO_DATA_URL + "MarketingAll")
-      if (marketings) store.commit("comboData", marketings.data)
-      // Study Program Combo Data
-      let studies = await axios.get(COMBO_DATA_URL + "StudyProgram")
-      if (studies) store.commit("comboData2", studies.data)
-      // Marketing Action Combo Data
-      let actions = await axios.get(COMBO_DATA_URL + "Action")
-      if (actions) store.commit("comboData3", actions.data)
     } catch (e) {
-      console.log(e)
+      catchError(e)
     }
   },
   components: { detail, dform }

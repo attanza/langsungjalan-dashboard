@@ -38,7 +38,7 @@
   </div>
 </template>
 <script>
-import { SCHEDULLE_URL } from "~/utils/apis"
+import { SCHEDULLE_URL, COMBO_DATA_URL } from "~/utils/apis"
 import { global } from "~/mixins"
 import { dform, searchForm } from "~/components/schedulles"
 import axios from "axios"
@@ -47,6 +47,21 @@ import catchError from "~/utils/catchError"
 export default {
   middleware: "auth",
   components: { dform, searchForm },
+  async fetch({ store }) {
+    try {
+      // Marketing Combo Data
+      let marketings = await axios.get(COMBO_DATA_URL + "MarketingAll")
+      if (marketings) store.commit("comboData", marketings.data)
+      // Study Program Combo Data
+      let studies = await axios.get(COMBO_DATA_URL + "StudyProgram")
+      if (studies) store.commit("comboData2", studies.data)
+      // Marketing Action Combo Data
+      let actions = await axios.get(COMBO_DATA_URL + "Action")
+      if (actions) store.commit("comboData3", actions.data)
+    } catch (e) {
+      catchError(e)
+    }
+  },
   mixins: [global],
   data: () => ({
     title: "Schedulle",

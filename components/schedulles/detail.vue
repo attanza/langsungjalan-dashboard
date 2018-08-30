@@ -278,8 +278,6 @@ export default {
       }
     },
     confirmDelete() {
-      console.log("confirm delete")
-
       this.dialog = false
       this.dialog = true
     },
