@@ -49,7 +49,7 @@
                     v-model="study_id"
                     label="Select Study Program"
                     single-line
-                    item-text="name"
+                    item-text="university"
                     item-value="id"
                     cache-items
                   />
@@ -235,12 +235,20 @@ export default {
   watch: {
     show() {
       this.dialog = this.show
+    },
+    start_date() {
+      if (this.start_date != null) {
+        this.end_date = this.start_date
+      }
     }
   },
   async mounted() {
     // Marketing Combo Data
     let marketings = await axios.get(COMBO_DATA_URL + "MarketingAll")
-    if (marketings) this.$store.commit("comboData", marketings.data)
+    if (marketings) {
+      this.$store.commit("comboData", null)
+      this.$store.commit("comboData", marketings.data)
+    }
     // Study Program Combo Data
     let studies = await axios.get(COMBO_DATA_URL + "StudyProgram")
     if (studies) this.$store.commit("comboData2", studies.data)

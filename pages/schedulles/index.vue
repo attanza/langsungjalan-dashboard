@@ -20,7 +20,7 @@
         <template slot="items" slot-scope="props">
           <td v-if="props.item.marketing">{{ props.item.marketing.name }}</td>
           <td v-if="props.item.action">{{ props.item.action.name }}</td>
-          <td v-if="props.item.study.studyName">{{ props.item.study.studyName.name }}</td>
+          <td v-if="props.item.study.studyName">{{ props.item.study.studyName.name }} ~ {{ props.item.study.university.name }}</td>
           <td>{{ props.item.start_date | moment("DD MMM YYYY HH:mm:ss") }}</td>
           <td>{{ props.item.end_date | moment("DD MMM YYYY HH:mm:ss") }}</td>
           <!-- <td>{{ props.item.description }}</td> -->

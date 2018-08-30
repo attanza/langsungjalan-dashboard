@@ -51,7 +51,7 @@
                 v-model="study_id"
                 label="Select Study Program"
                 single-line
-                item-text="name"
+                item-text="university"
                 item-value="id"
                 cache-items
               />
