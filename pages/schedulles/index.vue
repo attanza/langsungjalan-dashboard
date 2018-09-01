@@ -49,6 +49,10 @@ export default {
   components: { dform, searchForm },
   async fetch({ store }) {
     try {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${
+        store.state.token
+      }`
+      axios.defaults.headers.post["Content-Type"] = "application/json"
       // Marketing Combo Data
       let marketings = await axios.get(COMBO_DATA_URL + "MarketingAll")
       if (marketings) store.commit("comboData", marketings.data)
@@ -59,6 +63,8 @@ export default {
       let actions = await axios.get(COMBO_DATA_URL + "Action")
       if (actions) store.commit("comboData3", actions.data)
     } catch (e) {
+      console.log(e)
+
       catchError(e)
     }
   },
