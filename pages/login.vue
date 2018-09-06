@@ -35,7 +35,7 @@
               </form>
             </v-card-text>
             <v-card-actions>
-              <v-btn flat><span class="primary--text">Forgot Password ?</span></v-btn>
+              <v-btn flat @click="showResetForm = true"><span class="primary--text">Forgot Password ?</span></v-btn>
               <v-spacer/>
               <v-btn :loading="loading" :disabled="loading" color="primary" @click="submit">Login</v-btn>
             </v-card-actions>
@@ -43,6 +43,7 @@
         </v-flex>
       </v-layout>
     </v-container>
+    <EmailForm :show="showResetForm" @onClose="showResetForm = false"/>
   </v-content>
 </template>
 
@@ -52,18 +53,21 @@ import { LOGIN_URL } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
 import { global } from "~/mixins"
+import EmailForm from "~/components/EmailForm"
 export default {
   layout: "nonav",
   $_veeValidate: {
     validator: "new"
   },
+  components: { EmailForm },
   mixins: [global],
   data: () => ({
     email: "super_administrator@langsungjalan.com",
     password: "P4sw0rd@langsungjalan.com",
     e1: false,
     loading: false,
-    allowedLogin: ["super-administrator", "administrator"]
+    allowedLogin: ["super-administrator", "administrator"],
+    showResetForm: false
   }),
   methods: {
     submit() {
@@ -104,8 +108,6 @@ export default {
           showNoty("Login failed", "error")
         }
       } catch (e) {
-        console.log(e)
-
         this.loading = false
         catchError(e)
       }
