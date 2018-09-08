@@ -67,6 +67,11 @@ export const getters = {
     return state.comboData.filter(
       item => item.name.toLowerCase().indexOf(name) > -1
     )
+  },
+  getRoles: state => name => {
+    return state.comboData.filter(
+      item => item.name.toLowerCase().indexOf(name) > -1
+    )
   }
 }
 // var test = _.filter(items, function (item) {

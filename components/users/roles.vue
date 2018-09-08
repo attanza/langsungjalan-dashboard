@@ -19,20 +19,20 @@
         </v-toolbar>
         <v-card-text>
           <v-layout v-if="items" row wrap>
-            <v-flex v-for="permission in items" :key="permission.id" md3 sm4 xs6>
-              <v-checkbox v-model="permissionArray" :label="permission.name" :value="permission.id" color="primary"/>
+            <v-flex v-for="role in items" :key="role.id" md3 sm4 xs6>
+              <v-checkbox v-model="rolesArray" :label="role.name" :value="role.id" color="primary"/>
             </v-flex>
           </v-layout>
         </v-card-text>
       </v-container>
     </v-card>
-    <Dialog :showDialog="showDialog" text="Are you sure want to update ?" @onClose="showDialog = false" @onConfirmed="attachPermissions"/>
+    <Dialog :showDialog="showDialog" text="Are you sure want to update ?" @onClose="showDialog = false" @onConfirmed="attachRoles"/>
   </div>
 </template>
 
 <script>
 import { global } from "~/mixins"
-import { ROLE_PERMISSIONS_URL } from "~/utils/apis"
+import { USER_URL } from "~/utils/apis"
 import axios from "axios"
 import Dialog from "~/components/Dialog"
 import catchError, { showNoty } from "~/utils/catchError"
@@ -43,72 +43,68 @@ export default {
   data() {
     return {
       showDialog: false,
-      permissionArray: [],
       search: "",
-      items: []
+      items: [],
+      rolesArray: []
     }
   },
   watch: {
     search() {
-      if (this.search !== "") this.searchPermissions()
+      if (this.search !== "") this.searchRoles()
     }
   },
   mounted() {
-    this.items = this.$store.getters.getPermissions("")
-    this.setPermissionArray()
+    this.items = this.$store.getters.getRoles("")
+    this.setRoleArray()
   },
   methods: {
     toHome() {
-      this.$router.push("/roles")
+      this.$router.push("/users")
     },
-    setPermissionArray() {
-      if (this.permissions) {
-        this.permissions.forEach(p => {
-          this.permissionArray.push(p.id)
+    setRoleArray() {
+      if (this.currentEdit.roles) {
+        this.currentEdit.roles.forEach(r => {
+          this.rolesArray.push(r.id)
         })
       }
     },
-    async attachPermissions() {
+    selectAll() {
+      if (this.items) {
+        this.rolesArray = []
+        this.items.forEach(c => {
+          this.rolesArray.push(c.id)
+        })
+      }
+    },
+    clearAll() {
+      this.rolesArray = []
+    },
+    searchRoles: debounce(function() {
+      let results = this.$store.getters.getRoles(this.search)
+      this.items = results
+    }, 300),
+    async attachRoles() {
       try {
         let formData = {
-          role_id: this.currentEdit.id,
-          permissions: this.permissionArray
+          name: this.currentEdit.name,
+          email: this.currentEdit.email,
+          phone: this.currentEdit.phone,
+          address: this.currentEdit.address,
+          roles: this.rolesArray
         }
         const resp = await axios
-          .put(ROLE_PERMISSIONS_URL, formData)
+          .put(USER_URL + "/" + this.currentEdit.id, formData)
           .then(res => res.data)
-        this.$store.commit("permissions", resp.data)
+        this.$store.commit("currentEdit", resp.data)
         showNoty("Data Saved", "success")
         this.showDialog = false
       } catch (e) {
         catchError(e)
       }
-    },
-    selectAll() {
-      if (this.items) {
-        this.permissionArray = []
-        this.items.forEach(c => {
-          this.permissionArray.push(c.id)
-        })
-      }
-    },
-    clearAll() {
-      this.permissionArray = []
-    },
-    searchPermissions: debounce(function() {
-      let results = this.$store.getters.getPermissions(this.search)
-      this.items = results
-    }, 300)
+    }
   }
 }
 </script>
 
 <style scoped>
-.btn-group {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-}
 </style>
