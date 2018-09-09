@@ -81,6 +81,8 @@ export default {
     },
     async editData() {
       try {
+        this.activateLoader()
+
         if (this.currentEdit) {
           this.formData.role_id = 3
           const resp = await axios
@@ -89,8 +91,11 @@ export default {
           this.$store.commit("currentEdit", resp.data)
           this.setFields()
           showNoty("Data Updated", "success")
+          this.deactivateLoader()
         }
       } catch (e) {
+        this.deactivateLoader()
+        this.deactivateLoader()
         catchError(e)
       }
     },
@@ -99,16 +104,21 @@ export default {
     },
     async removeData() {
       try {
+        this.activateLoader()
+
         if (this.currentEdit) {
           const resp = await axios
             .delete(STUDY_NAME_URL + "/" + this.currentEdit.id)
             .then(res => res.data)
           if (resp.meta.status === 200) {
             showNoty("Data Deleted", "success")
+            this.deactivateLoader()
             this.toHome()
           }
         }
       } catch (e) {
+        this.showDialog = false
+        this.deactivateLoader()
         catchError(e)
       }
     }

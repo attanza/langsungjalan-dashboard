@@ -98,6 +98,7 @@ export default {
     },
     async editData() {
       try {
+        this.activateLoader()
         if (this.currentEdit) {
           this.formData.roles = this.$store.getters.getRoles("")
           const resp = await axios
@@ -106,8 +107,11 @@ export default {
           this.$store.commit("currentEdit", resp.data)
           this.setFields()
           showNoty("Data Updated", "success")
+          this.deactivateLoader()
         }
       } catch (e) {
+        this.deactivateLoader()
+
         catchError(e)
       }
     },
@@ -116,6 +120,8 @@ export default {
     },
     async removeData() {
       try {
+        this.activateLoader()
+
         if (this.currentEdit) {
           const resp = await axios
             .delete(USER_URL + "/" + this.currentEdit.id)
@@ -125,7 +131,10 @@ export default {
             this.$router.push("/supervisors")
           }
         }
+        this.deactivateLoader()
       } catch (e) {
+        this.deactivateLoader()
+
         catchError(e)
       }
     }

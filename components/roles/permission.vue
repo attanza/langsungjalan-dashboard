@@ -70,6 +70,7 @@ export default {
     },
     async attachPermissions() {
       try {
+        this.activateLoader()
         let formData = {
           role_id: this.currentEdit.id,
           permissions: this.permissionArray
@@ -80,7 +81,9 @@ export default {
         this.$store.commit("permissions", resp.data)
         showNoty("Data Saved", "success")
         this.showDialog = false
+        this.deactivateLoader()
       } catch (e) {
+        this.deactivateLoader()
         catchError(e)
       }
     },

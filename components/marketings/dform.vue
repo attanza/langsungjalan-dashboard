@@ -9,7 +9,7 @@
           <v-container grid-list-md>
             <form>
               <v-layout row wrap>
-                <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
+                <v-flex v-for="(f, index) in fillable" :key="index" xs12>
                   <div v-if="f.key !== 'is_active'">
                     <label>{{ setCase(f.key) }}</label>
                     <v-text-field
@@ -104,6 +104,7 @@ export default {
     },
     async saveData() {
       try {
+        this.activateLoader()
         this.formData.role_id = 4
         const resp = await axios
           .post(MARKETING_URL, this.formData)
@@ -112,7 +113,9 @@ export default {
           showNoty("Data Saved", "success")
           this.$emit("onAdd", resp.data)
         }
+        this.deactivateLoader()
       } catch (e) {
+        this.deactivateLoader()
         catchError(e)
       }
     }

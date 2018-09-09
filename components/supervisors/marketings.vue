@@ -115,6 +115,8 @@ export default {
     },
     async getMarketings() {
       try {
+        this.activateLoader()
+
         if (this.currentEdit) {
           this.loading = true
           const { page, rowsPerPage } = this.pagination
@@ -125,9 +127,12 @@ export default {
           this.marketings = resp.data
           this.totalItems = resp.meta.total
           this.loading = false
+          this.deactivateLoader()
         }
       } catch (error) {
         this.loading = false
+        this.deactivateLoader()
+
         catchError(error)
       }
     },
@@ -137,6 +142,8 @@ export default {
     }, 300),
 
     addMarketing() {
+      this.activateLoader()
+
       this.loading = true
       if (this.marketingsToAdd.length > 0 && this.currentEdit) {
         let data = {
@@ -154,15 +161,18 @@ export default {
           })
           .catch(e => {
             this.clear()
+            this.deactivateLoader()
             catchError(e)
           })
       }
+      this.deactivateLoader()
     },
     prepareForDelete(id) {
       this.marketingsToDelete.push(id)
       this.showDialog = true
     },
     async detachMarketing() {
+      this.activateLoader()
       this.loading = true
       if (this.marketingsToDelete.length > 0 && this.currentEdit) {
         let data = {
@@ -180,8 +190,11 @@ export default {
           })
           .catch(e => {
             this.clear()
+            this.deactivateLoader()
+
             catchError(e)
           })
+        this.deactivateLoader()
       }
     },
 

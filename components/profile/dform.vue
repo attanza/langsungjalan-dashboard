@@ -96,6 +96,7 @@ export default {
     },
     async saveData() {
       try {
+        this.activateLoader()
         if (this.user) {
           const resp = await axios
             .put(
@@ -109,8 +110,10 @@ export default {
             this.clearForm()
           }
         }
+        this.deactivateLoader()
       } catch (e) {
         this.clearForm()
+        this.deactivateLoader()
         catchError(e)
       }
     },

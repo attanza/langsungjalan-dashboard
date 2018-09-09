@@ -68,6 +68,7 @@ export default {
     }, 500),
     async setLocation() {
       try {
+        this.activateLoader()
         if (this.currentEdit) {
           for (var key in this.currentEdit) {
             if (this.currentEdit.hasOwnProperty(key)) {
@@ -81,9 +82,10 @@ export default {
             .then(res => res.data)
           this.$store.commit("currentEdit", resp.data)
           showNoty("Map Saved", "success")
+          this.deactivateLoader()
         }
       } catch (e) {
-        console.log(e)
+        this.deactivateLoader()
         catchError(e)
       }
     },

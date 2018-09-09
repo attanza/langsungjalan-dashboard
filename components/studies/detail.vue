@@ -138,6 +138,7 @@ export default {
     },
     async editData() {
       try {
+        this.activateLoader()
         if (this.currentEdit) {
           const resp = await axios
             .put(STUDIES_URL + "/" + this.currentEdit.id, this.formData)
@@ -145,9 +146,10 @@ export default {
           this.$store.commit("currentEdit", resp.data)
           this.setFields()
           showNoty("Data Updated", "success")
+          this.deactivateLoader()
         }
       } catch (e) {
-        console.log(e)
+        this.deactivateLoader()
         catchError(e)
       }
     },
@@ -157,6 +159,8 @@ export default {
     },
     async removeData() {
       try {
+        this.activateLoader()
+
         if (this.currentEdit) {
           const resp = await axios
             .delete(STUDIES_URL + "/" + this.currentEdit.id)
@@ -166,8 +170,9 @@ export default {
             this.$router.push("/study-programs")
           }
         }
+        this.deactivateLoader()
       } catch (e) {
-        console.log(e)
+        this.deactivateLoader()
         catchError(e)
       }
     }

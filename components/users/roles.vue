@@ -85,6 +85,8 @@ export default {
     }, 300),
     async attachRoles() {
       try {
+        this.activateLoader()
+
         let formData = {
           name: this.currentEdit.name,
           email: this.currentEdit.email,
@@ -98,7 +100,10 @@ export default {
         this.$store.commit("currentEdit", resp.data)
         showNoty("Data Saved", "success")
         this.showDialog = false
+        this.deactivateLoader()
       } catch (e) {
+        this.deactivateLoader()
+
         catchError(e)
       }
     }

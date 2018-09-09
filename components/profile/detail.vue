@@ -83,6 +83,7 @@ export default {
     },
     async editData() {
       try {
+        this.activateLoader()
         if (this.user) {
           this.formData.role_id = 3
           const resp = await axios
@@ -95,9 +96,10 @@ export default {
           this.$store.commit("user", resp.data)
           this.setFields()
           showNoty("Profile Updated", "success")
+          this.deactivateLoader()
         }
       } catch (e) {
-        console.log(e)
+        this.deactivateLoader()
         catchError(e)
       }
     }

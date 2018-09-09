@@ -102,6 +102,7 @@ export default {
     },
     async saveData() {
       try {
+        this.activateLoader()
         let formData = {
           name: this.name,
           description: this.description
@@ -114,8 +115,10 @@ export default {
           this.$emit("onAdd", resp.data)
           this.setFields()
         }
+        this.deactivateLoader()
       } catch (e) {
         this.dialog = false
+        this.deactivateLoader()
         catchError(e)
       }
     },

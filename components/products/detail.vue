@@ -94,6 +94,7 @@ export default {
     },
     async editData() {
       try {
+        this.activateLoader()
         if (this.currentEdit) {
           const resp = await axios
             .put(PRODUCT_URL + "/" + this.currentEdit.id, this.formData)
@@ -102,8 +103,9 @@ export default {
           this.setFields()
           showNoty("Data Updated", "success")
         }
+        this.deactivateLoader()
       } catch (e) {
-        console.log(e)
+        this.deactivateLoader()
         catchError(e)
       }
     },
@@ -113,6 +115,7 @@ export default {
     },
     async removeData() {
       try {
+        this.activateLoader()
         if (this.currentEdit) {
           const resp = await axios
             .delete(PRODUCT_URL + "/" + this.currentEdit.id)
@@ -122,8 +125,11 @@ export default {
             this.$router.push("/products")
           }
         }
+        this.deactivateLoader()
       } catch (e) {
-        console.log(e)
+        this.showDialog = false
+        this.deactivateLoader()
+
         catchError(e)
       }
     }

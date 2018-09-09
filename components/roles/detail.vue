@@ -62,11 +62,7 @@ export default {
         { key: "description", value: "", rules: "max:250" }
       ],
       formData: {},
-      showNoty: false,
-      showDialog: false,
-      notyText: "",
-      notyColor: "success",
-      toggle_multiple: [0, 1, 2, 3]
+      showDialog: false
     }
   },
   created() {
@@ -94,6 +90,7 @@ export default {
     },
     async editData() {
       try {
+        this.activateLoader()
         if (this.currentEdit) {
           const resp = await axios
             .put(ROLE_URL + "/" + this.currentEdit.id, this.formData)
@@ -101,8 +98,10 @@ export default {
           this.$store.commit("currentEdit", resp.data)
           this.setFields()
           showNoty("Data Updated", "success")
+          this.deactivateLoader()
         }
       } catch (e) {
+        this.deactivateLoader()
         catchError(e)
       }
     },
@@ -112,6 +111,7 @@ export default {
     },
     async removeData() {
       try {
+        this.activateLoader()
         if (this.currentEdit) {
           const resp = await axios
             .delete(ROLE_URL + "/" + this.currentEdit.id)
@@ -121,8 +121,10 @@ export default {
             this.$router.push("/roles")
           }
         }
+        this.deactivateLoader()
       } catch (e) {
-        console.log(e)
+        this.deactivateLoader()
+        this.showDialog = false
         catchError(e)
       }
     }

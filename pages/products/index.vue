@@ -86,6 +86,7 @@ export default {
       this.pupulateTable()
     }, 500),
     async pupulateTable() {
+      this.activateLoader()
       this.loading = true
       const { page, rowsPerPage, descending, sortBy } = this.pagination
       const endPoint = `${PRODUCT_URL}?page=${page}&limit=${rowsPerPage}&search=${
@@ -111,6 +112,7 @@ export default {
         })
       }
       this.loading = false
+      this.deactivateLoader()
     },
     toDetail(data) {
       this.$router.push(`/products/${data.id}`)

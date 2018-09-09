@@ -83,6 +83,8 @@ export default {
     },
     async editData() {
       try {
+        this.activateLoader()
+
         if (this.currentEdit) {
           this.formData.role_id = 3
           const resp = await axios
@@ -94,9 +96,10 @@ export default {
           this.$store.commit("currentEdit", resp.data)
           this.setFields()
           showNoty("Data Updated", "success")
+          this.deactivateLoader()
         }
       } catch (e) {
-        console.log(e)
+        this.deactivateLoader()
         catchError(e)
       }
     },
@@ -105,6 +108,7 @@ export default {
     },
     async removeData() {
       try {
+        this.activateLoader()
         if (this.currentEdit) {
           const resp = await axios
             .delete(MARKETING_ACTION_URL + "/" + this.currentEdit.id)
@@ -114,8 +118,10 @@ export default {
             this.$router.push("/marketing-actions")
           }
         }
+        this.deactivateLoader()
       } catch (e) {
-        console.log(e)
+        this.deactivateLoader()
+        this.showDialog = false
         catchError(e)
       }
     }

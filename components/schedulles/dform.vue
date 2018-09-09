@@ -257,6 +257,7 @@ export default {
     },
     async saveData() {
       try {
+        this.activateLoader()
         const resp = await axios
           .post(SCHEDULLE_URL, this.getData())
           .then(res => res.data)
@@ -266,7 +267,9 @@ export default {
           this.$emit("onAdd", resp.data)
           this.clearForm()
         }
+        this.deactivateLoader()
       } catch (e) {
+        this.deactivateLoader()
         catchError(e)
       }
     },

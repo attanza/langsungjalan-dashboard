@@ -78,6 +78,7 @@ export default {
     },
     async saveData() {
       try {
+        this.activateLoader()
         this.formData.role_id = 4
         const resp = await axios
           .post(MARKETING_ACTION_URL, this.formData)
@@ -87,7 +88,9 @@ export default {
           showNoty("Data Saved", "success")
           this.$emit("onAdd", resp.data)
         }
+        this.deactivateLoader()
       } catch (e) {
+        this.deactivateLoader()
         catchError(e)
       }
     }

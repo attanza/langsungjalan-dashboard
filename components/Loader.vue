@@ -28,7 +28,8 @@ export default {
   props: {
     loading: {
       type: Boolean,
-      required: true
+      required: false,
+      default: false
     }
   },
   data() {
@@ -42,6 +43,15 @@ export default {
         this.dialog = this.loading
       }
     }
+  },
+  created() {
+    this.$bus.$on("activate_loader", () => {
+      this.dialog = true
+    })
+
+    this.$bus.$on("deactivate_loader", () => {
+      this.dialog = false
+    })
   }
 }
 </script>

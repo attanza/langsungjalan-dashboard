@@ -44,6 +44,12 @@ export default {
         axios.defaults.headers.common["Authorization"] = `Bearer ${this.token}`
         axios.defaults.headers.post["Content-Type"] = "application/json"
       }
+    },
+    activateLoader() {
+      this.$bus.$emit("activate_loader")
+    },
+    deactivateLoader() {
+      this.$bus.$emit("deactivate_loader")
     }
   },
   computed: {

@@ -104,6 +104,7 @@ export default {
     },
     async saveData() {
       try {
+        this.activateLoader()
         const resp = await axios
           .post(UNIVERSITY_URL, this.formData)
           .then(res => res.data)
@@ -112,7 +113,9 @@ export default {
           this.$emit("onAdd", resp.data)
           this.setFields()
         }
+        this.deactivateLoader()
       } catch (e) {
+        this.deactivateLoader()
         catchError(e)
       }
     }

@@ -83,6 +83,7 @@ export default {
     }, 500),
     async pupulateTable() {
       try {
+        this.activateLoader()
         this.loading = true
         const { page, rowsPerPage, descending, sortBy } = this.pagination
         const endPoint = `${MARKETING_ACTION_URL}?page=${page}&limit=${rowsPerPage}&search=${
@@ -108,7 +109,9 @@ export default {
           })
         }
         this.loading = false
+        this.deactivateLoader()
       } catch (e) {
+        this.deactivateLoader()
         catchError(e)
       }
     },

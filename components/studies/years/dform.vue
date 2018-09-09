@@ -123,6 +123,7 @@ export default {
     },
     async postData() {
       try {
+        this.activateLoader()
         const resp = await axios
           .post(STUDY_YEARS_URL, this.formData)
           .then(res => res.data)
@@ -130,14 +131,17 @@ export default {
           showNoty("Data Saved", "success")
           this.$emit("onAdd", resp.data)
           this.setFields()
+          this.deactivateLoader()
         }
       } catch (e) {
+        this.deactivateLoader()
         catchError(e)
       }
     },
 
     async putData() {
       try {
+        this.activateLoader()
         const resp = await axios
           .put(STUDY_YEARS_URL + "/" + this.yearEdit.id, this.formData)
           .then(res => res.data)
@@ -146,7 +150,9 @@ export default {
           this.$emit("onEdit", resp.data)
           this.setFields()
         }
+        this.deactivateLoader()
       } catch (e) {
+        this.deactivateLoader()
         catchError(e)
       }
     }

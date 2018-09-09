@@ -98,6 +98,7 @@ export default {
     }, 500),
     async pupulateTable() {
       try {
+        this.activateLoader()
         this.loading = true
         const { page, rowsPerPage, descending, sortBy } = this.pagination
         const endPoint = `${STUDY_YEARS_URL}?page=${page}&limit=${rowsPerPage}&search=${
@@ -123,8 +124,9 @@ export default {
           })
         }
         this.loading = false
+        this.deactivateLoader()
       } catch (e) {
-        console.log("error fetching Study Program", e)
+        this.deactivateLoader()
       }
     },
     toDetail(data) {
@@ -148,21 +150,27 @@ export default {
       this.dataToDelete = data
     },
     removeData() {
-      axios
-        .delete(STUDY_YEARS_URL + "/" + this.dataToDelete.id)
-        .then(resp => {
-          if (resp.status === 200) {
-            let index = _.findIndex(
-              this.items,
-              item => item.id == this.dataToDelete.id
-            )
-            this.items.splice(index, 1)
-            showNoty("Data deleted", "success")
-            this.showDialog = false
-            this.dataToDelete = null
-          }
-        })
-        .catch(e => catchError(e))
+      try {
+        this.activateLoader()
+        axios
+          .delete(STUDY_YEARS_URL + "/" + this.dataToDelete.id)
+          .then(resp => {
+            if (resp.status === 200) {
+              let index = _.findIndex(
+                this.items,
+                item => item.id == this.dataToDelete.id
+              )
+              this.items.splice(index, 1)
+              showNoty("Data deleted", "success")
+              this.showDialog = false
+              this.dataToDelete = null
+            }
+          })
+        this.deactivateLoader()
+      } catch (e) {
+        this.deactivateLoader()
+        catchError(e)
+      }
     }
   }
 }

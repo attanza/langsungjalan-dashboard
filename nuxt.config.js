@@ -35,7 +35,8 @@ module.exports = {
     "~/plugins/vuetify.js",
     "~/plugins/veevalidate.js",
     "~/plugins/gmaps.js",
-    "~/plugins/dateformat.js"
+    "~/plugins/dateformat.js",
+    "~/plugins/eventBus.js"
   ],
   css: [
     "~/assets/style/app.styl",

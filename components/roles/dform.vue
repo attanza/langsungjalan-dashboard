@@ -81,7 +81,8 @@ export default {
       formTitle: "Register New Role",
       name: "",
       slug: "",
-      description: ""
+      description: "",
+      slugProcess: false
     }
   },
   watch: {
@@ -89,6 +90,7 @@ export default {
       this.dialog = this.show
     },
     name() {
+      this.slugProcess = true
       this.createSlug(this.name)
     }
   },
@@ -115,6 +117,7 @@ export default {
     },
     async saveData() {
       try {
+        this.activateLoader()
         let data = {
           name: this.name,
           slug: this.slug,
@@ -126,13 +129,16 @@ export default {
           this.$emit("onAdd", resp.data)
           this.setFields()
         }
+        this.deactivateLoader()
       } catch (e) {
         this.dialog = false
+        this.deactivateLoader()
         catchError(e)
       }
     },
     createSlug: debounce(function(name) {
       this.slug = this.setSnakeCase(name)
+      this.slugProcess = false
     }, 500)
   }
 }

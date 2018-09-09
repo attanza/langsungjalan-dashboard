@@ -255,6 +255,7 @@ export default {
     },
     async editData() {
       try {
+        this.activateLoader()
         if (this.currentEdit) {
           const resp = await axios
             .put(SCHEDULLE_URL + "/" + this.currentEdit.id, this.getData())
@@ -263,7 +264,9 @@ export default {
           this.setField()
           showNoty("Data Updated", "success")
         }
+        this.deactivateLoader()
       } catch (e) {
+        this.deactivateLoader()
         catchError(e)
       }
     },
@@ -283,6 +286,7 @@ export default {
     },
     async removeData() {
       try {
+        this.activateLoader()
         if (this.currentEdit) {
           const resp = await axios
             .delete(SCHEDULLE_URL + "/" + this.currentEdit.id)
@@ -292,7 +296,9 @@ export default {
             this.$router.push("/schedulles")
           }
         }
+        this.deactivateLoader()
       } catch (e) {
+        this.deactivateLoader()
         catchError(e)
       }
     }

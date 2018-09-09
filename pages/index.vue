@@ -69,9 +69,12 @@ export default {
   methods: {
     async seedData() {
       try {
+        this.activateLoader()
         let resp = await axios.get(DASHBOARD_DATA_URL)
         if (resp) this.$store.commit("dashboardData", resp.data)
+        this.deactivateLoader()
       } catch (e) {
+        this.deactivateLoader()
         catchError(e)
       }
     }

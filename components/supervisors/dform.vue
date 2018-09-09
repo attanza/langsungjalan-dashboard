@@ -103,6 +103,7 @@ export default {
     },
     async saveData() {
       try {
+        this.activateLoader()
         this.formData.role_id = 3
         const resp = await axios
           .post(SUPERVISOR_URL, this.formData)
@@ -113,8 +114,10 @@ export default {
           this.$emit("onAdd", resp.data)
           this.setFields()
         }
+        this.deactivateLoader()
       } catch (e) {
         this.dialog = false
+        this.deactivateLoader()
         catchError(e)
       }
     }

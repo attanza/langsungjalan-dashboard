@@ -82,6 +82,7 @@ export default {
     },
     async editData() {
       try {
+        this.activateLoader()
         if (this.currentEdit) {
           const resp = await axios
             .put(PERMISSION_URL + "/" + this.currentEdit.id, this.formData)
@@ -89,8 +90,11 @@ export default {
           this.$store.commit("currentEdit", resp.data)
           this.setFields()
           showNoty("Data Updated", "success")
+          this.deactivateLoader()
         }
       } catch (e) {
+        this.deactivateLoader()
+
         catchError(e)
       }
     },

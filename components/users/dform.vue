@@ -10,7 +10,7 @@
             <form>
               <v-layout row wrap>
                 <v-flex v-for="(f, index) in fillable" :key="index" xs12>
-                  <div v-if="f.key !== 'is_active'">
+                  <div v-if="!inArray(notIncluded, f.key)">
                     <label>{{ setCase(f.key) }}</label>
                     <v-text-field
                       v-validate="f.rules"
@@ -18,8 +18,22 @@
                       :error-messages="errors.collect(f.key)"
                       :name="f.key"
                       :data-vv-name="f.key"
-                      :type="f.key == 'password' ? 'password' : 'text'"
-                      color="purple darken-2"                      
+                    />
+                  </div>
+                  <div v-if="f.key == 'roles' && comboData">
+                    <label>Roles</label>                
+                    <v-autocomplete
+                      v-validate="'required|numeric'"
+                      :items="comboData"
+                      :error-messages="errors.collect('roles')"
+                      :data-vv-name="'roles'"
+                      v-model="formData['roles']"
+                      label="Select Roles"
+                      single-line
+                      item-text="name"
+                      item-value="id"
+                      cache-items
+                      multiple
                     />
                   </div>
                   <div v-if="f.key == 'is_active'">
@@ -45,7 +59,7 @@
 </template>
 <script>
 import { global } from "~/mixins"
-import { SUPERVISOR_URL } from "~/utils/apis"
+import { USER_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
 export default {
@@ -67,12 +81,14 @@ export default {
         { key: "email", value: "", rules: "required|email" },
         { key: "phone", value: "", rules: "required|max:30" },
         { key: "password", value: "", rules: "required|min:6" },
+        { key: "roles", value: [], rules: "required|array" },
         { key: "is_active", value: true, rules: "required|boolean" },
         { key: "address", value: "", rules: "required|max:250" },
         { key: "description", value: "", rules: "max:250" }
       ],
+      notIncluded: ["roles", "is_active"],
       formData: {},
-      formTitle: "Register New Supervisor"
+      formTitle: "Register New User"
     }
   },
   watch: {
@@ -81,11 +97,21 @@ export default {
     }
   },
   created() {
+    this.setAuth()
+    this.getRoles()
     this.setFields()
   },
   methods: {
     onClose() {
       this.$emit("onClose")
+    },
+    async getRoles() {
+      try {
+        let roles = await axios.get(COMBO_DATA_URL + "Role")
+        if (roles) this.$store.commit("comboData", roles.data)
+      } catch (e) {
+        catchError(e)
+      }
     },
     setFields() {
       this.errors.clear()
@@ -103,9 +129,9 @@ export default {
     },
     async saveData() {
       try {
-        this.formData.role_id = 3
+        this.activateLoader()
         const resp = await axios
-          .post(SUPERVISOR_URL, this.formData)
+          .post(USER_URL, this.formData)
           .then(res => res.data)
 
         if (resp.meta.status === 201) {
@@ -113,8 +139,10 @@ export default {
           this.$emit("onAdd", resp.data)
           this.setFields()
         }
+        this.deactivateLoader()
       } catch (e) {
         this.dialog = false
+        this.deactivateLoader()
         catchError(e)
       }
     }
