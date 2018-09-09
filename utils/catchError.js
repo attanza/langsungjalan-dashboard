@@ -22,7 +22,7 @@ export default e => {
       case 401:
         {
           console.log('401') //eslint-disable-line
-          toLogin()
+          // toLogin()
         }
         break
 

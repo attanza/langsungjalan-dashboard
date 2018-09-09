@@ -62,15 +62,20 @@ import catchError from "~/utils/catchError"
 import { global } from "~/mixins"
 
 export default {
-  async fetch({ store }) {
-    try {
-      let resp = await axios.get(DASHBOARD_DATA_URL)
-      if (resp) store.commit("dashboardData", resp.data)
-    } catch (e) {
-      catchError(e)
-    }
+  mixins: [global],
+  mounted() {
+    this.seedData()
   },
-  mixins: [global]
+  methods: {
+    async seedData() {
+      try {
+        let resp = await axios.get(DASHBOARD_DATA_URL)
+        if (resp) this.$store.commit("dashboardData", resp.data)
+      } catch (e) {
+        catchError(e)
+      }
+    }
+  }
 }
 </script>
 <style scoped>
