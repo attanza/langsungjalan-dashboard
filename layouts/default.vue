@@ -2,7 +2,7 @@
   <v-app>
     <sidebar/>
     <v-content>
-      <v-container>
+      <v-container fluid grid-list-lg>
         <nuxt />
       </v-container>
     </v-content>

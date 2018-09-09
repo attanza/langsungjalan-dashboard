@@ -1,14 +1,82 @@
 <template>
-  <div class="center-wrapper">
-    <h1>Langsung Jalan Dashboard</h1>
+  <div>
+    <v-layout row wrap>
+      <v-flex xs12 sm6 md4>
+        <v-card v-if="dashboardData" light class="elevation-8 mb-2" max-height="200px">
+          <v-layout>
+            <v-flex xs4 class="flex-all-centered">
+              <v-icon color="primary" style="font-size: 4rem;">supervised_user_circle</v-icon>
+            </v-flex>
+            <v-flex xs8>
+              <v-card-title primary-title>
+                <div>
+                  <div>Active Marketings</div>
+                  <div class="headline primary--text"> {{ dashboardData.total_marketings }}</div>
+                </div>
+              </v-card-title>
+            </v-flex>
+          </v-layout>
+        </v-card>
+      </v-flex>
+      <v-flex xs12 sm6 md4>
+        <v-card v-if="dashboardData" light class="elevation-8 mb-2" max-height="200px">
+          <v-layout>
+            <v-flex xs4 class="flex-all-centered">
+              <v-icon color="primary" style="font-size: 4rem;">account_balance</v-icon>
+            </v-flex>
+            <v-flex xs8>
+              <v-card-title primary-title>
+                <div>
+                  <div>Registered Universities</div>
+                  <div class="headline primary--text"> {{ dashboardData.total_universities }}</div>
+                </div>
+              </v-card-title>
+            </v-flex>
+          </v-layout>
+        </v-card>
+      </v-flex>
+      <v-flex xs12 sm6 md4>
+        <v-card v-if="dashboardData" light class="elevation-8 mb-2" max-height="200px">
+          <v-layout>
+            <v-flex xs4 class="flex-all-centered">
+              <v-icon color="primary" style="font-size: 4rem;">donut_small</v-icon>
+            </v-flex>
+            <v-flex xs8>
+              <v-card-title primary-title>
+                <div>
+                  <div>Products</div>
+                  <div class="headline primary--text"> {{ dashboardData.total_products }}</div>
+                </div>
+              </v-card-title>
+            </v-flex>
+          </v-layout>
+        </v-card>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
+<script>
+import { DASHBOARD_DATA_URL } from "~/utils/apis"
+import axios from "axios"
+import catchError from "~/utils/catchError"
+import { global } from "~/mixins"
+
+export default {
+  async fetch({ store }) {
+    try {
+      let resp = await axios.get(DASHBOARD_DATA_URL)
+      if (resp) store.commit("dashboardData", resp.data)
+    } catch (e) {
+      catchError(e)
+    }
+  },
+  mixins: [global]
+}
+</script>
 <style scoped>
-.center-wrapper {
-  width: 100%;
-  height: 80vh;
+.flex-all-centered {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 </style>

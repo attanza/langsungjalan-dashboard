@@ -2,6 +2,7 @@ const API_URL = process.env.API_URL
 
 export const LOGIN_URL = API_URL + "/login"
 
+export const DASHBOARD_DATA_URL = API_URL + "/dashboard-data"
 export const RESET_PASSWORD_URL = API_URL + "/reset"
 export const UNIVERSITY_URL = API_URL + "/universities"
 export const STUDIES_URL = API_URL + "/studies"

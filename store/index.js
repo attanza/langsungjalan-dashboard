@@ -10,7 +10,8 @@ export const state = () => ({
   comboData: null,
   comboData2: null,
   comboData3: null,
-  permissions: null
+  permissions: null,
+  dashboardData: null
 })
 
 export const mutations = {
@@ -40,6 +41,9 @@ export const mutations = {
   },
   permissions(state, p) {
     state.permissions = p
+  },
+  dashboardData(state, p) {
+    state.dashboardData = p
   }
 }
 
