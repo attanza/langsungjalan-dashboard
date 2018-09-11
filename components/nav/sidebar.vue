@@ -88,7 +88,10 @@
           <v-list>
             <v-list-tile avatar color="primary">
               <v-list-tile-avatar>
-                <img :src="avatar">
+                <v-img
+                  :src="avatar"
+                  aspect-ratio="1"
+                />
               </v-list-tile-avatar>
               <v-list-tile-content>
                 <v-list-tile-title v-html="user.name"/>

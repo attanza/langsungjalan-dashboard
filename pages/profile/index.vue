@@ -6,18 +6,24 @@
       <v-tab href="#detail">
         Info
       </v-tab>
+      <v-tab href="#avatar">
+        Profile Picture
+      </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
+      </v-tab-item>
+      <v-tab-item :id="'avatar'">
+        <avatar/>
       </v-tab-item>
     </v-tabs>
   </div>
 </template>
 
 <script>
-import { detail } from "~/components/profile"
+import { detail, avatar } from "~/components/profile"
 
 export default {
-  components: { detail }
+  components: { detail, avatar }
 }
 </script>
 
