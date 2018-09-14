@@ -112,6 +112,7 @@ export default {
         }&end_date=${this.end_date}`
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
+        console.log(this.items)
         this.totalItems = res.meta.total
         if (this.pagination.sortBy) {
           this.items = this.items.sort((a, b) => {

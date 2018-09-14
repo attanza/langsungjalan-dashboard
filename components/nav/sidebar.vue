@@ -44,7 +44,6 @@
           <v-list-group
             v-if="item.hasChild"
             :prepend-icon="item.icon"
-            value="true"
             no-action
           >
             <v-list-tile slot="activator">
@@ -145,12 +144,7 @@ export default {
           hasChild: true,
           children: [
             { title: "All Users", icon: "perm_identity", to: "/users" },
-            { title: "Supervisors", icon: "perm_identity", to: "/supervisors" },
-            {
-              title: "Marketings",
-              icon: "supervised_user_circle",
-              to: "/marketings"
-            }
+            { title: "Supervisors", icon: "perm_identity", to: "/supervisors" }
           ]
         },
         {
@@ -177,14 +171,32 @@ export default {
           ]
         },
         {
-          title: "Marketing Actions",
-          icon: "list",
-          to: "/marketing-actions"
-        },
-        {
-          title: "Marketing Schedulles",
-          icon: "date_range",
-          to: "/schedulles"
+          title: "Marketings",
+          icon: "supervised_user_circle",
+          to: "/marketings",
+          hasChild: true,
+          children: [
+            {
+              title: "List",
+              icon: "supervised_user_circle",
+              to: "/marketings"
+            },
+            {
+              title: "Actions",
+              icon: "list",
+              to: "/marketing-actions"
+            },
+            {
+              title: "Schedulles",
+              icon: "date_range",
+              to: "/schedulles"
+            },
+            {
+              title: "Reports",
+              icon: "find_in_page",
+              to: "/marketing-reports"
+            }
+          ]
         },
         {
           title: "Products",
