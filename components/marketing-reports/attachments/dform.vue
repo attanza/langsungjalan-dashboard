@@ -211,6 +211,11 @@ export default {
       }
     },
     clearForm() {
+      this.errors.clear()
+      this.dialog = false
+      this.imageName = ""
+      this.imageUrl = ""
+      this.imageFile = ""
       this.marketing_report_id = ""
       this.caption = ""
       this.tags = ""
