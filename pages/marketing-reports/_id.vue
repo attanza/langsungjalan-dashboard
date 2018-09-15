@@ -9,11 +9,17 @@
       <v-tab href="#maps">
         Maps
       </v-tab>
+      <v-tab href="#attachments">
+        Attachments
+      </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
       </v-tab-item>
       <v-tab-item :id="'maps'">
         <maps/>
+      </v-tab-item>
+      <v-tab-item :id="'attachments'">
+        <list/>
       </v-tab-item>
     </v-tabs>
   </div>
@@ -23,6 +29,8 @@
 import { MARKETING_REPORTS_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import { detail, maps } from "~/components/marketing-reports"
+import { list } from "~/components/marketing-reports/attachments"
+
 import { global } from "~/mixins"
 import catchError from "~/utils/catchError"
 
@@ -41,7 +49,7 @@ export default {
       catchError(e)
     }
   },
-  components: { detail, maps },
+  components: { detail, maps, list },
   mixins: [global]
 }
 </script>

@@ -27,7 +27,7 @@
                 <div v-if="f.key == 'marketing_id' && comboData">
                   <label>Marketing</label>                
                   <v-autocomplete
-                    v-validate="'required|numeric'"
+                    v-validate="f.rules"
                     :items="comboData"
                     :error-messages="errors.collect('marketing_id')"
                     :data-vv-name="'marketing_id'"
@@ -42,7 +42,7 @@
                 <div v-if="f.key == 'marketing_action_id' && comboData2">
                   <label>Action</label>                
                   <v-autocomplete
-                    v-validate="'required|numeric'"
+                    v-validate="f.rules"
                     :items="comboData2"
                     :error-messages="errors.collect('marketing_action_id')"
                     :data-vv-name="'marketing_action_id'"
@@ -57,7 +57,7 @@
                 <div v-if="f.key == 'method' && marketingMethods">
                   <label>Method</label>                
                   <v-autocomplete
-                    v-validate="'required|numeric'"
+                    v-validate="f.rules"
                     :items="marketingMethods"
                     :error-messages="errors.collect('method')"
                     :data-vv-name="'method'"
@@ -66,6 +66,63 @@
                     single-line
                     cache-items
                   />
+                </div>
+                <div v-if="f.key == 'schedulle_date'">
+                  <label>Schedulle Date</label>                
+                  <v-menu
+                    ref="menu"
+                    :close-on-content-click="false"
+                    v-model="menu"
+                    :nudge-right="40"
+                    :return-value.sync="formData['schedulle_date']"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
+                  >
+                    <v-text-field
+                      v-validate="'required'"
+                      slot="activator"
+                      :error-messages="errors.collect('schedulle_date')"
+                      :data-vv-name="'schedulle_date'"
+                      v-model="formData['schedulle_date']"
+                      label="Pick a Schedulle Date"
+                      readonly
+                    />
+                    <v-date-picker v-model="formData['schedulle_date']" @input="$refs.menu.save(formData['schedulle_date'])"/>
+                  </v-menu>
+                </div>
+                <div v-if="f.key == 'schedulle_time'">
+                  <label>Schedulle Time</label>                
+                  <v-menu
+                    ref="menuTime"
+                    :close-on-content-click="false"
+                    v-model="menuTime"
+                    :nudge-right="40"
+                    :return-value.sync="formData['schedulle_time']"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    max-width="290px"
+                    min-width="290px"
+                  >
+                    <v-text-field
+                      v-validate="'required'"
+                      slot="activator"
+                      :error-messages="errors.collect('schedulle_time')"
+                      :data-vv-name="'schedulle_time'"
+                      v-model="formData['schedulle_time']"
+                      label="Pick a Schedulle Time"
+                      readonly
+                    />
+                    <v-time-picker
+                      v-if="menuTime"
+                      v-model="start_time"
+                      @change="$refs.menuTime.save(formData['schedulle_time'])"
+                    />
+                  </v-menu>
                 </div>
                 <div v-if="f.key == 'terms' || f.key == 'description'">
                   <label>{{ setCase(f.key) }}</label>
@@ -93,6 +150,7 @@ import { MARKETING_REPORTS_URL } from "~/utils/apis"
 import axios from "axios"
 import Dialog from "~/components/Dialog"
 import catchError, { showNoty } from "~/utils/catchError"
+import moment from "moment"
 
 export default {
   $_veeValidate: {
@@ -117,6 +175,8 @@ export default {
         { key: "count_orders", value: "", rules: "integer" },
         { key: "count_dps", value: "", rules: "integer" },
         { key: "count_payments", value: "", rules: "integer" },
+        { key: "schedulle_date", value: "", rules: "date" },
+        { key: "schedulle_time", value: "", rules: "date" },
         { key: "result", value: "", rules: "" },
         { key: "terms", value: "", rules: "" },
         { key: "lng", value: "", rules: "number" },
@@ -130,7 +190,9 @@ export default {
         "lng",
         "lat",
         "terms",
-        "description"
+        "description",
+        "schedulle_date",
+        "schedulle_time"
       ],
       typeNumber: [
         "count_year",
@@ -145,7 +207,9 @@ export default {
       ],
       marketingMethods: ["By Phone", "By Meeting"],
       formData: {},
-      showDialog: false
+      showDialog: false,
+      menu: false,
+      menuTime: false
     }
   },
   created() {
@@ -162,6 +226,13 @@ export default {
           data => (this.formData[data.key] = this.currentEdit[data.key])
         )
       }
+      this.formData["schedulle_date"] = moment(
+        this.formData["schedulle_date"]
+      ).format("YYYY-MM-DD")
+      this.formData["schedulle_time"] = moment(
+        this.formData["schedulle_time"]
+      ).format("HH:mm:ss")
+      this.formData["schedulle_id"] = this.currentEdit.schedulle_id
     },
     submit() {
       this.$validator.validateAll().then(result => {
@@ -175,6 +246,8 @@ export default {
       try {
         this.activateLoader()
         if (this.currentEdit) {
+          this.formData.schedulle_date =
+            this.formData.schedulle_date + " " + this.formData.schedulle_time
           const resp = await axios
             .put(
               MARKETING_REPORTS_URL + "/" + this.currentEdit.id,

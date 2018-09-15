@@ -14,7 +14,6 @@
             
           >
           <Tbtn color="primary" block icon="cloud_upload" tooltip-text="Save profile picture" @onClick="submitFile"/>             
-
         </v-card-text>
 
       </v-card>

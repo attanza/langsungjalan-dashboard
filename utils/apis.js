@@ -24,3 +24,5 @@ export const SCHEDULLE_URL = API_URL + "/schedulles"
 export const ME_URL = API_URL + "/me"
 export const PROFILE_URL = API_URL + "/profile"
 export const MARKETING_REPORTS_URL = API_URL + "/marketing-reports"
+export const MARKETING_REPORT_ATTACHMENTS_URL =
+  API_URL + "/marketing-report-attachments"
