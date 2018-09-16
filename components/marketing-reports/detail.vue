@@ -277,7 +277,7 @@ export default {
             .then(res => res.data)
           if (resp.meta.status === 200) {
             showNoty("Data Deleted", "success")
-            this.$router.push("/roles")
+            this.$router.push("/marketing-reports")
           }
         }
         this.deactivateLoader()
@@ -290,13 +290,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.btn-group {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-}
-</style>

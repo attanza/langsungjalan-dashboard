@@ -44,6 +44,7 @@
     "axios": "^0.18.0",
     "change-case": "^3.0.2",
     "cookieparser": "^0.1.0",
+    "export-to-csv": "^0.1.2",
     "js-cookie": "^2.2.0",
     "moment": "^2.22.1",
     "node-sass": "^4.9.2",

@@ -3,6 +3,7 @@ import { mapState } from "vuex"
 import axios from "axios"
 import Noty from "~/components/Noty"
 import Tbtn from "~/components/Tbtn"
+import { ExportToCsv } from "export-to-csv"
 
 export default {
   components: { Noty, Tbtn },
@@ -17,7 +18,8 @@ export default {
         descending: false,
         page: 1,
         rowsPerPage: 10
-      }
+      },
+      showDownloadDialog: false
     }
   },
   mounted() {
@@ -50,6 +52,26 @@ export default {
     },
     deactivateLoader() {
       this.$bus.$emit("deactivate_loader")
+    },
+
+    csvExport(title, data) {
+      const options = {
+        filename: title,
+        fieldSeparator: ",",
+        quoteStrings: '"',
+        decimalseparator: ".",
+        showLabels: true,
+        showTitle: true,
+        title: title,
+        useBom: true,
+        useKeysAsHeaders: true
+        // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
+      }
+
+      if (data.length) {
+        const csvExporter = new ExportToCsv(options)
+        csvExporter.generateCsv(data)
+      }
     }
   },
   computed: {

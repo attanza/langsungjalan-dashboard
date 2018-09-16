@@ -26,3 +26,4 @@ export const PROFILE_URL = API_URL + "/profile"
 export const MARKETING_REPORTS_URL = API_URL + "/marketing-reports"
 export const MARKETING_REPORT_ATTACHMENTS_URL =
   API_URL + "/marketing-report-attachments"
+export const DATA_EXPORT_URL = API_URL + "/export-data"
