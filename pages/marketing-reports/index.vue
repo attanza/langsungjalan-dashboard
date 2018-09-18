@@ -44,6 +44,7 @@ import { MARKETING_REPORTS_URL } from "~/utils/apis"
 import { global } from "~/mixins"
 import catchError from "~/utils/catchError"
 import axios from "axios"
+
 export default {
   mixins: [global],
   data: () => ({

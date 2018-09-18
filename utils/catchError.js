@@ -40,7 +40,7 @@ export default e => {
     }
   } else {
     console.log('default error') //eslint-disable-line
-    toLogin("Internal Server Error, please contact our Administrator")
+    showNoty("Internal Server Error, please contact our Administrator", "error")
   }
 }
 

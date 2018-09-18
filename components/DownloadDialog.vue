@@ -111,7 +111,7 @@
 <script>
 import { global } from "~/mixins"
 import axios from "axios"
-import catchError from "~/utils/catchError"
+import catchError, { showNoty } from "~/utils/catchError"
 import moment from "moment"
 import { DATA_EXPORT_URL } from "~/utils/apis"
 
@@ -186,15 +186,16 @@ export default {
             DATA_EXPORT_URL + "?model=" + this.model + query
           )
 
-          if (resp.status === 200) {
+          if (resp.status === 200 && resp.data.data) {
             this.csvExport(this.model + "s", resp.data.data)
+          } else {
+            showNoty("No result found", "error")
           }
           this.onClose()
           this.deactivateLoader()
         } catch (e) {
           this.clearForm()
           this.deactivateLoader()
-
           catchError(e)
         }
       }

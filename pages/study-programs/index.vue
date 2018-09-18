@@ -4,6 +4,8 @@
     <v-card dark class="pt-3">
       <v-toolbar card color="transparent">
         <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
+        <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>       
+
         <v-spacer/>
         <v-text-field
           v-model="search"
@@ -37,6 +39,8 @@
       </v-data-table>
     </v-card>
     <dform :show="showForm" @onClose="showForm = false" @onAdd="addData"/>
+    <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" model="StudyProgram" @onClose="showDownloadDialog = false"/>
+
   </div>
 </template>
 <script>
@@ -46,9 +50,11 @@ import { global } from "~/mixins"
 import { dform } from "~/components/studies"
 import axios from "axios"
 import catchError from "~/utils/catchError"
+import DownloadDialog from "~/components/DownloadDialog"
+
 export default {
   middleware: "auth",
-  components: { dform },
+  components: { dform, DownloadDialog },
   mixins: [global],
   data: () => ({
     title: "Study Program",
@@ -63,10 +69,19 @@ export default {
       { text: "Actions", value: "", sortable: false }
     ],
     items: [],
-    itemEdit: {},
-    userIdDelete: "",
     confirmMessage: "Are you sure want to delete this ?",
-    showConfirm: false
+    showConfirm: false,
+    dataToExport: [],
+    fillable: [
+      "id",
+      "address",
+      "email",
+      "phone",
+      "description",
+      "address",
+      "contact_person"
+    ],
+    typeDates: ["created_at"]
   }),
 
   watch: {
@@ -131,6 +146,19 @@ export default {
     addData(data) {
       this.items.unshift(data)
       this.showForm = false
+    },
+    downloadData() {
+      this.dataToExport = []
+      this.items.map(i => {
+        let data = Object.assign({}, i)
+        delete data.years
+        delete data.university
+        delete data.studyName
+        this.dataToExport.push(data)
+      })
+      if (this.dataToExport.length) {
+        this.showDownloadDialog = true
+      }
     }
   }
 }
