@@ -66,7 +66,7 @@ export default {
       { text: "Contact Person", value: "contact_person", align: "left" },
       { text: "Phone", value: "phone", align: "left" },
       { text: "Email", value: "email", align: "left" },
-      { text: "Actions", value: "", sortable: false }
+      { text: "Actions", align: "center", value: "", sortable: false }
     ],
     items: [],
     confirmMessage: "Are you sure want to delete this ?",
@@ -74,6 +74,8 @@ export default {
     dataToExport: [],
     fillable: [
       "id",
+      "university_id",
+      "study_name_id",
       "address",
       "email",
       "phone",
@@ -149,12 +151,28 @@ export default {
     },
     downloadData() {
       this.dataToExport = []
-      this.items.map(i => {
-        let data = Object.assign({}, i)
-        delete data.years
-        delete data.university
-        delete data.studyName
-        this.dataToExport.push(data)
+      this.items.map(data => {
+        let d = Object.assign({}, data)
+        if (d.university) delete d.university
+        if (data.university) d.university = data.university.name
+
+        if (d.studyName) delete d.studyName
+        if (data.studyName) d.studyName = data.studyName.name
+
+        if (d.years) delete d.years
+        let years = ""
+        if (data.years) {
+          data.years.map(y => {
+            let year = ""
+            year += `[year: ${y.year}, class_per_year: ${
+              y.class_per_year
+            }, students_per_class: ${y.students_per_class}], `
+            years += year
+          })
+        }
+        d.years = years
+
+        this.dataToExport.push(d)
       })
       if (this.dataToExport.length) {
         this.showDownloadDialog = true

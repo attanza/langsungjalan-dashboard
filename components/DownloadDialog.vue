@@ -153,7 +153,9 @@ export default {
         range_start: moment()
           .add(-1, "M")
           .format("YYYY-MM-DD"),
-        range_end: moment().format("YYYY-MM-DD")
+        range_end: moment()
+          .add(1, "d")
+          .format("YYYY-MM-DD")
       },
       menu_range_start: false,
       menu_range_end: false
@@ -186,7 +188,13 @@ export default {
             DATA_EXPORT_URL + "?model=" + this.model + query
           )
 
-          if (resp.status === 200 && resp.data.data) {
+          console.log("resp", resp)
+
+          if (
+            resp.status === 200 &&
+            resp.data.data &&
+            resp.data.data.length > 0
+          ) {
             this.csvExport(this.model + "s", resp.data.data)
           } else {
             showNoty("No result found", "error")
