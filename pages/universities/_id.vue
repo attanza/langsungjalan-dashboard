@@ -6,11 +6,17 @@
       <v-tab href="#detail">
         Details
       </v-tab>
+      <v-tab href="#study">
+        Study Programs
+      </v-tab>
       <v-tab href="#maps">
         Maps
       </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
+      </v-tab-item>
+      <v-tab-item :id="'study'">
+        <study/>
       </v-tab-item>
       <v-tab-item :id="'maps'">
         <maps/>
@@ -22,7 +28,7 @@
 <script>
 import { UNIVERSITY_URL } from "~/utils/apis"
 import axios from "axios"
-import { detail, dform, maps } from "~/components/university"
+import { detail, dform, maps, study } from "~/components/university"
 import catchError from "~/utils/catchError"
 
 export default {
@@ -34,7 +40,7 @@ export default {
       catchError(e)
     }
   },
-  components: { detail, dform, maps }
+  components: { detail, dform, maps, study }
 }
 </script>
 

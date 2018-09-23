@@ -188,8 +188,6 @@ export default {
             DATA_EXPORT_URL + "?model=" + this.model + query
           )
 
-          console.log("resp", resp)
-
           if (
             resp.status === 200 &&
             resp.data.data &&

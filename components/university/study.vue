@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h2 class="primary--text mb-3">{{ title }}s</h2>
     <v-card dark class="pt-3">
       <v-toolbar card color="transparent">
         <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
@@ -24,17 +23,12 @@
         class="elevation-1"
       >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.name }}</td>
-          <td>{{ props.item.email }}</td>
+          <td v-if="props.item.studyName">{{ props.item.studyName.name }}</td>
+          <td v-if="props.item.university">{{ props.item.university.name }}</td>
+          <!-- <td>{{ props.item.address }}</td> -->
+          <td>{{ props.item.contact_person }}</td>
           <td>{{ props.item.phone }}</td>
-          <td>
-            <span v-if="props.item.supervisors.length > 0">{{ props.item.supervisors[0].name }}</span>
-            <span v-else/>
-          </td>
-          <td>
-            <span v-if="props.item.is_active"><v-chip color="green" text-color="white">Active</v-chip></span>
-            <span v-else><v-chip>Not Active</v-chip></span>
-          </td>
+          <td>{{ props.item.email }}</td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
               <Tbtn :tooltip-text="'Show '+title" icon-mode flat color="white" icon="remove_red_eye" @onClick="toDetail(props.item)"/>
@@ -43,33 +37,35 @@
         </template>
       </v-data-table>
     </v-card>
-    <dform :show="showForm" @onClose="showForm = false" @onAdd="addData"/>
-    <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" model="Marketing" @onClose="showDownloadDialog = false"/>
+    <studyForm :show="showForm" @onClose="showForm = false" @onAdd="addData"/>
+    <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" model="StudyProgram" @onClose="showDownloadDialog = false"/>
 
   </div>
 </template>
 <script>
 import _ from "lodash"
-import { MARKETING_URL } from "~/utils/apis"
+import { STUDIES_URL } from "~/utils/apis"
 import { global } from "~/mixins"
-import { dform } from "~/components/marketings"
+import studyForm from "./studyForm"
 import axios from "axios"
 import catchError from "~/utils/catchError"
 import DownloadDialog from "~/components/DownloadDialog"
 
 export default {
   middleware: "auth",
-  components: { dform, DownloadDialog },
+  components: { studyForm, DownloadDialog },
   mixins: [global],
   data: () => ({
-    title: "Marketing",
+    title: "Study Program",
+
     headers: [
-      { text: "Name", align: "left", value: "name" },
-      { text: "Email", align: "left", value: "email" },
-      { text: "Phone", align: "left", value: "phone" },
-      { text: "Supervisor", align: "left", value: "supervisor_id" },
-      { text: "Status", align: "left", value: "is_active" },
-      { text: "Actions", value: "name", sortable: false }
+      { text: "Name", align: "left", value: "study_name_id" },
+      { text: "University", align: "left", value: "university_id" },
+      // { text: "Address", value: "address", align: "left" },
+      { text: "Contact Person", value: "contact_person", align: "left" },
+      { text: "Phone", value: "phone", align: "left" },
+      { text: "Email", value: "email", align: "left" },
+      { text: "Actions", align: "center", value: "", sortable: false }
     ],
     items: [],
     confirmMessage: "Are you sure want to delete this ?",
@@ -77,13 +73,14 @@ export default {
     dataToExport: [],
     fillable: [
       "id",
-      "uid",
-      "name",
+      "university_id",
+      "study_name_id",
+      "address",
       "email",
       "phone",
       "description",
       "address",
-      "is_active"
+      "contact_person"
     ],
     typeDates: ["created_at"]
   }),
@@ -96,7 +93,7 @@ export default {
       deep: true
     },
     search() {
-      if (this.search == "" || this.search.length > 2) {
+      if (this.search != "") {
         this.searchQuery()
       }
     }
@@ -115,9 +112,9 @@ export default {
         this.activateLoader()
         this.loading = true
         const { page, rowsPerPage, descending, sortBy } = this.pagination
-        const endPoint = `${MARKETING_URL}?page=${page}&limit=${rowsPerPage}&search=${
-          this.search
-        }`
+        const endPoint = `${STUDIES_URL}?page=${page}&limit=${rowsPerPage}&university_id=${
+          this.currentEdit.id
+        }&search=${this.search}`
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
         this.totalItems = res.meta.total
@@ -140,13 +137,12 @@ export default {
         this.loading = false
         this.deactivateLoader()
       } catch (e) {
-        this.loading = false
         this.deactivateLoader()
         catchError(e)
       }
     },
     toDetail(data) {
-      this.$router.push(`/marketings/${data.id}`)
+      this.$router.push(`/study-programs/${data.id}`)
     },
     addData(data) {
       this.items.unshift(data)
@@ -154,7 +150,29 @@ export default {
     },
     downloadData() {
       this.dataToExport = []
-      this.dataToExport = this.items
+      this.items.map(data => {
+        let d = Object.assign({}, data)
+        if (d.university) delete d.university
+        if (data.university) d.university = data.university.name
+
+        if (d.studyName) delete d.studyName
+        if (data.studyName) d.studyName = data.studyName.name
+
+        if (d.years) delete d.years
+        let years = ""
+        if (data.years) {
+          data.years.map(y => {
+            let year = ""
+            year += `[year: ${y.year}, class_per_year: ${
+              y.class_per_year
+            }, students_per_class: ${y.students_per_class}], `
+            years += year
+          })
+        }
+        d.years = years
+
+        this.dataToExport.push(d)
+      })
       if (this.dataToExport.length) {
         this.showDownloadDialog = true
       }
