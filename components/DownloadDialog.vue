@@ -137,6 +137,11 @@ export default {
     typeDates: {
       type: Array,
       required: true
+    },
+    query: {
+      type: String,
+      required: false,
+      default: ""
     }
   },
 
@@ -183,6 +188,9 @@ export default {
           let query = ""
           for (let key in this.queryData) {
             query += `&${key}=${this.queryData[key]}`
+          }
+          if (this.query) {
+            query += "&" + this.query
           }
           let resp = await axios.get(
             DATA_EXPORT_URL + "?model=" + this.model + query

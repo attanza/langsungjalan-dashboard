@@ -9,11 +9,17 @@
       <v-tab href="#roles">
         Roles
       </v-tab>
+      <v-tab href="#activities">
+        Activities
+      </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
       </v-tab-item>
       <v-tab-item :id="'roles'">
         <roles/>
+      </v-tab-item>
+      <v-tab-item :id="'activities'">
+        <activities/>
       </v-tab-item>
     </v-tabs>
   </div>
@@ -22,7 +28,7 @@
 <script>
 import { USER_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
-import { detail, dform, roles } from "~/components/users"
+import { detail, dform, roles, activities } from "~/components/users"
 import catchError from "~/utils/catchError"
 
 export default {
@@ -37,7 +43,7 @@ export default {
       catchError(e)
     }
   },
-  components: { detail, dform, roles },
+  components: { detail, dform, roles, activities },
   data() {
     return {
       title: "User"
