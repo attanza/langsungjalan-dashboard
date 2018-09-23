@@ -18,18 +18,20 @@
         :loading="loading"
         :pagination.sync="pagination"
         :total-items="totalItems"
+        :rows-per-page-items="rowsPerPage"
         class="elevation-1"
+
       >
         <template slot="items" slot-scope="props">
           <td>{{ props.item.ip }}</td>
           <td>{{ props.item.browser }}</td>
           <td>{{ props.item.activity }}</td>
           <td>{{ props.item.created_at }}</td>
-          <td class="justify-center layout px-0">
+          <!-- <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
               <Tbtn :tooltip-text="'Show '+title" icon-mode flat color="white" icon="remove_red_eye" @onClick="toDetail(props.item)"/>
             </v-btn>
-          </td>
+          </td> -->
         </template>
       </v-data-table>
     </v-card>
@@ -55,8 +57,8 @@ export default {
       { text: "IP Address", align: "left", value: "ip" },
       { text: "Browser", align: "left", value: "browser" },
       { text: "Activity", align: "left", value: "activity" },
-      { text: "Created", align: "left", value: "created_at" },
-      { text: "Actions", value: "name", sortable: false }
+      { text: "Created", align: "left", value: "created_at" }
+      // { text: "Actions", value: "name", sortable: false }
     ],
     items: [],
     dataToExport: [],

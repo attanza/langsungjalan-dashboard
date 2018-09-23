@@ -233,7 +233,7 @@ export default {
       this.$router.push("/login")
     },
     toProfile() {
-      this.$router.push("profile")
+      this.$router.push("/profile")
     },
     itemActions(title) {
       switch (title) {

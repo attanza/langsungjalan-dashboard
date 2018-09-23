@@ -9,21 +9,27 @@
       <v-tab href="#avatar">
         Profile Picture
       </v-tab>
+      <v-tab href="#activities">
+        Activities
+      </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
       </v-tab-item>
       <v-tab-item :id="'avatar'">
         <avatar/>
       </v-tab-item>
+      <v-tab-item :id="'activities'">
+        <activities/>
+      </v-tab-item>
     </v-tabs>
   </div>
 </template>
 
 <script>
-import { detail, avatar } from "~/components/profile"
+import { detail, avatar, activities } from "~/components/profile"
 
 export default {
-  components: { detail, avatar }
+  components: { detail, avatar, activities }
 }
 </script>
 

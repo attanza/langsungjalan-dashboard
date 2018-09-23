@@ -13,6 +13,7 @@ export default {
       showForm: false,
       totalItems: 0,
       search: "",
+      rowsPerPage: [10, 25, 50, 100],
       pagination: {
         sortBy: "",
         descending: false,

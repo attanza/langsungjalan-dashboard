@@ -21,7 +21,9 @@
           :loading="loading"
           :pagination.sync="pagination"
           :total-items="totalItems"
+          :rows-per-page-items="rowsPerPage"
           class="elevation-1"
+
         >
           <template slot="items" slot-scope="props">
             <td>{{ props.item.year }}</td>

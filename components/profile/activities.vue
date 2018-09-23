@@ -2,9 +2,7 @@
   <div>
     <v-card dark class="pt-3">
       <v-toolbar card color="transparent">
-        <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
         <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>       
-
         <v-spacer/>
         <v-text-field
           v-model="search"
@@ -22,66 +20,48 @@
         :total-items="totalItems"
         :rows-per-page-items="rowsPerPage"
         class="elevation-1"
-
       >
         <template slot="items" slot-scope="props">
-          <td v-if="props.item.studyName">{{ props.item.studyName.name }}</td>
-          <!-- <td>{{ props.item.address }}</td> -->
-          <td>{{ props.item.contact_person }}</td>
-          <td>{{ props.item.phone }}</td>
-          <td>{{ props.item.email }}</td>
-          <td class="justify-center layout px-0">
+          <td>{{ props.item.ip }}</td>
+          <td>{{ props.item.browser }}</td>
+          <td>{{ props.item.activity }}</td>
+          <td>{{ props.item.created_at }}</td>
+          <!-- <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
               <Tbtn :tooltip-text="'Show '+title" icon-mode flat color="white" icon="remove_red_eye" @onClick="toDetail(props.item)"/>
             </v-btn>
-          </td>
+          </td> -->
         </template>
       </v-data-table>
     </v-card>
-    <studyForm :show="showForm" @onClose="showForm = false" @onAdd="addData"/>
-    <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" model="StudyProgram" @onClose="showDownloadDialog = false"/>
+    <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" :query="`user_id=${user.id}`" model="Activity" @onClose="showDownloadDialog = false"/>
 
   </div>
 </template>
 <script>
-import _ from "lodash"
-import { STUDIES_URL } from "~/utils/apis"
+import debounce from "lodash/debounce"
+import { ACTIVITIES_URL } from "~/utils/apis"
 import { global } from "~/mixins"
-import studyForm from "./studyForm"
 import axios from "axios"
 import catchError from "~/utils/catchError"
 import DownloadDialog from "~/components/DownloadDialog"
 
 export default {
   middleware: "auth",
-  components: { studyForm, DownloadDialog },
+  components: { DownloadDialog },
   mixins: [global],
   data: () => ({
-    title: "Study Program",
-
+    title: "Activity",
     headers: [
-      { text: "Name", align: "left", value: "study_name_id" },
-      // { text: "Address", value: "address", align: "left" },
-      { text: "Contact Person", value: "contact_person", align: "left" },
-      { text: "Phone", value: "phone", align: "left" },
-      { text: "Email", value: "email", align: "left" },
-      { text: "Actions", align: "center", value: "", sortable: false }
+      { text: "IP Address", align: "left", value: "ip" },
+      { text: "Browser", align: "left", value: "browser" },
+      { text: "Activity", align: "left", value: "activity" },
+      { text: "Created", align: "left", value: "created_at" }
+      // { text: "Actions", value: "name", sortable: false }
     ],
     items: [],
-    confirmMessage: "Are you sure want to delete this ?",
-    showConfirm: false,
     dataToExport: [],
-    fillable: [
-      "id",
-      "university_id",
-      "study_name_id",
-      "address",
-      "email",
-      "phone",
-      "description",
-      "address",
-      "contact_person"
-    ],
+    fillable: ["id", "ip", "browser", "activity", "created_at"],
     typeDates: ["created_at"]
   }),
 
@@ -93,7 +73,7 @@ export default {
       deep: true
     },
     search() {
-      if (this.search != "") {
+      if (this.search == "" || this.search.length > 2) {
         this.searchQuery()
       }
     }
@@ -104,7 +84,7 @@ export default {
   },
 
   methods: {
-    searchQuery: _.debounce(function() {
+    searchQuery: debounce(function() {
       this.pupulateTable()
     }, 500),
     async pupulateTable() {
@@ -112,9 +92,9 @@ export default {
         this.activateLoader()
         this.loading = true
         const { page, rowsPerPage, descending, sortBy } = this.pagination
-        const endPoint = `${STUDIES_URL}?page=${page}&limit=${rowsPerPage}&university_id=${
-          this.currentEdit.id
-        }&search=${this.search}`
+        const endPoint = `${ACTIVITIES_URL}?page=${page}&limit=${rowsPerPage}&search=${
+          this.search
+        }&user_id=${this.user.id}`
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
         this.totalItems = res.meta.total
@@ -137,41 +117,26 @@ export default {
         this.loading = false
         this.deactivateLoader()
       } catch (e) {
+        this.loading = false
+        this.showForm = false
         this.deactivateLoader()
         catchError(e)
       }
     },
     toDetail(data) {
-      this.$router.push(`/study-programs/${data.id}`)
-    },
-    addData(data) {
-      this.items.unshift(data)
-      this.showForm = false
+      this.$router.push(`/users/${data.id}`)
     },
     downloadData() {
       this.dataToExport = []
-      this.items.map(data => {
-        let d = Object.assign({}, data)
-        if (d.university) delete d.university
-        if (data.university) d.university = data.university.name
-
-        if (d.studyName) delete d.studyName
-        if (data.studyName) d.studyName = data.studyName.name
-
-        if (d.years) delete d.years
-        let years = ""
-        if (data.years) {
-          data.years.map(y => {
-            let year = ""
-            year += `[year: ${y.year}, class_per_year: ${
-              y.class_per_year
-            }, students_per_class: ${y.students_per_class}], `
-            years += year
-          })
-        }
-        d.years = years
-
-        this.dataToExport.push(d)
+      let localItems = this.items
+      localItems.map(i => {
+        let user = ""
+        let data = Object.assign({}, i)
+        delete data.user
+        delete data.user_id
+        if (i.user) user = i.user.name
+        data.user = user
+        this.dataToExport.push(data)
       })
       if (this.dataToExport.length) {
         this.showDownloadDialog = true

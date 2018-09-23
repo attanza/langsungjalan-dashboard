@@ -15,7 +15,9 @@
         :loading="loading"
         :pagination.sync="pagination"
         :total-items="totalItems"
+        :rows-per-page-items="rowsPerPage"
         class="elevation-1"
+
       >
         <template slot="items" slot-scope="props">
           <td v-if="props.item.marketing">{{ props.item.marketing.name }}</td>
