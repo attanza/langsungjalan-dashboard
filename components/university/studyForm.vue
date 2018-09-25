@@ -125,7 +125,6 @@ export default {
         this.formData.lat = this.currentEdit.lat
         this.formData.lng = this.currentEdit.lng
       }
-      console.log("formData", this.formData)
     },
     submit() {
       this.$validator.validateAll().then(result => {

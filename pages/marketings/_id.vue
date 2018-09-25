@@ -6,8 +6,14 @@
       <v-tab href="#detail">
         Details
       </v-tab>
+      <v-tab href="#schedulles">
+        Schedulles
+      </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
+      </v-tab-item>
+      <v-tab-item :id="'schedulles'">
+        <schedulles/>
       </v-tab-item>
     </v-tabs>
   </div>
@@ -16,7 +22,7 @@
 <script>
 import { MARKETING_URL } from "~/utils/apis"
 import axios from "axios"
-import { detail, dform } from "~/components/marketings"
+import { detail, dform, schedulles } from "~/components/marketings"
 import catchError from "~/utils/catchError"
 
 export default {
@@ -28,7 +34,7 @@ export default {
       catchError(e)
     }
   },
-  components: { detail, dform }
+  components: { detail, dform, schedulles }
 }
 </script>
 

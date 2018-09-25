@@ -39,22 +39,16 @@
             md4 sm6 xs12
           >
             <v-card color="primary">
-              <v-card-media
+              <v-img
                 :src="marketing.photo !== '' ? marketing.photo: '/images/user.png'"
-                height="200px"
-              >
-                <v-container
-                  fill-height
-                  fluid
-                  pa-2
-                >
-                  <v-layout fill-height>
-                    <v-flex xs12 align-end flexbox>
-                      <span class="headline primary--text" v-text="marketing.name"/>
-                    </v-flex>
-                  </v-layout>
-                </v-container>
-              </v-card-media>
+                aspect-ratio="1.7"
+              />
+
+              <v-card-title>
+                <div>
+                  <h3 class="title mb-0">{{ marketing.name }}</h3>
+                </div>
+              </v-card-title>
 
               <v-card-actions>
                 <v-spacer/>
