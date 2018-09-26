@@ -4,6 +4,7 @@
     <v-card dark class="pt-3">
       <v-toolbar card color="transparent">
         <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
+        <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>       
         <v-spacer/>
         <Tbtn :bottom="true" :tooltip-text="'Refresh Table'" color="primary" icon="refresh" @onClick="resetTable"/>
         <Tbtn :bottom="true" :tooltip-text="'Search'" color="primary" icon="search" @onClick="showSearch = true"/>
@@ -36,6 +37,8 @@
     </v-card>
     <dform :show="showForm" @onClose="showForm = false" @onAdd="addData"/>
     <searchForm :show-search="showSearch" @onClose="showSearch = false" @onSearch="onSearch"/>
+    <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" model="Schedulle" @onClose="showDownloadDialog = false"/>
+
 
   </div>
 </template>
@@ -45,10 +48,11 @@ import { global } from "~/mixins"
 import { dform, searchForm } from "~/components/schedulles"
 import axios from "axios"
 import catchError from "~/utils/catchError"
+import DownloadDialog from "~/components/DownloadDialog"
 
 export default {
   middleware: "auth",
-  components: { dform, searchForm },
+  components: { dform, searchForm, DownloadDialog },
   async fetch({ store }) {
     try {
       axios.defaults.headers.common["Authorization"] = `Bearer ${
@@ -83,7 +87,19 @@ export default {
       { text: "Actions", value: "", align: "center", sortable: false }
     ],
     items: [],
-    showSearch: false
+    showSearch: false,
+    dataToExport: [],
+    fillable: [
+      "id",
+      "marketing_id",
+      "study_id",
+      "marketing_action_id",
+      "start_date",
+      "end_date",
+      "description",
+      "created_at"
+    ],
+    typeDates: ["created_at"]
   }),
   watch: {
     pagination: {
@@ -155,6 +171,38 @@ export default {
       this.pagination.between_date = "start_date"
       this.showSearch = false
       this.pupulateTable()
+    },
+    downloadData() {
+      this.dataToExport = []
+      this.items.forEach(data => {
+        let d = Object.assign({}, data)
+
+        // Schedulle Marketing
+        delete d.marketing
+        delete d.marketing_id
+        if (data.marketing) d.marketing = data.marketing.name
+
+        // Add University Data
+        d.university = data.study.university.name
+
+        // Schedulle Study Program
+        delete d.study
+        delete d.study_id
+        if (data.study) d.study = data.study.studyName.name
+
+        // Schedulle Study Program
+        delete d.action
+        delete d.marketing_action_id
+        if (data.action) d.action = data.action.name
+
+        // Add Address Data
+        d.address = data.study.address
+
+        this.dataToExport.push(d)
+      })
+      if (this.dataToExport.length) {
+        this.showDownloadDialog = true
+      }
     }
   }
 }
