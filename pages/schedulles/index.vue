@@ -5,7 +5,7 @@
       <v-toolbar card color="transparent">
         <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
         <v-spacer/>
-        <Tbtn :bottom="true" :tooltip-text="'Refresh Table'" color="primary" icon="refresh" @onClick="pupulateTable"/>
+        <Tbtn :bottom="true" :tooltip-text="'Refresh Table'" color="primary" icon="refresh" @onClick="resetTable"/>
         <Tbtn :bottom="true" :tooltip-text="'Search'" color="primary" icon="search" @onClick="showSearch = true"/>
 
       </v-toolbar>
@@ -40,7 +40,7 @@
   </div>
 </template>
 <script>
-import { SCHEDULLE_URL, COMBO_DATA_URL } from "~/utils/apis"
+import { COMBO_DATA_URL, SCHEDULLE_URL } from "~/utils/apis"
 import { global } from "~/mixins"
 import { dform, searchForm } from "~/components/schedulles"
 import axios from "axios"
@@ -83,11 +83,7 @@ export default {
       { text: "Actions", value: "", align: "center", sortable: false }
     ],
     items: [],
-    showSearch: false,
-    search_by: "",
-    search_query: "",
-    start_date: "",
-    end_date: ""
+    showSearch: false
   }),
   watch: {
     pagination: {
@@ -105,13 +101,12 @@ export default {
   methods: {
     async pupulateTable() {
       try {
+        this.activateLoader()
         this.loading = true
-        const { page, rowsPerPage, descending, sortBy } = this.pagination
-        const endPoint = `${SCHEDULLE_URL}?page=${page}&limit=${rowsPerPage}&search_by=${
-          this.search_by
-        }&search_query=${this.search_query}&start_date=${
-          this.start_date
-        }&end_date=${this.end_date}`
+
+        const { descending, sortBy } = this.pagination
+        const endPoint = `${SCHEDULLE_URL}?${this.getQueryParams()}`
+
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
         this.totalItems = res.meta.total
@@ -132,8 +127,10 @@ export default {
           })
         }
         this.loading = false
+        this.deactivateLoader()
       } catch (e) {
         this.loading = false
+        this.deactivateLoader()
         catchError(e)
       }
     },
@@ -144,17 +141,20 @@ export default {
       this.items.unshift(data)
       this.showForm = false
     },
+    resetTable() {
+      this.resetPagination()
+      this.pupulateTable()
+    },
     onSearch(data) {
-      this.search_by = data.search_by
-      this.search_query = data.search_query
-      this.start_date = data.start_date
-      this.end_date = data.end_date
+      if (data.start_date == "null null") data.start_date = null
+      if (data.end_date == "null null") data.end_date = null
+      this.pagination.search_by = data.search_by || null
+      this.pagination.search_query = data.search_query || null
+      this.pagination.start_date = data.start_date
+      this.pagination.end_date = data.end_date
+      this.pagination.between_date = "start_date"
       this.showSearch = false
       this.pupulateTable()
-      this.search_by = ""
-      this.search_query = ""
-      this.start_date = ""
-      this.end_date = ""
     }
   }
 }
