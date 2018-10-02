@@ -6,16 +6,16 @@
           <v-text-field
             v-model="search"
             append-icon="search"
-            label="Search"
+            label="Cari"
             single-line
             hide-details
           />
           <v-spacer/>
-          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Back to Role List" @onClick="toHome"/>
-          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Save" @onClick="showDialog = true"/>              
+          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Kembali" @onClick="toHome"/>
+          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Simpan" @onClick="showDialog = true"/>              
 
-          <Tbtn color="primary" tooltip-text="Select all" icon-mode icon="check_box" @onClick="selectAll"/>
-          <Tbtn color="primary" tooltip-text="Unselect all" icon-mode icon="check_box_outline_blank" @onClick="clearAll"/> 
+          <Tbtn color="primary" tooltip-text="Tandai semua" icon-mode icon="check_box" @onClick="selectAll"/>
+          <Tbtn color="primary" tooltip-text="Tidak ditandai semua" icon-mode icon="check_box_outline_blank" @onClick="clearAll"/> 
         </v-toolbar>
         <v-card-text>
           <v-layout v-if="items" row wrap>
@@ -26,7 +26,7 @@
         </v-card-text>
       </v-container>
     </v-card>
-    <Dialog :showDialog="showDialog" text="Are you sure want to update ?" @onClose="showDialog = false" @onConfirmed="attachPermissions"/>
+    <Dialog :showDialog="showDialog" text="Yakin menambah Permission ?" @onClose="showDialog = false" @onConfirmed="attachPermissions"/>
   </div>
 </template>
 
@@ -79,7 +79,7 @@ export default {
           .put(ROLE_PERMISSIONS_URL, formData)
           .then(res => res.data)
         this.$store.commit("permissions", resp.data)
-        showNoty("Data Saved", "success")
+        showNoty("Data disimpan", "success")
         this.showDialog = false
         this.deactivateLoader()
       } catch (e) {
@@ -105,13 +105,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.btn-group {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-}
-</style>

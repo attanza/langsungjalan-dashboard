@@ -4,10 +4,10 @@
     <v-tabs align-with-title class="white elevation-1">
       <v-tabs-slider color="white"/>
       <v-tab href="#detail">
-        Details
+        Detail
       </v-tab>
       <v-tab href="#permissions">
-        Permissions
+        Permission
       </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>

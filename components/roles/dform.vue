@@ -3,14 +3,14 @@
     <v-dialog v-model="dialog" persistent max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="headline">{{ formTitle }}</span>
+          <span class="primary--text headline">{{ formTitle }}</span>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
             <form>
               <v-layout row wrap>
                 <v-flex xs12>
-                  <label>Name</label>
+                  <label>Role</label>
                   <v-text-field
                     v-validate="'required|max:50'"
                     v-model="name"
@@ -30,7 +30,7 @@
                   />
                 </v-flex>
                 <v-flex sm12>
-                  <label>Description</label>
+                  <label>Deskripsi</label>
                   <v-textarea
                     v-validate="'max:250'"
                     v-model="description"
@@ -45,8 +45,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="primary" flat @click.native="onClose">Close</v-btn>
-          <v-btn color="primary" flat @click.native="submit">Save</v-btn>
+          <v-btn dark color="primary" @click.native="onClose">Tutup</v-btn>
+          <v-btn dark color="primary" @click.native="submit">Simpan</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -78,7 +78,7 @@ export default {
         { key: "description", value: "", rules: "max:250" }
       ],
       formData: {},
-      formTitle: "Register New Role",
+      formTitle: "Tambah Role",
       name: "",
       slug: "",
       description: "",

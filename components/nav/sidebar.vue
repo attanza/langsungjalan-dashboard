@@ -122,21 +122,21 @@ export default {
       items: [
         { title: "Dashboard", icon: "dashboard", to: "/" },
         {
-          title: "Roles and Permissions",
+          title: "Role dan Permission",
           icon: "pan_tool",
           to: "/roles",
           hasChild: true,
           children: [
-            { title: "Roles", icon: "format_line_spacing", to: "/roles" },
+            { title: "Role", icon: "format_line_spacing", to: "/roles" },
             {
-              title: "Permissions",
+              title: "Permission",
               icon: "format_list_bulleted",
               to: "/permissions"
             }
           ]
         },
         {
-          title: "Users",
+          title: "User",
           icon: "account_circle",
           to: "/users",
           hasChild: true,
@@ -146,30 +146,30 @@ export default {
           ]
         },
         {
-          title: "Campus",
+          title: "Kampus",
           icon: "account_balance",
           to: "/universities",
           hasChild: true,
           children: [
             {
-              title: "Universities",
+              title: "Universitas",
               icon: "account_balance",
               to: "/universities"
             },
             {
-              title: "Study Names",
+              title: "Nama Studi",
               icon: "description",
               to: "/study-names"
             },
             {
-              title: "Study Programs",
+              title: "Program Studi",
               icon: "library_books",
               to: "/study-programs"
             }
           ]
         },
         {
-          title: "Marketings",
+          title: "Marketing",
           icon: "supervised_user_circle",
           to: "/marketings",
           hasChild: true,
@@ -180,24 +180,24 @@ export default {
               to: "/marketings"
             },
             {
-              title: "Actions",
+              title: "Aksi",
               icon: "list",
               to: "/marketing-actions"
             },
             {
-              title: "Schedulles",
+              title: "Jadwal",
               icon: "date_range",
               to: "/schedulles"
             },
             {
-              title: "Reports",
+              title: "Laporan",
               icon: "find_in_page",
               to: "/marketing-reports"
             }
           ]
         },
         {
-          title: "Products",
+          title: "Produk",
           icon: "donut_small",
           to: "/products"
         }

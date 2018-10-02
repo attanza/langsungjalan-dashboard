@@ -11,7 +11,9 @@ export const state = () => ({
   comboData2: null,
   comboData3: null,
   permissions: null,
-  dashboardData: null
+  dashboardData: null,
+  locales: ["en", "id"],
+  locale: "id"
 })
 
 export const mutations = {
@@ -44,6 +46,11 @@ export const mutations = {
   },
   dashboardData(state, p) {
     state.dashboardData = p
+  },
+  SET_LANG(state, locale) {
+    if (state.locales.indexOf(locale) !== -1) {
+      state.locale = locale
+    }
   }
 }
 
@@ -51,6 +58,7 @@ export const actions = {
   nuxtServerInit({ commit }, { req }) {
     let token = null
     let user = null
+    let lang = ""
 
     if (req.headers.cookie) {
       let parsed = cookieparser.parse(req.headers.cookie)
@@ -58,10 +66,12 @@ export const actions = {
         let data = JSON.parse(parsed.lj_token)
         token = data.token
         user = data.user
+        lang = data.user.lang
       }
     }
     commit("token", token)
     commit("user", user)
+    commit("SET_LANG", lang)
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
   }
 }

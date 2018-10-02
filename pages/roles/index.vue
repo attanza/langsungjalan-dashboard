@@ -1,16 +1,16 @@
 <template>
   <div>
-    <h2 class="mb-3">{{ title }}s</h2>
+    <h2 class="primary--text mb-3">{{ title }}s</h2>
     <v-card class="pt-3">
       <v-toolbar card color="transparent">
-        <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode icon="add" color="primary" @onClick="showForm = true"/>
-        <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode icon="cloud_download" color="primary" @onClick="downloadData"/>       
+        <Tbtn :bottom="true" :tooltip-text="'Tambahkan ' + title " icon-mode icon="add" color="primary" @onClick="showForm = true"/>
+        <Tbtn :bottom="true" :tooltip-text="'Download data ' + title" icon-mode icon="cloud_download" color="primary" @onClick="downloadData"/>       
 
         <v-spacer/>
         <v-text-field
           v-model="search"
           append-icon="search"
-          label="Search"
+          label="Cari"
           single-line
           hide-details
         />
@@ -24,11 +24,9 @@
         :total-items="totalItems"
         :rows-per-page-items="rowsPerPage"
         class="elevation-1"
-
       >
         <template slot="items" slot-scope="props">
           <td>{{ props.item.name }}</td>
-          <td>{{ props.item.slug }}</td>
           <td>{{ props.item.description }}</td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
@@ -59,13 +57,12 @@ export default {
   data: () => ({
     title: "Role",
     headers: [
-      { text: "Name", align: "left", value: "name" },
-      { text: "Slug", align: "left", value: "slug" },
-      { text: "Desctiption", align: "left", value: "description" },
-      { text: "Actions", value: "", align: "center", sortable: false }
+      { text: "Role", align: "left", value: "name" },
+      { text: "Deskripsi", align: "left", value: "description" },
+      { text: "Aksi", value: "", align: "center", sortable: false }
     ],
     items: [],
-    confirmMessage: "Are you sure want to delete this ?",
+    confirmMessage: "Yakin mau menghapus ?",
     showConfirm: false,
     dataToExport: [],
     fillable: ["id", "name", "slug", "description"],

@@ -7,8 +7,8 @@
         </v-card-title>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="white primary--text" light @click="onClose" >No</v-btn>
-          <v-btn color="white primary--text" light @click="onConfirmed" >Yes</v-btn>          
+          <v-btn color="white primary--text" light @click="onClose" >Tidak</v-btn>
+          <v-btn color="white primary--text" light @click="onConfirmed" >Ya</v-btn>          
         </v-card-actions>
       </v-card>
     </v-dialog>

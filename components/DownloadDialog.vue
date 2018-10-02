@@ -1,15 +1,15 @@
 <template>
   <div>
     <v-dialog v-model="dialog" max-width="500px" persistent>
-      <v-card dark>
+      <v-card light>
         <v-card-title>
-          <span class="headline">Choose one of following options</span>
+          <span class="primary--text headline">Choose one of following options</span>
         </v-card-title>
         <v-card-text style="padding: 0;"/>
         <v-container fluid style="padding-top: 0; padding-bottom: 0;" grid-list-md>
           <v-radio-group v-model="radios">
-            <v-radio label="As seen on screen" value="1" color="white"/>
-            <v-radio label="Custom" value="2" color="white"/>
+            <v-radio label="As seen on screen" value="1" color="primary"/>
+            <v-radio label="Custom" value="2" color="primary"/>
           </v-radio-group>
           <v-layout v-if="radios == '2'" row wrap>
             <v-flex sm6 xs12>
