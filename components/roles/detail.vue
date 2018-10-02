@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card dark>
+    <v-card>
       <v-container grid-list-md fluid style="padding: 0px;">
         <v-toolbar color="transparent" card>
           <v-spacer/>

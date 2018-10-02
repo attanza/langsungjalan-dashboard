@@ -70,7 +70,6 @@ export default {
       if (actions) store.commit("comboData3", actions.data)
     } catch (e) {
       console.log(e)
-
       catchError(e)
     }
   },

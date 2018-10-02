@@ -3,7 +3,7 @@
     <v-tooltip top>
       <v-btn slot="activator" 
              :color="color" :flat="flat" :block="block" :outline="outline" :icon="iconMode" :text="text"
-             :tooltip-text="tooltipText" @click="onClick"
+             :tooltip-text="tooltipText" :dark="dark" @click="onClick"
       >
         <v-icon v-if="icon != ''">{{ icon }}</v-icon>
         <span v-if="text">{{ text }}</span>
@@ -51,6 +51,11 @@ export default {
       default: false
     },
     iconMode: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    dark: {
       type: Boolean,
       required: false,
       default: false

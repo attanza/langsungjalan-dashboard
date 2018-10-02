@@ -4,7 +4,7 @@
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md6>
           <v-card class="elevation-12">
-            <v-toolbar dark color="primary">
+            <v-toolbar>
               <v-toolbar-title>Login form</v-toolbar-title>
               <v-spacer/>
             </v-toolbar>
@@ -35,9 +35,9 @@
               </form>
             </v-card-text>
             <v-card-actions>
-              <v-btn flat @click="showResetForm = true"><span class="primary--text">Forgot Password ?</span></v-btn>
+              <v-btn flat @click="showResetForm = true"><span>Forgot Password ?</span></v-btn>
               <v-spacer/>
-              <v-btn :loading="loading" :disabled="loading" color="primary" @click="submit">Login</v-btn>
+              <v-btn :loading="loading" :disabled="loading" @click="submit">Login</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>

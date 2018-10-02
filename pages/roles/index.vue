@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h2 class="primary--text mb-3">{{ title }}s</h2>
-    <v-card dark class="pt-3">
+    <h2 class="mb-3">{{ title }}s</h2>
+    <v-card class="pt-3">
       <v-toolbar card color="transparent">
-        <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
-        <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>       
+        <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode icon="add" color="primary" @onClick="showForm = true"/>
+        <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode icon="cloud_download" color="primary" @onClick="downloadData"/>       
 
         <v-spacer/>
         <v-text-field
@@ -32,7 +32,7 @@
           <td>{{ props.item.description }}</td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <v-icon color="white">remove_red_eye</v-icon>
+              <v-icon>remove_red_eye</v-icon>
             </v-btn>
           </td>
         </template>

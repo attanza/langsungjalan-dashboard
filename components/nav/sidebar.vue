@@ -3,8 +3,6 @@
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant.sync="mini"
-      color="grey darken-4"
-      dark
       fixed
       app
     >
@@ -67,7 +65,7 @@
         
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar color="primary" dark fixed app>
+    <v-toolbar fixed app>
       <v-toolbar-side-icon @click="drawer = !drawer"/>
       <v-spacer/>
       <v-toolbar-items>

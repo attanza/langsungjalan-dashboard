@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card dark>
+    <v-card>
       <v-container fluid>
         <v-toolbar color="transparent" card>
           <v-text-field

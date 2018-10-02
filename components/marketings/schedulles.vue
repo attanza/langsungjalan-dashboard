@@ -38,7 +38,7 @@
   </div>
 </template>
 <script>
-import { SCHEDULLE_URL } from "~/utils/apis"
+import { SCHEDULLE_URL, COMBO_DATA_URL } from "~/utils/apis"
 import { global } from "~/mixins"
 import { searchForm } from "~/components/schedulles"
 import axios from "axios"
@@ -48,6 +48,26 @@ export default {
   middleware: "auth",
   components: { searchForm },
   mixins: [global],
+  async fetch({ store }) {
+    try {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${
+        store.state.token
+      }`
+      axios.defaults.headers.post["Content-Type"] = "application/json"
+      // Marketing Combo Data
+      let marketings = await axios.get(COMBO_DATA_URL + "MarketingAll")
+      if (marketings) store.commit("comboData", marketings.data)
+      // Study Program Combo Data
+      let studies = await axios.get(COMBO_DATA_URL + "StudyProgram")
+      if (studies) store.commit("comboData2", studies.data)
+      // Marketing Action Combo Data
+      let actions = await axios.get(COMBO_DATA_URL + "Action")
+      if (actions) store.commit("comboData3", actions.data)
+    } catch (e) {
+      console.log(e)
+      catchError(e)
+    }
+  },
   data: () => ({
     title: "Schedulle",
     headers: [
