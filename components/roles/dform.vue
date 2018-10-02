@@ -17,6 +17,8 @@
                     :error-messages="errors.collect('name')"
                     name="name"
                     data-vv-name="name"
+                    data-vv-as="Role"
+
                   />
                 </v-flex>
                 <v-flex xs12>
@@ -37,6 +39,8 @@
                     :error-messages="errors.collect('description')"
                     name="description"
                     data-vv-name="description"
+                    data-vv-as="Deskripsi"
+
                   />
                 </v-flex>
               </v-layout>     

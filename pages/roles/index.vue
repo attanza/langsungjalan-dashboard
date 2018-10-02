@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="primary--text mb-3">{{ title }}s</h2>
+    <h2 class="primary--text mb-3">{{ title }}</h2>
     <v-card class="pt-3">
       <v-toolbar card color="transparent">
         <Tbtn :bottom="true" :tooltip-text="'Tambahkan ' + title " icon-mode icon="add" color="primary" @onClick="showForm = true"/>
@@ -30,7 +30,7 @@
           <td>{{ props.item.description }}</td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <v-icon>remove_red_eye</v-icon>
+              <v-icon color="primary">remove_red_eye</v-icon>
             </v-btn>
           </td>
         </template>

@@ -1,7 +1,7 @@
 <template>
   <v-layout row justify-center>
     <v-dialog v-model="dialog" persistent max-width="500px">
-      <v-card dark>
+      <v-card>
         <v-card-title>
           <span class="headline primary--text">{{ formTitle }}</span>
         </v-card-title>
@@ -11,22 +11,24 @@
               <v-layout row wrap>
                 <v-flex v-for="(f, index) in fillable" :key="index" xs12>
                   <div v-if="!inArray(notIncluded, f.key)">
-                    <label>{{ setCase(f.key) }}</label>
+                    <label>{{ f.caption }}</label>
                     <v-text-field
                       v-validate="f.rules"
                       v-model="formData[f.key]"
                       :error-messages="errors.collect(f.key)"
                       :name="f.key"
                       :data-vv-name="f.key"
+                      :data-vv-as="f.caption"
                     />
                   </div>
                   <div v-if="f.key == 'roles' && comboData">
-                    <label>Roles</label>                
+                    <label>Role</label>                
                     <v-autocomplete
                       v-validate="'required|numeric'"
                       :items="comboData"
                       :error-messages="errors.collect('roles')"
                       :data-vv-name="'roles'"
+                      :data-vv-as="'Role'"
                       v-model="formData['roles']"
                       label="Select Roles"
                       single-line
@@ -39,7 +41,7 @@
                   <div v-if="f.key == 'is_active'">
                     <v-switch
                       v-model="formData['is_active']"
-                      label="Active"
+                      label="Status aktif"
                       color="primary"
                     />
                   </div>
@@ -50,8 +52,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="primary" flat @click.native="onClose">Close</v-btn>
-          <v-btn color="primary" flat @click.native="submit">Save</v-btn>
+          <v-btn color="primary" @click.native="onClose">Tutup</v-btn>
+          <v-btn color="primary" @click.native="submit">Simpan</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -77,18 +79,43 @@ export default {
     return {
       dialog: false,
       fillable: [
-        { key: "name", value: "", rules: "required|max:50" },
-        { key: "email", value: "", rules: "required|email" },
-        { key: "phone", value: "", rules: "required|max:30" },
-        { key: "password", value: "", rules: "required|min:6" },
-        { key: "roles", value: [], rules: "required|array" },
-        { key: "is_active", value: true, rules: "required|boolean" },
-        { key: "address", value: "", rules: "required|max:250" },
-        { key: "description", value: "", rules: "max:250" }
+        { key: "name", caption: "Nama", value: "", rules: "required|max:50" },
+        { key: "email", caption: "Email", value: "", rules: "required|email" },
+        {
+          key: "phone",
+          caption: "Telepon",
+          value: "",
+          rules: "required|max:30"
+        },
+        {
+          key: "password",
+          caption: "Password",
+          value: "",
+          rules: "required|min:6"
+        },
+        { key: "roles", caption: "Role", value: [], rules: "required|array" },
+        {
+          key: "is_active",
+          caption: "Status aktif",
+          value: true,
+          rules: "required|boolean"
+        },
+        {
+          key: "address",
+          caption: "Alamat",
+          value: "",
+          rules: "required|max:250"
+        },
+        {
+          key: "description",
+          caption: "Deskripsi",
+          value: "",
+          rules: "max:250"
+        }
       ],
       notIncluded: ["roles", "is_active"],
       formData: {},
-      formTitle: "Register New User"
+      formTitle: "Tambah User"
     }
   },
   watch: {
@@ -135,7 +162,7 @@ export default {
           .then(res => res.data)
 
         if (resp.meta.status === 201) {
-          showNoty("Data Saved", "success")
+          showNoty("Data disimpan", "success")
           this.$emit("onAdd", resp.data)
           this.setFields()
         }

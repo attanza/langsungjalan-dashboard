@@ -4,7 +4,7 @@
     <v-tabs align-with-title color="primary" class="white elevation-1" dark>
       <v-tabs-slider color="white"/>
       <v-tab href="#detail">
-        Details
+        Detail
       </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>

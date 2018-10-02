@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 v-if="currentEdit" class="primary--text mb-2">Role {{ currentEdit.name }}</h2>    
-    <v-tabs align-with-title class="white elevation-1">
+    <v-tabs align-with-title color="primary" class="white elevation-1" dark>
       <v-tabs-slider color="white"/>
       <v-tab href="#detail">
         Detail

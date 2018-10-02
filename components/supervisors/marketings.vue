@@ -1,13 +1,13 @@
 <template>
   <div>
-    <v-card dark>
+    <v-card>
       <v-container fluid grid-list-md style="padding-top: 5px;">
         <v-toolbar card color="transparent">
           <v-toolbar-items>
             <v-text-field
               v-model="search"
               append-icon="search"
-              label="Search"
+              label="Cari"
               single-line
               hide-details
               class="mt-2"
@@ -16,7 +16,7 @@
               v-if="addMode && comboData"
               :items="comboData"
               v-model="marketingsToAdd"
-              label="Select Marketing to add"
+              label="Pilih marketing"
               multiple
               item-text="name"
               item-value="id"
@@ -26,10 +26,10 @@
             />
           </v-toolbar-items>
           <v-spacer/>
-          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Back to List" @onClick="toHome"/>
-          <Tbtn v-if="!addMode" color="primary" icon="add" icon-mode tooltip-text="Add Marketing" @onClick="addMode = true"/>  
-          <Tbtn v-if="addMode" color="primary" icon="save" icon-mode tooltip-text="Save" @onClick="addMarketing"/>      
-          <Tbtn color="primary" icon="refresh" icon-mode tooltip-text="refresh" @onClick="repopulateData"/>              
+          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Kembali" @onClick="toHome"/>
+          <Tbtn v-if="!addMode" color="primary" icon="add" icon-mode tooltip-text="Tambah Marketing" @onClick="addMode = true"/>  
+          <Tbtn v-if="addMode" color="primary" icon="save" icon-mode tooltip-text="Simpan" @onClick="addMarketing"/>      
+          <Tbtn color="primary" icon="refresh" icon-mode tooltip-text="Refresh" @onClick="repopulateData"/>              
 
         </v-toolbar>
         <v-layout row wrap>
@@ -38,7 +38,7 @@
             :key="marketing.id"
             md4 sm6 xs12
           >
-            <v-card color="primary">
+            <v-card color="primary" dark>
               <v-img
                 :src="marketing.photo !== '' ? marketing.photo: '/images/user.png'"
                 aspect-ratio="1.7"
@@ -61,7 +61,7 @@
         </v-layout>
       </v-container>
     </v-card>
-    <Dialog :showDialog="showDialog" text="Are you sure want to delete ?" @onClose="clear" @onConfirmed="detachMarketing"/>
+    <Dialog :showDialog="showDialog" text="Yakin mau menghapus ?" @onClose="clear" @onConfirmed="detachMarketing"/>
     <Loader :loading="loading"/>
 
   </div>
@@ -148,7 +148,7 @@ export default {
           .post(ADD_MARKETING_URL, data)
           .then(resp => {
             if (resp.status === 200) {
-              showNoty("Marketing added.", "success")
+              showNoty("Marketing ditambahkan.", "success")
               this.clear()
               this.repopulateData()
             } else this.clear()
@@ -177,7 +177,7 @@ export default {
           .put(DETACH_MARKETING_URL, data)
           .then(resp => {
             if (resp.status === 200) {
-              showNoty("Marketing detached.", "success")
+              showNoty("Marketing dilepas.", "success")
               this.clear()
               this.repopulateData()
             } else this.clear()

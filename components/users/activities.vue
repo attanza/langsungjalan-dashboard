@@ -1,13 +1,13 @@
 <template>
   <div>
-    <v-card dark class="pt-3">
+    <v-card class="pt-3">
       <v-toolbar card color="transparent">
         <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>       
         <v-spacer/>
         <v-text-field
           v-model="search"
           append-icon="search"
-          label="Search"
+          label="Cari"
           single-line
           hide-details
         />
@@ -52,7 +52,7 @@ export default {
   components: { DownloadDialog },
   mixins: [global],
   data: () => ({
-    title: "Activity",
+    title: "Aktivitas",
     headers: [
       { text: "IP Address", align: "left", value: "ip" },
       { text: "Browser", align: "left", value: "browser" },

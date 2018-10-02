@@ -1,7 +1,7 @@
 <template>
   <v-layout row justify-center>
     <v-dialog v-model="dialog" persistent max-width="500px">
-      <v-card dark>
+      <v-card>
         <v-card-title>
           <span class="headline primary--text">{{ formTitle }}</span>
         </v-card-title>
@@ -10,23 +10,25 @@
             <form>
               <v-layout row wrap>
                 <v-flex xs12>
-                  <label>Name</label>
+                  <label>Permission</label>
                   <v-text-field
                     v-validate="'required|max:50'"
                     v-model="name"
                     :error-messages="errors.collect('name')"
                     name="name"
                     data-vv-name="name"
+                    data-vv-as="Permission"
                   />
                 </v-flex>
                 <v-flex sm12>
-                  <label>Description</label>
+                  <label>Deskripsi</label>
                   <v-textarea
                     v-validate="'max:250'"
                     v-model="description"
                     :error-messages="errors.collect('description')"
                     name="description"
                     data-vv-name="description"
+                    data-vv-as="Deskripsi"
                   />
                 </v-flex>
               </v-layout>     
@@ -35,8 +37,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="primary" flat @click.native="onClose">Close</v-btn>
-          <v-btn color="primary" flat @click.native="submit">Save</v-btn>
+          <v-btn color="primary" @click.native="onClose">Tutup</v-btn>
+          <v-btn color="primary" @click.native="submit">Simpan</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -68,7 +70,7 @@ export default {
         { key: "description", value: "", rules: "max:250" }
       ],
       formData: {},
-      formTitle: "Register New Permission",
+      formTitle: "Tambah Permission",
       name: "",
       slug: "",
       description: ""
@@ -111,7 +113,7 @@ export default {
           .post(PERMISSION_URL, formData)
           .then(res => res.data)
         if (resp.meta.status === 201) {
-          showNoty("Data Saved", "success")
+          showNoty("Data disimpan", "success")
           this.$emit("onAdd", resp.data)
           this.setFields()
         }
