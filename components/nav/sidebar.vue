@@ -6,7 +6,7 @@
       fixed
       app
     >
-      <v-toolbar flat class="transparent">
+      <v-toolbar flat>
         <v-list class="pa-0">
           <v-list-tile>
             <v-list-tile-content v-if="!mini">

@@ -1,41 +1,45 @@
 <template>
   <div>
-    <v-card dark class="pt-3">
+    <v-card class="pt-3">
       <v-container grid-list-md fluid style="padding-top: 0px;">
         <v-toolbar color="transparent" card>
           <v-spacer/>
-          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Back to List" @onClick="toHome"/>
-          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Save" @onClick="submit"/>              
+          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Kembali" @onClick="toHome"/>
+          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Simpan" @onClick="submit"/>              
           <Tbtn color="primary" icon="refresh" icon-mode tooltip-text="Refresh" @onClick="setFields"/>  
-          <Tbtn color="primary" icon="delete" icon-mode tooltip-text="Delete" @onClick="confirmDelete"/>  
+          <Tbtn color="primary" icon="delete" icon-mode tooltip-text="Hapus" @onClick="confirmDelete"/>  
         </v-toolbar>  
         <form>
           <v-layout row wrap class="mt-3 px-2">
             <v-flex v-for="(f, index) in fillable" v-if="!inArray(notIncluded, f.key)" :key="index" sm6 xs12>
-              <label>{{ setCase(f.key) }}</label>
+              <label>{{ f.caption }}</label>
               <v-text-field
                 v-validate="f.rules"
                 v-model="formData[f.key]"
                 :error-messages="errors.collect(f.key)"
                 :name="f.key"
                 :data-vv-name="f.key"
+                :data-vv-as="f.caption"
+                :type="inArray(typeNumber, f.key) ? 'number': 'text'"
+
               />
             </v-flex>
             <v-flex v-for="(f, index) in fillable" v-if="inArray(notIncluded, f.key)" :key="index" sm6 xs12>
-              <label>{{ setCase(f.key) }}</label>
+              <label>{{ f.caption }}</label>
               <v-textarea
                 v-validate="f.rules"
                 v-model="formData[f.key]"
                 :error-messages="errors.collect(f.key)"
                 :name="f.key"
                 :data-vv-name="f.key"
+                :data-vv-as="f.caption"
               />
             </v-flex>
           </v-layout>     
         </form>
       </v-container>
     </v-card>
-    <Dialog :showDialog="showDialog" text="Are you sure want to delete ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
+    <Dialog :showDialog="showDialog" text="Yakin mau menghapus ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
   </div>
 </template>
 
@@ -55,19 +59,48 @@ export default {
   data() {
     return {
       fillable: [
-        { key: "name", value: "", rules: "required|max:50" },
-        { key: "phone", value: "", rules: "required|max:30" },
-        { key: "email", value: "", rules: "required|email" },
-        { key: "contact_person", value: "", rules: "required|max:50" },
-        { key: "province", value: "", rules: "required|max:50" },
-        { key: "city", value: "", rules: "required|max:50" },
-        { key: "address", value: "", rules: "required|max:250" },
-        { key: "description", value: "", rules: "max:250" }
+        { key: "name", caption: "Nama", value: "", rules: "required|max:50" },
+        {
+          key: "phone",
+          caption: "Telepon",
+          value: "",
+          rules: "required|max:30"
+        },
+        { key: "email", caption: "Email", value: "", rules: "required|email" },
+        {
+          key: "contact_person",
+          caption: "Nama kontak",
+          value: "",
+          rules: "required|max:50"
+        },
+        {
+          key: "province",
+          caption: "Provinsi",
+          value: "",
+          rules: "required|max:50"
+        },
+        { key: "city", caption: "Kota", value: "", rules: "required|max:50" },
+        { key: "lat", caption: "Latitude", value: null, rules: "" },
+        { key: "lng", caption: "Longitude", value: null, rules: "" },
+
+        {
+          key: "address",
+          caption: "Alamat",
+          value: "",
+          rules: "required|max:250"
+        },
+        {
+          key: "description",
+          caption: "Deskripsi",
+          value: "",
+          rules: "max:250"
+        }
       ],
+      typeNumber: ["lat", "lng"],
+
       notIncluded: ["description", "address"],
       formData: {},
-      showDialog: false,
-      toggle_multiple: [0, 1, 2, 3]
+      showDialog: false
     }
   },
   created() {
@@ -96,14 +129,20 @@ export default {
     async editData() {
       try {
         this.activateLoader()
-
+        for (let key in this.formData) {
+          if (this.formData.hasOwnProperty(key)) {
+            if (key == "lat" || key == "lng") {
+              this.formData[key] = parseFloat(this.formData[key])
+            }
+          }
+        }
         if (this.currentEdit) {
           const resp = await axios
             .put(UNIVERSITY_URL + "/" + this.currentEdit.id, this.formData)
             .then(res => res.data)
           this.$store.commit("currentEdit", resp.data)
           this.setFields()
-          showNoty("Data Updated", "success")
+          showNoty("Data diperbaharui", "success")
           this.deactivateLoader()
         }
       } catch (e) {
@@ -124,7 +163,7 @@ export default {
             .then(res => res.data)
           if (resp.meta.status === 200) {
             this.deactivateLoader()
-            showNoty("Data Deleted", "success")
+            showNoty("Data dihapus", "success")
             this.$router.push("/universities")
           }
         }
@@ -137,13 +176,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.btn-group {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-}
-</style>

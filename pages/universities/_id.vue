@@ -4,13 +4,13 @@
     <v-tabs align-with-title color="primary" class="white elevation-1" dark>
       <v-tabs-slider color="white"/>
       <v-tab href="#detail">
-        Details
+        Detail
       </v-tab>
       <v-tab href="#study">
-        Study Programs
+        Program Studi
       </v-tab>
       <v-tab href="#maps">
-        Maps
+        Peta
       </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>

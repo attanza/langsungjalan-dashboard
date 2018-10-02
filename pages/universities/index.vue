@@ -1,15 +1,15 @@
 <template>
   <div>
     <h2 class="primary--text mb-3">{{ title }}</h2>
-    <v-card dark class="pt-3">
+    <v-card class="pt-3">
       <v-toolbar card color="transparent">
-        <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
+        <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
         <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>       
         <v-spacer/>
         <v-text-field
           v-model="search"
           append-icon="search"
-          label="Search"
+          label="Cari"
           single-line
           hide-details
         />
@@ -33,7 +33,7 @@
           <td class="text-xs-left">{{ props.item.city }}</td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <Tbtn :tooltip-text="'Show '+title" icon-mode flat color="white" icon="remove_red_eye" @onClick="toDetail(props.item)"/>
+              <Tbtn :tooltip-text="'Show '+title" icon-mode flat color="primary" icon="remove_red_eye" @onClick="toDetail(props.item)"/>
             </v-btn>
           </td>
         </template>
@@ -58,18 +58,18 @@ export default {
   components: { dform, DownloadDialog },
   mixins: [global],
   data: () => ({
-    title: "University",
+    title: "Universitas",
     headers: [
-      { text: "Name", align: "left", value: "name" },
+      { text: "Universitas", align: "left", value: "name" },
       // { text: "Address", value: "address", align: "left" },
-      { text: "Contact Person", value: "contact_person", align: "left" },
-      { text: "Phone", value: "phone", align: "left" },
+      { text: "Nama Kontak", value: "contact_person", align: "left" },
+      { text: "Telepon", value: "phone", align: "left" },
       { text: "Email", value: "email", align: "left" },
-      { text: "City", value: "city", align: "left" },
-      { text: "Actions", value: "name", sortable: false }
+      { text: "Kota", value: "city", align: "left" },
+      { text: "Aksi", value: "name", sortable: false }
     ],
     items: [],
-    confirmMessage: "Are you sure want to delete this ?",
+    confirmMessage: "Yakin mau menghapus ?",
     showConfirm: false,
     dataToExport: [],
     fillable: [
