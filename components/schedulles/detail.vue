@@ -1,13 +1,13 @@
 <template>
   <div>
-    <v-card dark>
+    <v-card>
       <v-container grid-list-md fluid style="padding-top: 5px;">
         <v-toolbar color="transparent" card>
           <v-spacer/>
-          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Back to List" @onClick="toHome"/>
-          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Save" @onClick="submit"/>              
+          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Kembali" @onClick="toHome"/>
+          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Simpan" @onClick="submit"/>              
           <Tbtn color="primary" icon="refresh" icon-mode tooltip-text="Refresh" @onClick="setField"/>  
-          <Tbtn color="primary" icon="delete" icon-mode tooltip-text="Delete" @onClick="confirmDelete"/>  
+          <Tbtn color="primary" icon="delete" icon-mode tooltip-text="Hapus" @onClick="confirmDelete"/>  
         </v-toolbar> 
         <form>
           <v-layout row wrap class="mt-3 px-2">
@@ -18,8 +18,10 @@
                 :items="comboData"
                 :error-messages="errors.collect('marketing_id')"
                 :data-vv-name="'marketing_id'"
+                :data-vv-as="'Marketing'"
+
                 v-model="marketing_id"
-                label="Select Marketing"
+                label="Pilih marketing"
                 single-line
                 item-text="name"
                 item-value="id"
@@ -27,14 +29,16 @@
               />
             </v-flex>
             <v-flex v-if="comboData3" sm6 xs12>
-              <label>Marketing Action</label>                
+              <label>Aksi</label>                
               <v-autocomplete
                 v-validate="'required|numeric'"
                 :items="comboData3"
                 :error-messages="errors.collect('marketing_action_id')"
                 :data-vv-name="'marketing_action_id'"
+                :data-vv-as="'Aksi'"
+
                 v-model="marketing_action_id"
-                label="Select Marketing Action"
+                label="Pilih aksi"
                 single-line
                 item-text="name"
                 item-value="id"
@@ -42,12 +46,14 @@
               />
             </v-flex>
             <v-flex v-if="comboData2" sm6 xs12>
-              <label>Study Program</label>                
+              <label>Program Studi</label>                
               <v-autocomplete
                 v-validate="'required|numeric'"
                 :items="comboData2"
                 :error-messages="errors.collect('study_id')"
                 :data-vv-name="'study_id'"
+                :data-vv-as="'Program Studi'"
+
                 v-model="study_id"
                 label="Select Study Program"
                 single-line
@@ -59,7 +65,7 @@
           </v-layout>
           <v-layout row wrap>
             <v-flex sm6 xs12>
-              <label>Start Date</label>                
+              <label>Tanggal Mulai</label>                
               <v-menu
                 ref="menu"
                 :close-on-content-click="false"
@@ -77,8 +83,10 @@
                   slot="activator"
                   :error-messages="errors.collect('start_date')"
                   :data-vv-name="'start_date'"
+                  :data-vv-as="'Tanggal mulai'"
+
                   v-model="start_date"
-                  label="Pick a Start Date"
+                  label="Pilih tanggal mulai"
                   readonly
                 />
                 <v-date-picker v-model="start_date" @input="$refs.menu.save(start_date)"/>
@@ -87,7 +95,7 @@
             </v-flex>
 
             <v-flex sm6 xs12>
-              <label>Start Time</label>                
+              <label>Waktu Mulai</label>                
               <v-menu
                 ref="menuTime"
                 :close-on-content-click="false"
@@ -106,8 +114,10 @@
                   slot="activator"
                   :error-messages="errors.collect('start_time')"
                   :data-vv-name="'start_time'"
+                  :data-vv-as="'Waktu mulai'"
+
                   v-model="start_time"
-                  label="Pick a Start Time"
+                  label="Pilih waktu mulai"
                   readonly
                 />
                 <v-time-picker
@@ -119,7 +129,7 @@
             </v-flex>
 
             <v-flex sm6 xs12>
-              <label>End Date</label>                
+              <label>Tanggal Akhir</label>                
               <v-menu
                 ref="menu2"
                 :close-on-content-click="false"
@@ -137,8 +147,9 @@
                   slot="activator"
                   :error-messages="errors.collect('end_date')"
                   :data-vv-name="'end_date'"
+                  :data-vv-as="'Tanggal Akhir'"
                   v-model="end_date"
-                  label="Pick a Start Date"
+                  label="Pilih tanggal akhir"
                   readonly
                 />
                 <v-date-picker v-model="end_date" @input="$refs.menu2.save(end_date)"/>
@@ -147,7 +158,7 @@
             </v-flex>
 
             <v-flex sm6 xs12>
-              <label>End Time</label>                
+              <label>Waktu Akhir</label>                
               <v-menu
                 ref="menuTime2"
                 :close-on-content-click="false"
@@ -166,8 +177,10 @@
                   slot="activator"
                   :error-messages="errors.collect('end_time')"
                   :data-vv-name="'end_time'"
+                  :data-vv-as="'Waktu Akhir'"
+
                   v-model="end_time"
-                  label="Pick a Start Time"
+                  label="Pilih waktu akhir"
                   readonly
                 />
                 <v-time-picker
@@ -178,20 +191,22 @@
               </v-menu>
             </v-flex>
             <v-flex sm12>
-              <label>Description</label>
+              <label>Deskripsi</label>
               <v-textarea
                 v-validate="'max:250'"
                 v-model="description"
                 :error-messages="errors.collect('description')"
                 name="description"
                 data-vv-name="description"
+                data-vv-as="Deskripsi"
+
               />
             </v-flex>
           </v-layout>       
         </form>
       </v-container>
     </v-card>
-    <Dialog :showDialog="dialog" text="Are you sure want to delete ?" @onClose="dialog = false" @onConfirmed="removeData"/>
+    <Dialog :showDialog="dialog" text="Yakin mau menghapus ?" @onClose="dialog = false" @onConfirmed="removeData"/>
   </div>
 </template>
 
@@ -262,7 +277,7 @@ export default {
             .then(res => res.data)
           this.$store.commit("currentEdit", resp.data)
           this.setField()
-          showNoty("Data Updated", "success")
+          showNoty("Data diperbaharui", "success")
         }
         this.deactivateLoader()
       } catch (e) {
@@ -292,7 +307,7 @@ export default {
             .delete(SCHEDULLE_URL + "/" + this.currentEdit.id)
             .then(res => res.data)
           if (resp.meta.status === 200) {
-            showNoty("Data Deleted", "success")
+            showNoty("Data dihapus", "success")
             this.$router.push("/schedulles")
           }
         }
@@ -305,13 +320,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.btn-group {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-}
-</style>
