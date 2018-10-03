@@ -1,11 +1,11 @@
 <template>
   <div>
-    <v-card dark class="pt-3">
+    <v-card class="pt-3">
       <v-toolbar card color="transparent">
         <!-- <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/> -->
         <v-spacer/>
-        <Tbtn :bottom="true" :tooltip-text="'Refresh Table'" color="primary" icon="refresh" @onClick="pupulateTable"/>
-        <Tbtn :bottom="true" :tooltip-text="'Search'" color="primary" icon="search" @onClick="showSearch = true"/>
+        <Tbtn :bottom="true" :tooltip-text="'Refresh'" color="primary" icon="refresh" @onClick="pupulateTable"/>
+        <Tbtn :bottom="true" :tooltip-text="'Cari'" color="primary" icon="search" @onClick="showSearch = true"/>
 
       </v-toolbar>
       <v-data-table
@@ -26,7 +26,7 @@
           <!-- <td>{{ props.item.description }}</td> -->
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <v-icon color="white">remove_red_eye</v-icon>
+              <v-icon color="primary">remove_red_eye</v-icon>
             </v-btn>
           </td>
         </template>
@@ -72,11 +72,11 @@ export default {
     title: "Schedulle",
     headers: [
       { text: "Action", align: "left", value: "marketing_action_id" },
-      { text: "Study Programs", align: "left", value: "study_id" },
-      { text: "Start Date", align: "left", value: "start_date" },
-      { text: "End Date", align: "left", value: "end_date" },
+      { text: "Program Studi", align: "left", value: "study_id" },
+      { text: "Tanggal Mulai", align: "left", value: "start_date" },
+      { text: "Tanggal Akhir", align: "left", value: "end_date" },
       // { text: "Description", align: "left", value: "description" },
-      { text: "Actions", value: "", align: "center", sortable: false }
+      { text: "Aksi", value: "", align: "center", sortable: false }
     ],
     items: [],
     showSearch: false,

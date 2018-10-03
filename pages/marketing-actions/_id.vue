@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h2 class="primary--text mb-2">Marketing Action Detail</h2>    
+    <h2 class="primary--text mb-2">Detail Aksi Kegiatan</h2>    
     <v-tabs align-with-title color="primary" class="white elevation-1" dark>
       <v-tabs-slider color="white"/>
       <v-tab href="#detail">
-        Details
+        Detail
       </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>

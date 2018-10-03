@@ -1,16 +1,16 @@
 <template>
   <div>
-    <h2 class="primary--text mb-3">{{ title }}s</h2>
-    <v-card dark class="pt-3">
+    <h2 class="primary--text mb-3">{{ title }}</h2>
+    <v-card class="pt-3">
       <v-toolbar card color="transparent">
-        <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
+        <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
         <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>       
 
         <v-spacer/>
         <v-text-field
           v-model="search"
           append-icon="search"
-          label="Search"
+          label="Cari"
           single-line
           hide-details
         />
@@ -39,7 +39,7 @@
           </td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <Tbtn :tooltip-text="'Show '+title" icon-mode flat color="white" icon="remove_red_eye" @onClick="toDetail(props.item)"/>
+              <Tbtn :tooltip-text="'Show '+title" icon-mode flat color="primary" icon="remove_red_eye" @onClick="toDetail(props.item)"/>
             </v-btn>
           </td>
         </template>
@@ -66,15 +66,15 @@ export default {
   data: () => ({
     title: "Marketing",
     headers: [
-      { text: "Name", align: "left", value: "name" },
+      { text: "Nama", align: "left", value: "name" },
       { text: "Email", align: "left", value: "email" },
-      { text: "Phone", align: "left", value: "phone" },
+      { text: "Telepon", align: "left", value: "phone" },
       { text: "Supervisor", align: "left", value: "supervisor_id" },
       { text: "Status", align: "left", value: "is_active" },
-      { text: "Actions", value: "name", sortable: false }
+      { text: "Aksi", value: "name", sortable: false }
     ],
     items: [],
-    confirmMessage: "Are you sure want to delete this ?",
+    confirmMessage: "Yakin mau menghapus ?",
     showConfirm: false,
     dataToExport: [],
     fillable: [
