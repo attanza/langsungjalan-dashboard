@@ -1,16 +1,16 @@
 <template>
   <div>
-    <h2 v-if="currentEdit" class="primary--text mb-2">Marketing Report</h2>    
+    <h2 v-if="currentEdit" class="primary--text mb-2">Laporan Marketing</h2>    
     <v-tabs align-with-title color="primary" class="white elevation-1" dark>
       <v-tabs-slider color="white"/>
       <v-tab href="#detail">
-        Details
+        Detail
       </v-tab>
       <v-tab href="#maps">
-        Maps
+        Peta
       </v-tab>
       <v-tab href="#attachments">
-        Attachments
+        Lampiran
       </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>

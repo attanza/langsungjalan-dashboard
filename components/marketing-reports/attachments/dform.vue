@@ -1,7 +1,7 @@
 <template>
   <v-layout row justify-center>
     <v-dialog v-model="dialog" persistent max-width="600px">
-      <v-card dark>
+      <v-card>
         <v-card-title>
           <span class="headline primary--text">{{ formTitle }}</span>
         </v-card-title>
@@ -10,13 +10,15 @@
             <form>
               <v-layout row wrap class="mt-3 px-2">
                 <v-flex xs12>
-                  <label>Caption</label>
+                  <label>Label</label>
                   <v-text-field
                     v-validate="'required|max:50'"
                     v-model="caption"
                     :error-messages="errors.collect('caption')"
                     name="caption"
                     data-vv-name="caption"
+                    data-vv-as="Label"
+
                   />
                 </v-flex>
                 <v-flex xs12>
@@ -46,8 +48,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="primary" flat @click.native="onClose">Close</v-btn>
-          <v-btn color="primary" flat @click.native="submit">Save</v-btn>
+          <v-btn color="primary" @click.native="onClose">Tutup</v-btn>
+          <v-btn color="primary" @click.native="submit">Simpan</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -81,7 +83,7 @@ export default {
   data() {
     return {
       dialog: false,
-      formTitle: "Upload an attachment",
+      formTitle: "Upload Lampiran",
       caption: "",
       tags: "",
       marketing_report_id: "",
@@ -162,7 +164,7 @@ export default {
           })
           .then(res => res.data)
         if (resp.meta.status === 201) {
-          showNoty("Data Saved", "success")
+          showNoty("Data disimpan", "success")
           this.$emit("onAdd", resp.data)
           this.clearForm()
           this.deactivateLoader()
@@ -184,7 +186,7 @@ export default {
           )
           .then(res => res.data)
         if (resp.meta.status === 200) {
-          showNoty("Data Saved", "success")
+          showNoty("Data diperbaharui", "success")
           this.$emit("onEdit", resp.data)
           this.clearForm()
         }

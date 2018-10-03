@@ -1,14 +1,14 @@
 <template>
   <div>
-    <h2 class="primary--text mb-3">{{ title }}s</h2>
-    <v-card dark class="pt-3">
+    <h2 class="primary--text mb-3">{{ title }}</h2>
+    <v-card class="pt-3">
       <v-toolbar card color="transparent">
         <!-- <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
         <v-spacer/> -->
         <v-text-field
           v-model="search"
           append-icon="search"
-          label="Search"
+          label="Cari"
           single-line
           hide-details
         />
@@ -32,7 +32,7 @@
           <td>{{ props.item.result }}</td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <v-icon color="white">remove_red_eye</v-icon>
+              <v-icon color="primary">remove_red_eye</v-icon>
             </v-btn>
           </td>
         </template>
@@ -50,17 +50,17 @@ import axios from "axios"
 export default {
   mixins: [global],
   data: () => ({
-    title: "Marketing Report",
+    title: "Laporan Marketing",
     headers: [
       { text: "Marketing", align: "left", value: "marketing_id" },
-      { text: "Action", align: "left", value: "marketing_action_id" },
-      { text: "Method", align: "left", value: "method" },
-      { text: "Contact Person", align: "left", value: "contact_person" },
-      { text: "Result", align: "left", value: "result" },
-      { text: "Actions", value: "", align: "center", sortable: false }
+      { text: "Aksi", align: "left", value: "marketing_action_id" },
+      { text: "Metode", align: "left", value: "method" },
+      { text: "Nama Kontak", align: "left", value: "contact_person" },
+      { text: "Hasil", align: "left", value: "result" },
+      { text: "Aksi", value: "", align: "center", sortable: false }
     ],
     items: [],
-    confirmMessage: "Are you sure want to delete this ?",
+    confirmMessage: "Yakin mau menghapus ?",
     showConfirm: false
   }),
 
