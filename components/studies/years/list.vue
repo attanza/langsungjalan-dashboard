@@ -1,18 +1,18 @@
 <template>
   <div>
-    <v-card dark>
-      <v-card dark class="pt-3">
+    <v-card>
+      <v-card class="pt-3">
         <v-toolbar card color="transparent">
           <v-text-field
             v-model="search"
             append-icon="search"
-            label="Search"
+            label="Cari"
             single-line
             hide-details
           />
           <v-spacer/>
-          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Back to List" @onClick="toHome"/>
-          <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
+          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Kembali" @onClick="toHome"/>
+          <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
           
         </v-toolbar>
         <v-data-table
@@ -31,17 +31,17 @@
             <td>{{ props.item.students_per_class }}</td>
             <td>
               <v-btn icon class="mx-0" @click="toDetail(props.item)">
-                <v-icon color="white">remove_red_eye</v-icon>
+                <v-icon color="primary">remove_red_eye</v-icon>
               </v-btn>
               <v-btn icon class="mx-0" @click="showConfirm(props.item)">
-                <v-icon color="white">delete</v-icon>
+                <v-icon color="primary">delete</v-icon>
               </v-btn>
             </td>
           </template>
         </v-data-table>
       </v-card>
       <dform :form="showForm" :is-edit="isEdit" :year-edit="yearEdit" @onClose="showForm = false" @onAdd="addData" @onEdit="editData"/>
-      <Dialog :showDialog="showDialog" text="Are you sure want to delete ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
+      <Dialog :showDialog="showDialog" text="Yakin mau menghapus ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
 
   </v-card></div>
 </template>
@@ -59,15 +59,15 @@ export default {
   components: { dform, Dialog },
   mixins: [global],
   data: () => ({
-    title: "Year",
+    title: "Angkatan",
     headers: [
-      { text: "Year", align: "left", value: "year" },
-      { text: "Class per Year", align: "left", value: "class_per_year" },
-      { text: "Studdents per Class", value: "students_per_class" },
-      { text: "Actions", value: "name", sortable: false }
+      { text: "Angkatan", align: "left", value: "year" },
+      { text: "Kelas per Angkatan", align: "left", value: "class_per_year" },
+      { text: "Siswa per Kelas", value: "students_per_class" },
+      { text: "Aksi", value: "name", sortable: false }
     ],
     items: [],
-    confirmMessage: "Are you sure want to delete this ?",
+    confirmMessage: "Yakin mau menghapus ?",
     showDialog: false,
     isEdit: false,
     yearEdit: {}
@@ -163,7 +163,7 @@ export default {
                 item => item.id == this.dataToDelete.id
               )
               this.items.splice(index, 1)
-              showNoty("Data deleted", "success")
+              showNoty("Data dihapus", "success")
               this.showDialog = false
               this.dataToDelete = null
             }

@@ -1,7 +1,7 @@
 <template>
   <v-layout row justify-center>
     <v-dialog v-model="dialog" persistent max-width="600px">
-      <v-card dark>
+      <v-card>
         <v-card-title>
           <span class="headline primary--text">{{ formTitle }}</span>
         </v-card-title>
@@ -12,7 +12,7 @@
                 <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
                   <div v-if="!inArray(notIncluded, f.key)">
 
-                    <label>{{ setCase(f.key) }}</label>
+                    <label>{{ f.caption }}</label>
                     <v-text-field
                       v-validate="f.rules"
                       v-model="formData[f.key]"
@@ -29,8 +29,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="primary" flat @click.native="onClose">Close</v-btn>
-          <v-btn color="primary" flat @click.native="submit">Save</v-btn>
+          <v-btn color="primary" @click.native="onClose">Tutup</v-btn>
+          <v-btn color="primary" @click.native="submit">Simpan</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -65,13 +65,33 @@ export default {
     return {
       dialog: false,
       fillable: [
-        { key: "year", value: "", rules: "required|max:4" },
-        { key: "class_per_year", value: "", rules: "required|integer" },
-        { key: "students_per_class", value: "", rules: "required|integer" },
-        { key: "study_program_id", value: "", rules: "required|integer" }
+        {
+          key: "year",
+          caption: "Angkatan",
+          value: "",
+          rules: "required|max:4"
+        },
+        {
+          key: "class_per_year",
+          caption: "Kelas per Angkatan",
+          value: "",
+          rules: "required|integer"
+        },
+        {
+          key: "students_per_class",
+          caption: "Siswa per Kelas",
+          value: "",
+          rules: "required|integer"
+        },
+        {
+          key: "study_program_id",
+          caption: "Program studi",
+          value: "",
+          rules: "required|integer"
+        }
       ],
       formData: {},
-      formTitle: "Register New Study Program Years",
+      formTitle: "Tambah Angkatan",
       typeNumber: ["class_per_year", "students_per_class"],
       notIncluded: ["study_program_id"]
     }
@@ -128,7 +148,7 @@ export default {
           .post(STUDY_YEARS_URL, this.formData)
           .then(res => res.data)
         if (resp.meta.status === 201) {
-          showNoty("Data Saved", "success")
+          showNoty("Data disimpan", "success")
           this.$emit("onAdd", resp.data)
           this.setFields()
           this.deactivateLoader()
@@ -146,7 +166,7 @@ export default {
           .put(STUDY_YEARS_URL + "/" + this.yearEdit.id, this.formData)
           .then(res => res.data)
         if (resp.meta.status === 200) {
-          showNoty("Data Saved", "success")
+          showNoty("Data diperbahrui", "success")
           this.$emit("onEdit", resp.data)
           this.setFields()
         }

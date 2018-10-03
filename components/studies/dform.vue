@@ -1,7 +1,7 @@
 <template>
   <v-layout row justify-center>
     <v-dialog v-model="dialog" persistent max-width="600px">
-      <v-card dark>
+      <v-card>
         <v-card-title>
           <span class="headline primary--text">{{ formTitle }}</span>
         </v-card-title>
@@ -11,24 +11,27 @@
               <v-layout row wrap class="mt-3 px-2">
                 <v-flex v-for="(f, index) in fillable" :key="index" xs12>
                   <div v-if="!inArray(notIncluded, f.key)">
-                    <label>{{ setCase(f.key) }}</label>
+                    <label>{{ f.caption }}</label>
                     <v-text-field
                       v-validate="f.rules"
                       v-model="formData[f.key]"
                       :error-messages="errors.collect(f.key)"
                       :name="f.key"
                       :data-vv-name="f.key"
+                      :data-vv-as="f.caption"
+
                     />
                   </div>
                   <div v-if="f.key == 'study_name_id' && comboData2">
-                    <label>Study Program Name</label>                
+                    <label>Nama Studi</label>                
                     <v-autocomplete
                       v-validate="'required|numeric'"
                       :items="comboData2"
                       :error-messages="errors.collect('study_name_id')"
                       :data-vv-name="'study_name_id'"
+                      :data-vv-as="'Nama studi'"
                       v-model="formData['study_name_id']"
-                      label="Select Study Program Name"
+                      label="Pilih nama studi"
                       single-line
                       item-text="name"
                       item-value="id"
@@ -36,14 +39,15 @@
                     />
                   </div>
                   <div v-if="f.key == 'university_id' && comboData">
-                    <label>University</label>                
+                    <label>Universitas</label>                
                     <v-autocomplete
                       v-validate="'required|numeric'"
                       :items="comboData"
                       :error-messages="errors.collect('university_id')"
                       :data-vv-name="'university_id'"
+                      :data-vv-as="'Universitas'"
                       v-model="formData['university_id']"
-                      label="Select University"
+                      label="Pilih universitas"
                       single-line
                       item-text="name"
                       item-value="id"
@@ -51,13 +55,14 @@
                     />
                   </div>
                   <div v-if="f.key == 'address' || f.key == 'description'">
-                    <label>{{ setCase(f.key) }}</label>
+                    <label>{{ f.caption }}</label>
                     <v-textarea
                       v-validate="f.rules"
                       v-model="formData[f.key]"
                       :error-messages="errors.collect(f.key)"
                       :name="f.key"
                       :data-vv-name="f.key"
+                      :data-vv-as="f.caption"
                     />
                   </div>
                 </v-flex>
@@ -67,8 +72,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="primary" flat @click.native="onClose">Close</v-btn>
-          <v-btn color="primary" flat @click.native="submit">Save</v-btn>
+          <v-btn color="primary" @click.native="onClose">Tutup</v-btn>
+          <v-btn color="primary" @click.native="submit">Simpan</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -94,17 +99,42 @@ export default {
     return {
       dialog: false,
       fillable: [
-        { key: "study_name_id", value: "", rules: "required|integer" },
-        { key: "university_id", value: "", rules: "required|integer" },
-        { key: "phone", value: "", rules: "required|max:30" },
-        { key: "email", value: "", rules: "required|email" },
-        { key: "contact_person", value: "", rules: "required|max:50" },
-        { key: "address", value: "", rules: "max:250" },
-        { key: "description", value: "", rules: "max:250" }
+        {
+          key: "study_name_id",
+          caption: "Nama Studi",
+          value: "",
+          rules: "required|integer"
+        },
+        {
+          key: "university_id",
+          caption: "Universitas",
+          value: "",
+          rules: "integer"
+        },
+        {
+          key: "phone",
+          caption: "Telepon",
+          value: "",
+          rules: "required|max:30"
+        },
+        { key: "email", caption: "Email", value: "", rules: "required|email" },
+        {
+          key: "contact_person",
+          caption: "Nama kontak",
+          value: "",
+          rules: "required|max:50"
+        },
+        { key: "address", caption: "Alamat", value: "", rules: "max:250" },
+        {
+          key: "description",
+          caption: "Deskripsi",
+          value: "",
+          rules: "max:250"
+        }
       ],
       notIncluded: ["description", "address", "university_id", "study_name_id"],
       formData: {},
-      formTitle: "Register New Study Programs",
+      formTitle: "Tambah Studi Program",
       years: []
     }
   },
@@ -156,7 +186,7 @@ export default {
           .post(STUDIES_URL, this.formData)
           .then(res => res.data)
         if (resp.meta.status === 201) {
-          showNoty("Data Saved", "success")
+          showNoty("Data disimpan", "success")
           this.$emit("onAdd", resp.data)
           this.setFields()
         }

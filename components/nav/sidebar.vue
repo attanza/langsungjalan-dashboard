@@ -141,7 +141,7 @@ export default {
           to: "/users",
           hasChild: true,
           children: [
-            { title: "Semua Users", icon: "perm_identity", to: "/users" },
+            { title: "User", icon: "perm_identity", to: "/users" },
             { title: "Supervisor", icon: "perm_identity", to: "/supervisors" }
           ]
         },
