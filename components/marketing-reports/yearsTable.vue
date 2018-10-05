@@ -2,63 +2,141 @@
   <div>
     <v-toolbar flat color="transparent">
       <v-toolbar-title style="margin-left: -10px;">Angkatan</v-toolbar-title>
+      <v-spacer/>
+      <v-text-field
+        v-model="search"
+        append-icon="search"
+        label="Cari"
+        single-line
+        hide-details
+      />
     </v-toolbar>
-    <table class="table is-fullwidth">
-      <thead>
-        <tr>
-          <th>Tahun</th>
-          <th>Jumlah Kelas</th>
-          <th>Rata-rata Siswa / Kelas</th>
-        </tr>
-      </thead>
-      <tbody v-if="years.length > 0">
-        <tr v-for="year in years" :key="year.id">
-          <td>{{ year.year }}</td>
-          <td>{{ year.class }}</td>
-          <td>{{ year.students }}</td>
-        </tr>
-      </tbody>
-      <tbody v-else>
-        <tr>
-          <td colspan="4" align="center">
-            Belum ada angkatan untuk laporan ini
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      :loading="loading"
+      :pagination.sync="pagination"
+      :total-items="totalItems"
+      :rows-per-page-items="rowsPerPage"
+      class="elevation-1"
+
+    >
+      <template slot="items" slot-scope="props">
+        <td>{{ props.item.year }}</td>
+        <td>{{ props.item.class }}</td>
+        <td>{{ props.item.students }}</td>
+        <td class="justify-center layout px-0">
+          <Tbtn :tooltip-text="'Hapus'" icon-mode flat color="primary" icon="delete" @onClick="showConfirm(props.item)"/>
+        </td>
+      </template>
+    </v-data-table>
+    <Dialog :showDialog="showDialog" text="Yakin mau menghapus ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
   </div>
 </template>
 
 <script>
 import { REPORT_YEARS } from "~/utils/apis"
-import catchError from "~/utils/catchError"
+import catchError, { showNoty } from "~/utils/catchError"
 import axios from "axios"
 import { global } from "~/mixins"
+import _ from "lodash"
+import Dialog from "~/components/Dialog"
+
 export default {
+  components: { Dialog },
   mixins: [global],
   data() {
     return {
-      years: []
+      headers: [
+        { text: "Angkatan", align: "left", value: "name" },
+        { text: "Jumlah Kelas", align: "left", value: "title" },
+        { text: "Rata-rata Siswa per Kelas", align: "left", value: "phone" },
+        { text: "Aksi", value: "name", sortable: false }
+      ],
+      items: [],
+      showDialog: false,
+      dataToDelete: null
+    }
+  },
+  watch: {
+    pagination: {
+      handler() {
+        this.pupulateTable()
+      },
+      deep: true
+    },
+    search() {
+      if (this.search == "" || this.search.length > 2) {
+        this.searchQuery()
+      }
     }
   },
   mounted() {
-    this.fetchData()
+    this.pupulateTable()
   },
   methods: {
-    async fetchData() {
+    searchQuery: _.debounce(function() {
+      this.pupulateTable()
+    }, 500),
+    async pupulateTable() {
       try {
         this.activateLoader()
-        this.years = await axios
-          .get(
-            `${REPORT_YEARS}?marketing_report_id=${
-              this.currentEdit.id
-            }&sort_by=year&sort_mode=asc`
-          )
-          .then(res => res.data.data)
+        this.loading = true
+        const { page, rowsPerPage, descending, sortBy } = this.pagination
+        const endPoint = `${REPORT_YEARS}?page=${page}&limit=${rowsPerPage}&search=${
+          this.search
+        }&marketing_report_id=${this.currentEdit.id}&sort_by=year&sort_mode=asc`
+        const res = await axios.get(endPoint).then(res => res.data)
+        this.items = res.data
+        this.totalItems = res.meta.total
+        if (this.pagination.sortBy) {
+          this.items = this.items.sort((a, b) => {
+            const sortA = a[sortBy]
+            const sortB = b[sortBy]
+
+            if (descending) {
+              if (sortA < sortB) return 1
+              if (sortA > sortB) return -1
+              return 0
+            } else {
+              if (sortA < sortB) return -1
+              if (sortA > sortB) return 1
+              return 0
+            }
+          })
+        }
+        this.loading = false
+        this.deactivateLoader()
+      } catch (e) {
+        this.loading = false
+        this.showForm = false
+        this.deactivateLoader()
+        catchError(e)
+      }
+    },
+    showConfirm(data) {
+      this.showDialog = true
+      this.dataToDelete = data
+    },
+    removeData() {
+      try {
+        this.activateLoader()
+        axios.delete(REPORT_YEARS + "/" + this.dataToDelete.id).then(resp => {
+          if (resp.status === 200) {
+            let index = _.findIndex(
+              this.items,
+              item => item.id == this.dataToDelete.id
+            )
+            this.items.splice(index, 1)
+            showNoty("Data dihapus", "success")
+            this.showDialog = false
+            this.dataToDelete = null
+          }
+        })
         this.deactivateLoader()
       } catch (e) {
         this.deactivateLoader()
-        catchError(e, null, this.$router)
+        catchError(e)
       }
     }
   }
