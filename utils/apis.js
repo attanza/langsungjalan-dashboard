@@ -28,3 +28,5 @@ export const MARKETING_REPORT_ATTACHMENTS_URL =
   API_URL + "/marketing-report-attachments"
 export const DATA_EXPORT_URL = API_URL + "/export-data"
 export const ACTIVITIES_URL = API_URL + "/activities"
+export const REPORT_CONTACT_URL = API_URL + "/contact-persons"
+export const REPORT_YEARS = API_URL + "/marketing-report-years"

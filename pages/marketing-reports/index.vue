@@ -28,7 +28,6 @@
           <td>{{ props.item.marketing.name }}</td>
           <td>{{ props.item.action.name }}</td>
           <td>{{ props.item.method }}</td>
-          <td>{{ props.item.contact_person }}</td>
           <td>{{ props.item.result }}</td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
@@ -55,7 +54,6 @@ export default {
       { text: "Marketing", align: "left", value: "marketing_id" },
       { text: "Aksi", align: "left", value: "marketing_action_id" },
       { text: "Metode", align: "left", value: "method" },
-      { text: "Nama Kontak", align: "left", value: "contact_person" },
       { text: "Hasil", align: "left", value: "result" },
       { text: "Aksi", value: "", align: "center", sortable: false }
     ],

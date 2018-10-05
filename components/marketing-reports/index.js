@@ -1,4 +1,6 @@
 import detail from "./detail"
 import maps from "./maps"
+import detail_v2 from "./detail_v2"
+import marketingTable from "./marketingTable"
 
-export { detail, maps }
+export { detail, maps, detail_v2, marketingTable }

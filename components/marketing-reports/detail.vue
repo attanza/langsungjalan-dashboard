@@ -193,36 +193,6 @@ export default {
           rules: "required|max:50"
         },
         {
-          key: "contact_person",
-          caption: "Nama Kontak",
-          value: "",
-          rules: "max:50"
-        },
-        {
-          key: "contact_person_phone",
-          caption: "Telepon Kontak",
-          value: "",
-          rules: "max:50"
-        },
-        {
-          key: "count_year",
-          caption: "Jumlah Angkatan",
-          value: "",
-          rules: "integer"
-        },
-        {
-          key: "count_class",
-          caption: "Jumlah Kelas",
-          value: "",
-          rules: "integer"
-        },
-        {
-          key: "average_students",
-          caption: "Jumalah Siswa",
-          value: "",
-          rules: "integer"
-        },
-        {
           key: "count_attendances",
           caption: "Jumlah Peserta",
           value: "",
@@ -269,7 +239,6 @@ export default {
         { key: "lng", caption: "Longitude", value: "", rules: "" },
         { key: "result", caption: "Hasil", value: "", rules: "" },
         { key: "terms", caption: "Persyaratan", value: "", rules: "" },
-
         { key: "description", caption: "Deskripsi", value: "", rules: "" }
       ],
       notIncluded: [
@@ -282,9 +251,6 @@ export default {
         "schedulle_time"
       ],
       typeNumber: [
-        "count_year",
-        "count_class",
-        "average_students",
         "count_attendances",
         "count_student_dps",
         "count_shared_packages",
