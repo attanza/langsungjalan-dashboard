@@ -57,12 +57,20 @@ export default {
   data: () => ({
     title: "Laporan Marketing",
     headers: [
-      { text: "Kode Jadwal", align: "left" },
-      { text: "Marketing", align: "left" },
-      { text: "Metode", align: "left" },
-      { text: "Universitas", align: "left" },
-      { text: "Program Studi", align: "left" },
-      { text: "Tanggal", align: "left" },
+      { text: "Kode Jadwal", align: "left", value: "schedulle.code" },
+      { text: "Marketing", align: "left", value: "schedulle.marketing.name" },
+      { text: "Metode", align: "left", value: "method" },
+      {
+        text: "Universitas",
+        align: "left",
+        value: "schedulle.study.university.name"
+      },
+      {
+        text: "Program Studi",
+        align: "left",
+        value: "schedulle.study.studyName.name"
+      },
+      { text: "Tanggal", align: "left", value: "schedulle_date" },
       { text: "Aksi", value: "", align: "center", sortable: false }
     ],
     items: [],
@@ -112,7 +120,6 @@ export default {
         }`
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
-
         this.totalItems = res.meta.total
         if (this.pagination.sortBy) {
           this.items = this.items.sort((a, b) => {
