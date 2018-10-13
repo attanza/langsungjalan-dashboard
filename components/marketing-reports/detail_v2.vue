@@ -3,6 +3,18 @@
     <marketingTable :data="currentEdit"/>
     <contactTable/>
     <yearsTable/>
+    <table class="table is-fullwidth">
+      <tbody>
+        <tr>
+          <th width="30%">Birokrasi Perizinan</th>
+          <td width="70%">{{ currentEdit.terms }}</td>
+        </tr>
+        <tr>
+          <th>Kodisi Lapangan</th>
+          <td>{{ currentEdit.description }}</td>
+        </tr>
+      </tbody>
+    </table>
   </v-container>
 </template>
 

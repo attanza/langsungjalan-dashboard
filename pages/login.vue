@@ -5,7 +5,7 @@
         <v-flex xs12 sm8 md6>
           <v-card class="elevation-12">
             <v-toolbar>
-              <v-toolbar-title>Login form</v-toolbar-title>
+              <v-toolbar-title>Login</v-toolbar-title>
               <v-spacer/>
             </v-toolbar>
             <v-card-text>
@@ -35,7 +35,7 @@
               </form>
             </v-card-text>
             <v-card-actions>
-              <v-btn flat @click="showResetForm = true"><span>Forgot Password ?</span></v-btn>
+              <v-btn flat @click="showResetForm = true"><span>Lupa Password ?</span></v-btn>
               <v-spacer/>
               <v-btn :loading="loading" :disabled="loading" @click="submit">Login</v-btn>
             </v-card-actions>
@@ -98,7 +98,7 @@ export default {
             Cookie.set("lj_token", JSON.stringify(resp.data), { expires: 1 })
             this.$store.commit("user", resp.data.user)
             this.$store.commit("token", resp.data.token)
-            this.$store.commit("SET_LANG", resp.data.user.lang)
+            // this.$store.commit("SET_LANG", resp.data.user.lang)
 
             this.$router.push("/")
           } else {

@@ -51,7 +51,7 @@ export default {
         { text: "Angkatan", align: "left", value: "name" },
         { text: "Jumlah Kelas", align: "left", value: "title" },
         { text: "Rata-rata Siswa per Kelas", align: "left", value: "phone" },
-        { text: "Aksi", value: "name", sortable: false }
+        { text: "Aksi", value: "name", align: "center", sortable: false }
       ],
       items: [],
       showDialog: false,

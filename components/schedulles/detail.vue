@@ -10,7 +10,7 @@
           <Tbtn color="primary" icon="delete" icon-mode tooltip-text="Hapus" @onClick="confirmDelete"/>  
         </v-toolbar> 
         <form>
-          <v-layout row wrap class="mt-3 px-2">
+          <v-layout row wrap>
             <v-flex v-if="comboData" sm6 xs12>
               <label>Marketing</label>                
               <v-autocomplete
@@ -19,9 +19,8 @@
                 :error-messages="errors.collect('marketing_id')"
                 :data-vv-name="'marketing_id'"
                 :data-vv-as="'Marketing'"
-
                 v-model="marketing_id"
-                label="Pilih marketing"
+                label="Pilih Marketing"
                 single-line
                 item-text="name"
                 item-value="id"
@@ -29,16 +28,15 @@
               />
             </v-flex>
             <v-flex v-if="comboData3" sm6 xs12>
-              <label>Aksi</label>                
+              <label>Aksi Marketing</label>                
               <v-autocomplete
                 v-validate="'required|numeric'"
                 :items="comboData3"
                 :error-messages="errors.collect('marketing_action_id')"
                 :data-vv-name="'marketing_action_id'"
-                :data-vv-as="'Aksi'"
-
+                :data-vv-as="'Aksi Marketing'"
                 v-model="marketing_action_id"
-                label="Pilih aksi"
+                label="Pilih Aksi Marketing"
                 single-line
                 item-text="name"
                 item-value="id"
@@ -46,24 +44,35 @@
               />
             </v-flex>
             <v-flex v-if="comboData2" sm6 xs12>
-              <label>Program Studi</label>                
+              <label>Universitas</label>                
               <v-autocomplete
-                v-validate="'required|numeric'"
                 :items="comboData2"
-                :error-messages="errors.collect('study_id')"
-                :data-vv-name="'study_id'"
-                :data-vv-as="'Program Studi'"
-
-                v-model="study_id"
-                label="Select Study Program"
+                v-model="university_id"
+                label="Pilih Universitas"
                 single-line
-                item-text="university"
+                item-text="name"
                 item-value="id"
                 cache-items
               />
             </v-flex>
-          </v-layout>
-          <v-layout row wrap>
+
+            <v-flex v-if="studies" sm6 xs12>
+              <label>Program Studi</label>                
+              <v-autocomplete
+                v-validate="'required|numeric'"
+                :items="studies"
+                :error-messages="errors.collect('study_id')"
+                :data-vv-name="'study_id'"
+                :data-vv-as="'Program Studi'"
+                v-model="study_id"
+                :loading="autoCompleteLoading"
+                label="Pilih Program Studi"
+                single-line
+                item-text="name"
+                item-value="id"
+              />
+            </v-flex>
+
             <v-flex sm6 xs12>
               <label>Tanggal Mulai</label>                
               <v-menu
@@ -83,8 +92,7 @@
                   slot="activator"
                   :error-messages="errors.collect('start_date')"
                   :data-vv-name="'start_date'"
-                  :data-vv-as="'Tanggal mulai'"
-
+                  :data-vv-as="'Tanggal Mulai'"
                   v-model="start_date"
                   label="Pilih tanggal mulai"
                   readonly
@@ -115,7 +123,6 @@
                   :error-messages="errors.collect('start_time')"
                   :data-vv-name="'start_time'"
                   :data-vv-as="'Waktu mulai'"
-
                   v-model="start_time"
                   label="Pilih waktu mulai"
                   readonly
@@ -178,7 +185,6 @@
                   :error-messages="errors.collect('end_time')"
                   :data-vv-name="'end_time'"
                   :data-vv-as="'Waktu Akhir'"
-
                   v-model="end_time"
                   label="Pilih waktu akhir"
                   readonly
@@ -190,6 +196,7 @@
                 />
               </v-menu>
             </v-flex>
+
             <v-flex sm12>
               <label>Deskripsi</label>
               <v-textarea
@@ -199,10 +206,9 @@
                 name="description"
                 data-vv-name="description"
                 data-vv-as="Deskripsi"
-
               />
             </v-flex>
-          </v-layout>       
+          </v-layout>     
         </form>
       </v-container>
     </v-card>
@@ -212,7 +218,7 @@
 
 <script>
 import { global } from "~/mixins"
-import { SCHEDULLE_URL } from "~/utils/apis"
+import { SCHEDULLE_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import Dialog from "~/components/Dialog"
 import catchError, { showNoty } from "~/utils/catchError"
@@ -233,20 +239,47 @@ export default {
       marketing_id: "",
       marketing_action_id: "",
       study_id: "",
+      university_id: "",
       start_date: null,
       end_date: null,
       start_time: null,
       end_time: null,
-      description: ""
+      description: "",
+      studies: [],
+      autoCompleteLoading: false
+    }
+  },
+  watch: {
+    university_id() {
+      if (this.university_id != "") {
+        console.log("university_id", this.university_id)
+        this.getStudy()
+      }
     }
   },
   created() {
     this.setField()
   },
   methods: {
+    async getStudy() {
+      try {
+        this.autoCompleteLoading = true
+        const study = await axios
+          .get(
+            COMBO_DATA_URL + "StudyProgram&university_id=" + this.university_id
+          )
+          .then(res => res.data)
+        console.log(study)
+        this.studies = study
+        this.autoCompleteLoading = false
+      } catch (e) {
+        catchError(e)
+      }
+    },
     setField() {
       if (this.currentEdit) {
         const data = this.currentEdit
+        this.university_id = data.study.university_id
         this.study_id = data.study_id
         this.marketing_id = data.marketing_id
         this.marketing_action_id = data.marketing_action_id

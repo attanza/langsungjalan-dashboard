@@ -9,6 +9,17 @@
           <v-container grid-list-md>
             <form>
               <v-layout row wrap>
+                <v-flex xs12>
+                  <label>Kode Jadwal</label>                
+                  <v-text-field
+                    v-validate="'required'"
+                    :error-messages="errors.collect('code')"
+                    :data-vv-name="'code'"
+                    :data-vv-as="'Kode Jadwal'"
+                    v-model="code"
+                    readonly
+                  />
+                </v-flex>
                 <v-flex v-if="comboData" xs12>
                   <label>Marketing</label>                
                   <v-autocomplete
@@ -42,17 +53,35 @@
                   />
                 </v-flex>
                 <v-flex v-if="comboData2" xs12>
-                  <label>Program Studi</label>                
+                  <label>Universitas</label>                
                   <v-autocomplete
                     v-validate="'required|numeric'"
                     :items="comboData2"
+                    :error-messages="errors.collect('university_id')"
+                    :data-vv-name="'university_id'"
+                    :data-vv-as="'Universitas'"
+                    v-model="university_id"
+                    label="Pilih Universitas"
+                    single-line
+                    item-text="name"
+                    item-value="id"
+                    cache-items
+                  />
+                </v-flex>
+
+                <v-flex v-if="studies" xs12>
+                  <label>Program Studi</label>                
+                  <v-autocomplete
+                    v-validate="'required|numeric'"
+                    :items="studies"
                     :error-messages="errors.collect('study_id')"
                     :data-vv-name="'study_id'"
                     :data-vv-as="'Program Studi'"
                     v-model="study_id"
+                    :loading="autoCompleteLoading"
                     label="Pilih Program Studi"
                     single-line
-                    item-text="university"
+                    item-text="name"
                     item-value="id"
                     cache-items
                   />
@@ -208,7 +237,7 @@
 </template>
 <script>
 import { global } from "~/mixins"
-import { SCHEDULLE_URL } from "~/utils/apis"
+import { SCHEDULLE_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
 export default {
@@ -226,18 +255,22 @@ export default {
     return {
       dialog: false,
       formTitle: "Tambah Jadwal",
+      code: Math.floor(Date.now() / 1000).toString(),
       menu: false,
       menu2: false,
       menuTime: false,
       menuTime2: false,
       marketing_id: "",
       marketing_action_id: "",
-      study_id: "",
+      university_id: "",
       start_date: null,
       end_date: null,
       start_time: null,
       end_time: null,
-      description: ""
+      description: "",
+      study_id: "",
+      studies: [],
+      autoCompleteLoading: false
     }
   },
   watch: {
@@ -247,6 +280,25 @@ export default {
     start_date() {
       if (this.start_date != null) {
         this.end_date = this.start_date
+      }
+    },
+    university_id() {
+      if (this.university_id != "") {
+        try {
+          this.autoCompleteLoading = true
+          axios
+            .get(
+              COMBO_DATA_URL +
+                "StudyProgram&university_id=" +
+                this.university_id
+            )
+            .then(res => {
+              this.studies = res.data
+              this.autoCompleteLoading = false
+            })
+        } catch (e) {
+          catchError(e)
+        }
       }
     }
   },
@@ -284,6 +336,7 @@ export default {
 
     getData() {
       return {
+        code: this.code,
         marketing_id: this.marketing_id,
         marketing_action_id: this.marketing_action_id,
         study_id: this.study_id,
@@ -301,6 +354,7 @@ export default {
       this.marketing_id = ""
       this.marketing_action_id = ""
       this.study_id = ""
+      this.code = Math.floor(Date.now() / 1000).toString()
       this.start_date = null
       this.end_date = null
       this.start_time = null

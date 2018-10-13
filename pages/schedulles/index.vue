@@ -21,9 +21,11 @@
 
       >
         <template slot="items" slot-scope="props">
+          <td >{{ props.item.code }}</td>
           <td v-if="props.item.marketing">{{ props.item.marketing.name }}</td>
           <td v-if="props.item.action">{{ props.item.action.name }}</td>
-          <td v-if="props.item.study.studyName">{{ props.item.study.studyName.name }} ({{ props.item.study.university.name }})</td>
+          <td vif="props.item.study.university">{{ props.item.study.university.name }}</td>
+          <td v-if="props.item.study.studyName">{{ props.item.study.studyName.name }} </td>
           <td>{{ props.item.start_date | moment("DD MMM YYYY HH:mm:ss") }}</td>
           <td>{{ props.item.end_date | moment("DD MMM YYYY HH:mm:ss") }}</td>
           <!-- <td>{{ props.item.description }}</td> -->
@@ -53,32 +55,14 @@ import DownloadDialog from "~/components/DownloadDialog"
 export default {
   middleware: "auth",
   components: { dform, searchForm, DownloadDialog },
-  async fetch({ store }) {
-    try {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${
-        store.state.token
-      }`
-      axios.defaults.headers.post["Content-Type"] = "application/json"
-      // Marketing Combo Data
-      let marketings = await axios.get(COMBO_DATA_URL + "MarketingAll")
-      if (marketings) store.commit("comboData", marketings.data)
-      // Study Program Combo Data
-      let studies = await axios.get(COMBO_DATA_URL + "StudyProgram")
-      if (studies) store.commit("comboData2", studies.data)
-      // Marketing Action Combo Data
-      let actions = await axios.get(COMBO_DATA_URL + "Action")
-      if (actions) store.commit("comboData3", actions.data)
-    } catch (e) {
-      console.log(e)
-      catchError(e)
-    }
-  },
   mixins: [global],
   data: () => ({
     title: "Jadwal Marketing",
     headers: [
+      { text: "Kode Jadwal", align: "left", value: "code" },
       { text: "Marketing", align: "left", value: "marketing_id" },
       { text: "Aksi Kegiatan", align: "left", value: "marketing_action_id" },
+      { text: "Universitas", align: "left", value: "university_id" },
       { text: "Program Studi", align: "left", value: "study_id" },
       { text: "Tanggal Mulai", align: "left", value: "start_date" },
       { text: "Tanggal Akhir", align: "left", value: "end_date" },
@@ -111,9 +95,29 @@ export default {
 
   mounted() {
     this.pupulateTable()
+    this.initStore()
   },
 
   methods: {
+    async initStore() {
+      try {
+        this.activateLoader()
+
+        // Marketing Combo Data
+        let marketings = await axios.get(COMBO_DATA_URL + "MarketingAll")
+        if (marketings) this.$store.commit("comboData", marketings.data)
+        // Study Program Combo Data
+        let studies = await axios.get(COMBO_DATA_URL + "University")
+        if (studies) this.$store.commit("comboData2", studies.data)
+        // Marketing Action Combo Data
+        let actions = await axios.get(COMBO_DATA_URL + "Action")
+        if (actions) this.$store.commit("comboData3", actions.data)
+        this.deactivateLoader()
+      } catch (e) {
+        this.deactivateLoader()
+        catchError(e)
+      }
+    },
     async pupulateTable() {
       try {
         this.activateLoader()

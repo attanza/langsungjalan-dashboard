@@ -53,7 +53,7 @@ export default {
         { text: "Jabatan", align: "left", value: "title" },
         { text: "Telepon", align: "left", value: "phone" },
         { text: "Email", align: "left", value: "email" },
-        { text: "Aksi", value: "name", sortable: false }
+        { text: "Aksi", value: "name", align: "center", sortable: false }
       ],
       items: [],
       showDialog: false,

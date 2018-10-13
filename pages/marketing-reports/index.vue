@@ -3,7 +3,7 @@
     <h2 class="primary--text mb-3">{{ title }}</h2>
     <v-card class="pt-3">
       <v-toolbar card color="transparent">
-        <!-- <Tbtn :bottom="true" :tooltip-text="'Register New ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
+        <!-- <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
         <v-spacer/> -->
         <v-text-field
           v-model="search"
@@ -25,10 +25,13 @@
 
       >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.marketing.name }}</td>
-          <td>{{ props.item.action.name }}</td>
+          <td>{{ props.item.schedulle ? props.item.schedulle.code : "" }}</td>
+          <td>{{ props.item.schedulle.marketing ? props.item.schedulle.marketing.name : "" }}</td>
           <td>{{ props.item.method }}</td>
-          <td>{{ props.item.result }}</td>
+          <td>{{ props.item.schedulle.study.university ? props.item.schedulle.study.university.name : "" }}</td>
+          <td>{{ props.item.schedulle.study.studyName ? props.item.schedulle.study.studyName.name : "" }}</td>
+
+          <td>{{ props.item.schedulle_date }}</td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
               <v-icon color="primary">remove_red_eye</v-icon>
@@ -37,29 +40,35 @@
         </template>
       </v-data-table>
     </v-card>
+    <dform :show="showForm" @onClose="onClose"/>
   </div>
 </template>
 <script>
 import debounce from "lodash/debounce"
-import { MARKETING_REPORTS_URL } from "~/utils/apis"
+import { MARKETING_REPORTS_URL, COMBO_DATA_URL } from "~/utils/apis"
 import { global } from "~/mixins"
 import catchError from "~/utils/catchError"
 import axios from "axios"
+import { dform } from "~/components/marketing-reports"
 
 export default {
+  components: { dform },
   mixins: [global],
   data: () => ({
     title: "Laporan Marketing",
     headers: [
-      { text: "Marketing", align: "left", value: "marketing_id" },
-      { text: "Aksi", align: "left", value: "marketing_action_id" },
-      { text: "Metode", align: "left", value: "method" },
-      { text: "Hasil", align: "left", value: "result" },
+      { text: "Kode Jadwal", align: "left" },
+      { text: "Marketing", align: "left" },
+      { text: "Metode", align: "left" },
+      { text: "Universitas", align: "left" },
+      { text: "Program Studi", align: "left" },
+      { text: "Tanggal", align: "left" },
       { text: "Aksi", value: "", align: "center", sortable: false }
     ],
     items: [],
     confirmMessage: "Yakin mau menghapus ?",
-    showConfirm: false
+    showConfirm: false,
+    showForm: false
   }),
 
   watch: {
@@ -78,12 +87,22 @@ export default {
 
   mounted() {
     this.pupulateTable()
+    // this.initStore()
   },
 
   methods: {
+    async initStore() {
+      let action = await axios.get(COMBO_DATA_URL + "Action")
+      if (action) this.$store.commit("comboData", action.data)
+      let marketing = await axios.get(COMBO_DATA_URL + "MarketingAll")
+      if (marketing) this.$store.commit("comboData2", marketing.data)
+      let university = await axios.get(COMBO_DATA_URL + "University")
+      if (university) this.$store.commit("comboData3", university.data)
+    },
     searchQuery: debounce(function() {
       this.pupulateTable()
     }, 500),
+
     async pupulateTable() {
       try {
         this.activateLoader()
@@ -123,6 +142,9 @@ export default {
     },
     addData(data) {
       this.items.unshift(data)
+      this.showForm = false
+    },
+    onClose() {
       this.showForm = false
     }
   }

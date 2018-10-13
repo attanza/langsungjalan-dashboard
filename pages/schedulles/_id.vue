@@ -6,17 +6,23 @@
       <v-tab href="#detail">
         Detail
       </v-tab>
+      <v-tab href="#report">
+        Report
+      </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
+      </v-tab-item>
+      <v-tab-item :id="'report'">
+        <report/>
       </v-tab-item>
     </v-tabs>
   </div>
 </template>
 
 <script>
-import { SCHEDULLE_URL } from "~/utils/apis"
+import { SCHEDULLE_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
-import { detail, dform } from "~/components/schedulles"
+import { detail, dform, report } from "~/components/schedulles"
 import catchError from "~/utils/catchError"
 
 export default {
@@ -24,11 +30,20 @@ export default {
     try {
       let currentEdit = await axios.get(SCHEDULLE_URL + "/" + params.id)
       if (currentEdit) store.commit("currentEdit", currentEdit.data.data)
+      // Marketing Combo Data
+      let marketings = await axios.get(COMBO_DATA_URL + "MarketingAll")
+      if (marketings) store.commit("comboData", marketings.data)
+      // Study Program Combo Data
+      let studies = await axios.get(COMBO_DATA_URL + "University")
+      if (studies) store.commit("comboData2", studies.data)
+      // Marketing Action Combo Data
+      let actions = await axios.get(COMBO_DATA_URL + "Action")
+      if (actions) store.commit("comboData3", actions.data)
     } catch (e) {
       catchError(e)
     }
   },
-  components: { detail, dform }
+  components: { detail, dform, report }
 }
 </script>
 

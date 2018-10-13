@@ -8,8 +8,8 @@
     <table class="table is-fullwidth">
       <tbody>
         <tr>
-          <th>Nama</th>
-          <td>{{ data.marketing.name }}</td>
+          <th width="30%">Nama</th>
+          <td width="70%">{{ data.marketing.name }}</td>
         </tr>
         <tr>
           <th>Action</th>
