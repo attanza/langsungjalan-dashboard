@@ -185,6 +185,11 @@ export default {
               to: "/marketing-actions"
             },
             {
+              title: "Target",
+              icon: "launch",
+              to: "/targets"
+            },
+            {
               title: "Jadwal",
               icon: "date_range",
               to: "/schedulles"
