@@ -4,7 +4,7 @@
     <v-card class="pt-3">
       <v-toolbar card color="transparent">
         <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
-        <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>       
+        <!-- <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>        -->
         <v-spacer/>
         <v-text-field
           v-model="pagination.search"
@@ -30,7 +30,7 @@
           <td vif="props.item.study.university">{{ props.item.study.university.name }}</td>
           <td v-if="props.item.study.studyName">{{ props.item.study.studyName.name }} </td>
           <td>{{ props.item.description }}</td>
-          <td>{{ props.item.created_at }}</td>
+          <td>{{ props.item.created_at | moment("DD MMM YYYY HH:mm:ss") }}</td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
               <v-icon color="primary">remove_red_eye</v-icon>
@@ -77,8 +77,6 @@ export default {
   watch: {
     pagination: {
       handler: debounce(function() {
-        console.log("pagination change")
-
         this.pupulateTable()
       }, 500),
       deep: true

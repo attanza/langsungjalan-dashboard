@@ -10,14 +10,34 @@
             <form>
               <v-layout row wrap>
                 <v-flex xs12>
-                  <label>Kode Jadwal</label>                
+                  <label>Kode Target Marketing</label>
+                  <v-autocomplete
+                    v-validate="'required|integer'"
+                    v-model="marketing_target_id"
+                    :items="targetItems"
+                    :loading="targetComboLoading"
+                    :search-input.sync="searchTarget"
+                    :error-messages="errors.collect('marketing_target_id')"
+                    item-text="code"
+                    item-value="id"
+                    placeholder="Ketik untuk mencari kode target"
+                    name="marketing_target_id"
+                    data-vv-name="marketing_target_id"
+                    data-vv-as="Marketing Target"
+                    hide-no-data
+                    hide-selected
+                  />
+                </v-flex>
+                <v-flex xs12>
+                  <label>Kode Jadwal</label>
                   <v-text-field
-                    v-validate="'required'"
-                    :error-messages="errors.collect('code')"
-                    :data-vv-name="'code'"
-                    :data-vv-as="'Kode Jadwal'"
+                    v-validate="'required|max:20'"
                     v-model="code"
-                    readonly
+                    :error-messages="errors.collect(code)"
+                    name="code"
+                    data-vv-name="code"
+                    data-vv-as="Kode jadwal"
+
                   />
                 </v-flex>
                 <v-flex v-if="comboData" xs12>
@@ -36,65 +56,32 @@
                     cache-items
                   />
                 </v-flex>
-                <v-flex v-if="comboData3" xs12>
-                  <label>Aksi Marketing</label>                
-                  <v-autocomplete
-                    v-validate="'required|numeric'"
-                    :items="comboData3"
-                    :error-messages="errors.collect('marketing_action_id')"
-                    :data-vv-name="'marketing_action_id'"
-                    :data-vv-as="'Aksi Marketing'"
-                    v-model="marketing_action_id"
-                    label="Pilih Aksi Marketing"
-                    single-line
-                    item-text="name"
-                    item-value="id"
-                    cache-items
-                  />
-                </v-flex>
                 <v-flex v-if="comboData2" xs12>
-                  <label>Universitas</label>                
+                  <label>Aksi</label>                
                   <v-autocomplete
                     v-validate="'required|numeric'"
                     :items="comboData2"
-                    :error-messages="errors.collect('university_id')"
-                    :data-vv-name="'university_id'"
-                    :data-vv-as="'Universitas'"
-                    v-model="university_id"
-                    label="Pilih Universitas"
+                    :error-messages="errors.collect('marketing_action_id')"
+                    :data-vv-name="'marketing_action_id'"
+                    :data-vv-as="'Aksi'"
+                    v-model="marketing_action_id"
+                    label="Pilih Aksi"
                     single-line
                     item-text="name"
                     item-value="id"
                     cache-items
                   />
                 </v-flex>
-
-                <v-flex v-if="studies" xs12>
-                  <label>Program Studi</label>                
-                  <v-autocomplete
-                    v-validate="'required|numeric'"
-                    :items="studies"
-                    :error-messages="errors.collect('study_id')"
-                    :data-vv-name="'study_id'"
-                    :data-vv-as="'Program Studi'"
-                    v-model="study_id"
-                    :loading="autoCompleteLoading"
-                    label="Pilih Program Studi"
-                    single-line
-                    item-text="name"
-                    item-value="id"
-                    cache-items
-                  />
-                </v-flex>
-
+              </v-layout>
+              <v-layout>
                 <v-flex sm6 xs12>
-                  <label>Tanggal Mulai</label>                
+                  <label>Tanggal</label>                
                   <v-menu
                     ref="menu"
                     :close-on-content-click="false"
                     v-model="menu"
                     :nudge-right="40"
-                    :return-value.sync="start_date"
+                    :return-value.sync="schedulleDate"
                     lazy
                     transition="scale-transition"
                     offset-y
@@ -104,26 +91,26 @@
                     <v-text-field
                       v-validate="'required'"
                       slot="activator"
-                      :error-messages="errors.collect('start_date')"
-                      :data-vv-name="'start_date'"
-                      :data-vv-as="'Tanggal Mulai'"
-                      v-model="start_date"
-                      label="Pilih tanggal mulai"
+                      :error-messages="errors.collect('schedulleDate')"
+                      :data-vv-name="'schedulleDate'"
+                      :data-vv-as="'Tanggal'"
+                      v-model="schedulleDate"
+                      label="Pilih tanggal"
                       readonly
                     />
-                    <v-date-picker v-model="start_date" @input="$refs.menu.save(start_date)"/>
+                    <v-date-picker v-model="schedulleDate" @input="$refs.menu.save(schedulleDate)"/>
 
                   </v-menu>
                 </v-flex>
 
                 <v-flex sm6 xs12>
-                  <label>Waktu Mulai</label>                
+                  <label>Waktu</label>                
                   <v-menu
                     ref="menuTime"
                     :close-on-content-click="false"
                     v-model="menuTime"
                     :nudge-right="40"
-                    :return-value.sync="start_time"
+                    :return-value.sync="schedulleTime"
                     lazy
                     transition="scale-transition"
                     offset-y
@@ -134,83 +121,22 @@
                     <v-text-field
                       v-validate="'required'"
                       slot="activator"
-                      :error-messages="errors.collect('start_time')"
-                      :data-vv-name="'start_time'"
-                      :data-vv-as="'Waktu mulai'"
-                      v-model="start_time"
-                      label="Pilih waktu mulai"
+                      :error-messages="errors.collect('schedulleTime')"
+                      :data-vv-name="'schedulleTime'"
+                      :data-vv-as="'Waktu'"
+                      v-model="schedulleTime"
+                      label="Pilih waktu"
                       readonly
                     />
                     <v-time-picker
                       v-if="menuTime"
-                      v-model="start_time"
-                      @change="$refs.menuTime.save(start_time)"
+                      v-model="schedulleTime"
+                      @change="$refs.menuTime.save(schedulleTime)"
                     />
                   </v-menu>
                 </v-flex>
-
-                <v-flex sm6 xs12>
-                  <label>Tanggal Akhir</label>                
-                  <v-menu
-                    ref="menu2"
-                    :close-on-content-click="false"
-                    v-model="menu2"
-                    :nudge-right="40"
-                    :return-value.sync="end_date"
-                    lazy
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    min-width="290px"
-                  >
-                    <v-text-field
-                      v-validate="'required'"
-                      slot="activator"
-                      :error-messages="errors.collect('end_date')"
-                      :data-vv-name="'end_date'"
-                      :data-vv-as="'Tanggal Akhir'"
-                      v-model="end_date"
-                      label="Pilih tanggal akhir"
-                      readonly
-                    />
-                    <v-date-picker v-model="end_date" @input="$refs.menu2.save(end_date)"/>
-
-                  </v-menu>
-                </v-flex>
-
-                <v-flex sm6 xs12>
-                  <label>Waktu Akhir</label>                
-                  <v-menu
-                    ref="menuTime2"
-                    :close-on-content-click="false"
-                    v-model="menuTime2"
-                    :nudge-right="40"
-                    :return-value.sync="end_time"
-                    lazy
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    max-width="290px"
-                    min-width="290px"
-                  >
-                    <v-text-field
-                      v-validate="'required'"
-                      slot="activator"
-                      :error-messages="errors.collect('end_time')"
-                      :data-vv-name="'end_time'"
-                      :data-vv-as="'Waktu Akhir'"
-                      v-model="end_time"
-                      label="Pilih waktu akhir"
-                      readonly
-                    />
-                    <v-time-picker
-                      v-if="menuTime2"
-                      v-model="end_time"
-                      @change="$refs.menuTime2.save(end_time)"
-                    />
-                  </v-menu>
-                </v-flex>
-
+              </v-layout>
+              <v-layout>
                 <v-flex sm12>
                   <label>Deskripsi</label>
                   <v-textarea
@@ -222,7 +148,7 @@
                     data-vv-as="Deskripsi"
                   />
                 </v-flex>
-              </v-layout>     
+              </v-layout>
             </form>
           </v-container>
         </v-card-text>
@@ -240,6 +166,8 @@ import { global } from "~/mixins"
 import { SCHEDULLE_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
+import debounce from "lodash/debounce"
+
 export default {
   $_veeValidate: {
     validator: "new"
@@ -256,53 +184,52 @@ export default {
       dialog: false,
       formTitle: "Tambah Jadwal",
       code: Math.floor(Date.now() / 1000).toString(),
-      menu: false,
-      menu2: false,
-      menuTime: false,
-      menuTime2: false,
+      marketing_target_id: "",
       marketing_id: "",
       marketing_action_id: "",
-      university_id: "",
-      start_date: null,
-      end_date: null,
-      start_time: null,
-      end_time: null,
+      date: "",
       description: "",
-      study_id: "",
-      studies: [],
-      autoCompleteLoading: false
+      targetEntries: [],
+      targetComboLoading: false,
+      searchTarget: null,
+      menu: false,
+      menuTime: false,
+      schedulleDate: null,
+      schedulleTime: null
+    }
+  },
+  computed: {
+    targetItems() {
+      let items = []
+      if (this.targetEntries.length > 0) {
+        this.targetEntries.map(target => items.push(target))
+      }
+      return items
     }
   },
   watch: {
     show() {
       this.dialog = this.show
     },
-    start_date() {
-      if (this.start_date != null) {
-        this.end_date = this.start_date
-      }
-    },
-    university_id() {
-      if (this.university_id != "") {
-        try {
-          this.autoCompleteLoading = true
-          axios
-            .get(
-              COMBO_DATA_URL +
-                "StudyProgram&university_id=" +
-                this.university_id
-            )
-            .then(res => {
-              this.studies = res.data
-              this.autoCompleteLoading = false
-            })
-        } catch (e) {
-          catchError(e)
-        }
+    searchTarget() {
+      if (this.searchTarget && this.searchTarget.length > 2) {
+        this.getMarketingTarget()
       }
     }
   },
   methods: {
+    getMarketingTarget: debounce(async function() {
+      try {
+        this.targetComboLoading = true
+        this.targetEntries = await axios
+          .get(COMBO_DATA_URL + "MarketingTarget&search=" + this.searchTarget)
+          .then(res => res.data)
+        this.targetComboLoading = false
+      } catch (e) {
+        this.targetComboLoading = false
+        console.log(e)
+      }
+    }, 500),
     onClose() {
       this.clearForm()
       this.$emit("onClose")
@@ -339,27 +266,22 @@ export default {
         code: this.code,
         marketing_id: this.marketing_id,
         marketing_action_id: this.marketing_action_id,
-        study_id: this.study_id,
-        start_date: this.start_date + " " + this.start_time,
-        end_date: this.end_date + " " + this.end_time,
+        marketing_target_id: this.marketing_target_id,
+        date: this.schedulleDate + " " + this.schedulleTime,
         description: this.description
       }
     },
     clearForm() {
       this.dialog = false
-      this.menu = false
-      this.menu2 = false
-      this.menuTime = false
-      this.menuTime2 = false
       this.marketing_id = ""
       this.marketing_action_id = ""
-      this.study_id = ""
+      this.marketing_target_id = ""
+      this.date = ""
+      this.schedulleDate = null
+      this.schedulleTime = null
       this.code = Math.floor(Date.now() / 1000).toString()
-      this.start_date = null
-      this.end_date = null
-      this.start_time = null
-      this.end_time = null
       this.description = ""
+      this.errors.clear()
     }
   }
 }
