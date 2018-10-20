@@ -98,7 +98,6 @@ export default {
     async initStore() {
       try {
         this.activateLoader()
-
         // Marketing Combo Data
         let marketings = await axios.get(COMBO_DATA_URL + "MarketingAll")
         if (marketings) this.$store.commit("comboData", marketings.data)

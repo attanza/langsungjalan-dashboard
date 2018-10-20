@@ -3,7 +3,7 @@
     <marketingTable :data="currentEdit"/>
     <contactTable/>
     <yearsTable/>
-    <table class="table is-fullwidth">
+    <table class="table is-fullwidth mt-3">
       <tbody>
         <tr>
           <th width="30%">Birokrasi Perizinan</th>
@@ -15,8 +15,7 @@
         </tr>
       </tbody>
     </table>
-  </v-container>
-</template>
+</v-container></template>
 
 <script>
 import { global } from "~/mixins"

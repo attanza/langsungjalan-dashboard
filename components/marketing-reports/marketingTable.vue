@@ -9,11 +9,11 @@
       <tbody>
         <tr>
           <th width="30%">Nama</th>
-          <td width="70%">{{ data.marketing.name }}</td>
+          <td width="70%">{{ data.schedulle && data.schedulle.marketing ? data.schedulle.marketing.name : "" }}</td>
         </tr>
         <tr>
           <th>Action</th>
-          <td>{{ data.action.name }}</td>
+          <td>{{ data.schedulle && data.schedulle.action ? data.schedulle.action.name : "" }}</td>
         </tr>
         <tr>
           <th>Metode</th>
@@ -21,35 +21,36 @@
         </tr>
         <tr>
           <th>Hari/Tanggal</th>
-          <td>{{ formatDate(data.schedulle.start_date) }}</td>
+          <td>{{ formatDate(data.date) }}</td>
         </tr>
         <tr>
           <th>Waktu</th>
-          <td>{{ formatTime(data.schedulle.start_date) }} - {{ formatTime(data.schedulle.end_date) }}</td>
-        </tr>
-        <tr>
-          <th>Program Studi</th>
-          <td>{{ data.schedulle.study.studyName.name }}</td>
+          <td>{{ formatTime(data.date) }}</td>
         </tr>
         <tr>
           <th>Universitas</th>
-          <td>{{ data.schedulle.study.university.name }}</td>
+          <td>{{ getStudyData(data) ? getStudyData(data).university.name : "" }}</td>
         </tr>
         <tr>
+          <th>Program Studi</th>
+          <td>{{ getStudyData(data) ? getStudyData(data).studyName.name : "" }}</td>
+        </tr>
+
+        <tr>
           <th>Alamat</th>
-          <td>{{ data.schedulle.study.address }}</td>
+          <td>{{ getStudyData(data) ? getStudyData(data).address : "" }}</td>
         </tr>
         <tr>
           <th>Kota/Kabupaten</th>
-          <td>{{ data.schedulle.study.university.city }}</td>
+          <td>{{ getStudyData(data) ? getStudyData(data).university.city : "" }}</td>
         </tr>
         <tr>
           <th>Provinsi</th>
-          <td>{{ data.schedulle.study.university.province }}</td>
+          <td>{{ getStudyData(data) ? getStudyData(data).university.province : "" }}</td>
         </tr>
         <tr>
           <th>Telepon</th>
-          <td>{{ data.schedulle.study.phone }}</td>
+          <td>{{ getStudyData(data) ? getStudyData(data).phone : "" }}</td>
         </tr>
       </tbody>
     </table>
@@ -79,6 +80,13 @@ export default {
     },
     formatTime(date) {
       return moment(date).format("HH:mm")
+    },
+    getStudyData(data) {
+      return data.schedulle &&
+        data.schedulle.target &&
+        data.schedulle.target.study
+        ? data.schedulle.target.study
+        : null
     }
   }
 }

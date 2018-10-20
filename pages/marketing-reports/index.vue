@@ -3,10 +3,10 @@
     <h2 class="primary--text mb-3">{{ title }}</h2>
     <v-card class="pt-3">
       <v-toolbar card color="transparent">
-        <!-- <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
-        <v-spacer/> -->
+        <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
+        <v-spacer/>
         <v-text-field
-          v-model="search"
+          v-model="pagination.search"
           append-icon="search"
           label="Cari"
           single-line
@@ -25,13 +25,11 @@
 
       >
         <template slot="items" slot-scope="props">
+          <td>{{ props.item.code }}</td>
           <td>{{ props.item.schedulle ? props.item.schedulle.code : "" }}</td>
           <td>{{ props.item.schedulle.marketing ? props.item.schedulle.marketing.name : "" }}</td>
           <td>{{ props.item.method }}</td>
-          <td>{{ props.item.schedulle.study.university ? props.item.schedulle.study.university.name : "" }}</td>
-          <td>{{ props.item.schedulle.study.studyName ? props.item.schedulle.study.studyName.name : "" }}</td>
-
-          <td>{{ props.item.schedulle_date }}</td>
+          <td>{{ props.item.date | moment("DD MMM YYYY HH:mm:ss") }}</td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
               <v-icon color="primary">remove_red_eye</v-icon>
@@ -40,7 +38,7 @@
         </template>
       </v-data-table>
     </v-card>
-    <dform :show="showForm" @onClose="onClose"/>
+    <dform :show="showForm" @onClose="onClose" @onAdd="addData"/>
   </div>
 </template>
 <script>
@@ -57,20 +55,11 @@ export default {
   data: () => ({
     title: "Laporan Marketing",
     headers: [
+      { text: "Kode Laporan", align: "left", value: "code" },
       { text: "Kode Jadwal", align: "left", value: "schedulle.code" },
       { text: "Marketing", align: "left", value: "schedulle.marketing.name" },
       { text: "Metode", align: "left", value: "method" },
-      {
-        text: "Universitas",
-        align: "left",
-        value: "schedulle.study.university.name"
-      },
-      {
-        text: "Program Studi",
-        align: "left",
-        value: "schedulle.study.studyName.name"
-      },
-      { text: "Tanggal", align: "left", value: "schedulle_date" },
+      { text: "Tanggal", align: "left", value: "date" },
       { text: "Aksi", value: "", align: "center", sortable: false }
     ],
     items: [],
@@ -81,15 +70,10 @@ export default {
 
   watch: {
     pagination: {
-      handler() {
+      handler: debounce(function() {
         this.pupulateTable()
-      },
+      }, 500),
       deep: true
-    },
-    search() {
-      if (this.search != "") {
-        this.searchQuery()
-      }
     }
   },
 
@@ -104,8 +88,6 @@ export default {
       if (action) this.$store.commit("comboData", action.data)
       let marketing = await axios.get(COMBO_DATA_URL + "MarketingAll")
       if (marketing) this.$store.commit("comboData2", marketing.data)
-      let university = await axios.get(COMBO_DATA_URL + "University")
-      if (university) this.$store.commit("comboData3", university.data)
     },
     searchQuery: debounce(function() {
       this.pupulateTable()
@@ -114,10 +96,9 @@ export default {
     async pupulateTable() {
       try {
         this.activateLoader()
-        const { page, rowsPerPage, descending, sortBy } = this.pagination
-        const endPoint = `${MARKETING_REPORTS_URL}?page=${page}&limit=${rowsPerPage}&search=${
-          this.search
-        }`
+        const { descending, sortBy } = this.pagination
+        const endPoint = `${MARKETING_REPORTS_URL}?${this.getQueryParams()}`
+
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
         this.totalItems = res.meta.total

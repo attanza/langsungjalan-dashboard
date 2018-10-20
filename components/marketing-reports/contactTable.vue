@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="mt-3">
     <v-toolbar flat color="transparent">
       <v-toolbar-title style="margin-left: -10px;">Contact Person</v-toolbar-title>
       <v-spacer/>
       <v-text-field
-        v-model="search"
+        v-model="pagination.search"
         append-icon="search"
         label="Cari"
         single-line
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { REPORT_CONTACT_URL } from "~/utils/apis"
+import { CONTACT_URL } from "~/utils/apis"
 import catchError, { showNoty } from "~/utils/catchError"
 import axios from "axios"
 import { global } from "~/mixins"
@@ -62,32 +62,26 @@ export default {
   },
   watch: {
     pagination: {
-      handler() {
+      handler: _.debounce(function() {
         this.pupulateTable()
-      },
+      }, 500),
       deep: true
-    },
-    search() {
-      if (this.search == "" || this.search.length > 2) {
-        this.searchQuery()
-      }
     }
   },
   mounted() {
     this.pupulateTable()
   },
   methods: {
-    searchQuery: _.debounce(function() {
-      this.pupulateTable()
-    }, 500),
     async pupulateTable() {
       try {
         this.activateLoader()
         this.loading = true
-        const { page, rowsPerPage, descending, sortBy } = this.pagination
-        const endPoint = `${REPORT_CONTACT_URL}?page=${page}&limit=${rowsPerPage}&search=${
-          this.search
-        }&marketing_report_id=${this.currentEdit.id}&sort_by=name&sort_mode=asc`
+
+        const { descending, sortBy } = this.pagination
+        const endPoint = `${CONTACT_URL}?${this.getQueryParams()}&marketing_target_id=${this.getTargetId(
+          this.currentEdit
+        )}`
+
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
         this.totalItems = res.meta.total
@@ -120,23 +114,26 @@ export default {
       this.showDialog = true
       this.dataToDelete = data
     },
+    getTargetId(data) {
+      return data.schedulle && data.schedulle.target
+        ? data.schedulle.target.id
+        : null
+    },
     removeData() {
       try {
         this.activateLoader()
-        axios
-          .delete(REPORT_CONTACT_URL + "/" + this.dataToDelete.id)
-          .then(resp => {
-            if (resp.status === 200) {
-              let index = _.findIndex(
-                this.items,
-                item => item.id == this.dataToDelete.id
-              )
-              this.items.splice(index, 1)
-              showNoty("Data dihapus", "success")
-              this.showDialog = false
-              this.dataToDelete = null
-            }
-          })
+        axios.delete(CONTACT_URL + "/" + this.dataToDelete.id).then(resp => {
+          if (resp.status === 200) {
+            let index = _.findIndex(
+              this.items,
+              item => item.id == this.dataToDelete.id
+            )
+            this.items.splice(index, 1)
+            showNoty("Data dihapus", "success")
+            this.showDialog = false
+            this.dataToDelete = null
+          }
+        })
         this.deactivateLoader()
       } catch (e) {
         this.deactivateLoader()

@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="mt-3">
     <v-toolbar flat color="transparent">
       <v-toolbar-title style="margin-left: -10px;">Angkatan</v-toolbar-title>
       <v-spacer/>
       <v-text-field
-        v-model="search"
+        v-model="pagination.search"
         append-icon="search"
         label="Cari"
         single-line
@@ -60,32 +60,26 @@ export default {
   },
   watch: {
     pagination: {
-      handler() {
+      handler: _.debounce(function() {
         this.pupulateTable()
-      },
+      }, 500),
       deep: true
-    },
-    search() {
-      if (this.search == "" || this.search.length > 2) {
-        this.searchQuery()
-      }
     }
   },
   mounted() {
     this.pupulateTable()
   },
   methods: {
-    searchQuery: _.debounce(function() {
-      this.pupulateTable()
-    }, 500),
     async pupulateTable() {
       try {
         this.activateLoader()
         this.loading = true
-        const { page, rowsPerPage, descending, sortBy } = this.pagination
-        const endPoint = `${REPORT_YEARS}?page=${page}&limit=${rowsPerPage}&search=${
-          this.search
-        }&marketing_report_id=${this.currentEdit.id}&sort_by=year&sort_mode=asc`
+
+        const { descending, sortBy } = this.pagination
+        const endPoint = `${REPORT_YEARS}?${this.getQueryParams()}&marketing_target_id=${this.getTargetId(
+          this.currentEdit
+        )}`
+
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
         this.totalItems = res.meta.total
@@ -108,11 +102,18 @@ export default {
         this.loading = false
         this.deactivateLoader()
       } catch (e) {
+        console.log(e)
+
         this.loading = false
         this.showForm = false
         this.deactivateLoader()
         catchError(e)
       }
+    },
+    getTargetId(data) {
+      return data.schedulle && data.schedulle.target
+        ? data.schedulle.target.id
+        : null
     },
     showConfirm(data) {
       this.showDialog = true

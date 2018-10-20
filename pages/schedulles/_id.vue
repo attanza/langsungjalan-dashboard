@@ -33,12 +33,9 @@ export default {
       // Marketing Combo Data
       let marketings = await axios.get(COMBO_DATA_URL + "MarketingAll")
       if (marketings) store.commit("comboData", marketings.data)
-      // Study Program Combo Data
-      let studies = await axios.get(COMBO_DATA_URL + "University")
-      if (studies) store.commit("comboData2", studies.data)
       // Marketing Action Combo Data
       let actions = await axios.get(COMBO_DATA_URL + "Action")
-      if (actions) store.commit("comboData3", actions.data)
+      if (actions) store.commit("comboData2", actions.data)
     } catch (e) {
       catchError(e)
     }

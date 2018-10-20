@@ -227,7 +227,7 @@ export default {
         this.targetComboLoading = false
       } catch (e) {
         this.targetComboLoading = false
-        console.log(e)
+        catchError(e)
       }
     }, 500),
     onClose() {
