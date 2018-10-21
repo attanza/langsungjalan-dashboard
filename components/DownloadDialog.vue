@@ -201,6 +201,7 @@ export default {
             resp.data.data &&
             resp.data.data.length > 0
           ) {
+            console.log(resp.data.data)
             this.csvExport(this.model + "s", resp.data.data)
           } else {
             showNoty("No result found", "error")

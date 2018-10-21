@@ -40,7 +40,7 @@
       </v-data-table>
     </v-card>
     <dform :show="showForm" @onClose="showForm = false" @onAdd="addData"/>
-    <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" model="Product" @onClose="showDownloadDialog = false"/>
+    <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" model="Contact" @onClose="showDownloadDialog = false"/>
 
   </div>
 </template>
@@ -133,7 +133,16 @@ export default {
     },
     downloadData() {
       this.dataToExport = []
-      this.dataToExport = this.items
+      this.items.forEach(data => {
+        let d = Object.assign({}, data)
+
+        // Target
+        delete d.target
+        delete d.marketing_target_id
+        if (data.target) d.target = data.target.code
+
+        this.dataToExport.push(d)
+      })
       if (this.dataToExport.length) {
         this.showDownloadDialog = true
       }
