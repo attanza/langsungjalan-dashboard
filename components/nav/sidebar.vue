@@ -210,6 +210,11 @@ export default {
           title: "Kontak",
           icon: "contact_phone",
           to: "/contacts"
+        },
+        {
+          title: "Lampiran",
+          icon: "attach_file",
+          to: "/attachments"
         }
       ],
       mini: false,
