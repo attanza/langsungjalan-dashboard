@@ -205,6 +205,11 @@ export default {
           title: "Produk",
           icon: "donut_small",
           to: "/products"
+        },
+        {
+          title: "Kontak",
+          icon: "contact_phone",
+          to: "/contacts"
         }
       ],
       mini: false,

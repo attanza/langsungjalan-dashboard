@@ -20,7 +20,7 @@
                     :data-vv-as="f.caption"
                   />
                 </div>
-                <div v-if="f.key == 'date'">
+                <div v-if="f.key == 'schedulle_id'">
                   <label>Kode Jadwal</label>
                   <v-autocomplete
                     v-validate="'required|integer'"
