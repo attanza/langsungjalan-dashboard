@@ -6,14 +6,8 @@
       <v-tab href="#detail">
         Detail
       </v-tab>
-      <v-tab href="#report">
-        Report
-      </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
-      </v-tab-item>
-      <v-tab-item :id="'report'">
-        <report/>
       </v-tab-item>
     </v-tabs>
   </div>
@@ -22,7 +16,7 @@
 <script>
 import { SCHEDULLE_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
-import { detail, dform, report } from "~/components/schedulles"
+import { detail, dform } from "~/components/schedulles"
 import catchError from "~/utils/catchError"
 
 export default {
@@ -40,7 +34,7 @@ export default {
       catchError(e)
     }
   },
-  components: { detail, dform, report }
+  components: { detail, dform }
 }
 </script>
 

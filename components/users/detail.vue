@@ -129,7 +129,9 @@ export default {
       try {
         this.activateLoader()
         if (this.currentEdit) {
-          this.formData.roles = this.$store.getters.getRoles("")
+          let roleIds = []
+          this.currentEdit.roles.map(role => roleIds.push(role.id))
+          this.formData.roles = roleIds
           const resp = await axios
             .put(USER_URL + "/" + this.currentEdit.id, this.formData)
             .then(res => res.data)

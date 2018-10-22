@@ -3,6 +3,9 @@
     <v-card>
       <v-container grid-list-md fluid style="padding-top: 5px;">
         <v-toolbar color="transparent" card>
+          <div>
+            <Tbtn :bottom="true" tooltip-text="Buat Laporan" text="Buat Laporan" color="primary" @onClick="reportFormShow = true"/>
+          </div>
           <v-spacer/>
           <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Kembali" @onClick="toHome"/>
           <Tbtn color="primary" icon="save" icon-mode tooltip-text="Simpan" @onClick="submit"/>              
@@ -155,6 +158,8 @@
       </v-container>
     </v-card>
     <Dialog :showDialog="dialog" text="Yakin mau menghapus ?" @onClose="dialog = false" @onConfirmed="removeData"/>
+    <report-form :show="reportFormShow" :schedulle-id="schedulleId" @onClose="reportFormShow = false" @onAdd="addReport"/>
+
   </div>
 </template>
 
@@ -166,17 +171,19 @@ import Dialog from "~/components/Dialog"
 import catchError, { showNoty } from "~/utils/catchError"
 import moment from "moment"
 import debounce from "lodash/debounce"
+import reportForm from "~/components/marketing-reports/dform"
 
 export default {
   $_veeValidate: {
     validator: "new"
   },
-  components: { Dialog },
+  components: { Dialog, reportForm },
   mixins: [global],
   data() {
     return {
       dialog: false,
       formTitle: "Tambah Jadwal",
+      reportFormShow: false,
       code: Math.floor(Date.now() / 1000).toString(),
       marketing_target_id: "",
       marketing_id: "",
@@ -199,6 +206,9 @@ export default {
         this.targetEntries.map(target => items.push(target))
       }
       return items
+    },
+    schedulleId() {
+      return this.currentEdit.id || null
     }
   },
   watch: {
@@ -303,6 +313,9 @@ export default {
         this.deactivateLoader()
         catchError(e)
       }
+    },
+    addReport(data) {
+      this.$router.push("/marketing-reports/" + data.id)
     }
   }
 }
