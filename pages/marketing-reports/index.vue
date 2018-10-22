@@ -27,7 +27,7 @@
         <template slot="items" slot-scope="props">
           <td>{{ props.item.code }}</td>
           <td>{{ props.item.schedulle ? props.item.schedulle.code : "" }}</td>
-          <td>{{ props.item.schedulle.marketing ? props.item.schedulle.marketing.name : "" }}</td>
+          <td>{{ props.item.schedulle && props.item.schedulle.marketing ? props.item.schedulle.marketing.name : "" }}</td>
           <td>{{ props.item.method }}</td>
           <td>{{ props.item.date | moment("DD MMM YYYY HH:mm:ss") }}</td>
           <td class="justify-center layout px-0">

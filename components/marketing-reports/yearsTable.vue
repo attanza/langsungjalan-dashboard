@@ -1,7 +1,9 @@
 <template>
-  <div class="mt-3">
+  <div class="mt-4">
+    <h3 class="subheading ml-3">Angkatan</h3>
+
     <v-toolbar flat color="transparent">
-      <v-toolbar-title style="margin-left: -10px;">Angkatan</v-toolbar-title>
+      <Tbtn :bottom="true" tooltip-text="Tambah angkatan" icon-mode color="primary" icon="add" @onClick="showForm = true"/>
       <v-spacer/>
       <v-text-field
         v-model="pagination.search"
@@ -31,19 +33,21 @@
       </template>
     </v-data-table>
     <Dialog :showDialog="showDialog" text="Yakin mau menghapus ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
+    <year-form :show="showForm" :target-id="targetId" @onClose="showForm = false" @onAdd="addData"/>
   </div>
 </template>
 
 <script>
-import { REPORT_YEARS } from "~/utils/apis"
+import { TARGET_YEARS } from "~/utils/apis"
 import catchError, { showNoty } from "~/utils/catchError"
 import axios from "axios"
 import { global } from "~/mixins"
 import _ from "lodash"
 import Dialog from "~/components/Dialog"
+import yearForm from "./yearForm"
 
 export default {
-  components: { Dialog },
+  components: { Dialog, yearForm },
   mixins: [global],
   data() {
     return {
@@ -55,7 +59,13 @@ export default {
       ],
       items: [],
       showDialog: false,
-      dataToDelete: null
+      dataToDelete: null,
+      showForm: false
+    }
+  },
+  computed: {
+    targetId() {
+      return this.currentEdit.schedulle.target.id || null
     }
   },
   watch: {
@@ -76,7 +86,7 @@ export default {
         this.loading = true
 
         const { descending, sortBy } = this.pagination
-        const endPoint = `${REPORT_YEARS}?${this.getQueryParams()}&marketing_target_id=${this.getTargetId(
+        const endPoint = `${TARGET_YEARS}?${this.getQueryParams()}&marketing_target_id=${this.getTargetId(
           this.currentEdit
         )}`
 
@@ -119,10 +129,14 @@ export default {
       this.showDialog = true
       this.dataToDelete = data
     },
+    addData(data) {
+      this.items.unshift(data)
+      this.showForm = false
+    },
     removeData() {
       try {
         this.activateLoader()
-        axios.delete(REPORT_YEARS + "/" + this.dataToDelete.id).then(resp => {
+        axios.delete(TARGET_YEARS + "/" + this.dataToDelete.id).then(resp => {
           if (resp.status === 200) {
             let index = _.findIndex(
               this.items,
