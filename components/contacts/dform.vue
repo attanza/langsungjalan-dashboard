@@ -21,7 +21,7 @@
 
                   />
                 </v-flex>
-                <v-flex v-for="(f, index) in fillable" v-if="f.key == 'marketing_target_id'" :key="index" sm6 xs12>
+                <v-flex v-for="(f, index) in fillable" v-if="targetId == 0 && f.key == 'marketing_target_id'" :key="index" sm6 xs12>
                   <label>Kode Jadwal</label>
                   <v-autocomplete
                     v-validate="'required|integer'"
@@ -69,6 +69,11 @@ export default {
     show: {
       type: Boolean,
       required: true
+    },
+    targetId: {
+      type: Number,
+      required: false,
+      default: 0
     }
   },
   data() {
@@ -145,6 +150,9 @@ export default {
     setFields() {
       this.fillable.forEach(data => (this.formData[data.key] = data.value))
       this.errors.clear()
+      if (this.targetId && this.targetId != 0) {
+        this.formData["marketing_target_id"] = this.targetId
+      }
     },
     submit() {
       this.$validator.validateAll().then(result => {

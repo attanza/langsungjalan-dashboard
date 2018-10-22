@@ -5,7 +5,6 @@
       <v-toolbar card color="transparent">
         <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
         <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>       
-
         <v-spacer/>
         <v-text-field
           v-model="pagination.search"

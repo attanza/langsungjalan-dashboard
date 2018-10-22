@@ -1,7 +1,8 @@
 <template>
-  <div class="mt-3">
+  <div class="mt-4">
+    <h3 class="subheading ml-3">Contact Person</h3>
     <v-toolbar flat color="transparent">
-      <v-toolbar-title style="margin-left: -10px;">Contact Person</v-toolbar-title>
+      <Tbtn :bottom="true" tooltip-text="Tambah kontak" icon-mode color="primary" icon="add" @onClick="showForm = true"/>
       <v-spacer/>
       <v-text-field
         v-model="pagination.search"
@@ -32,6 +33,8 @@
       </template>
     </v-data-table>
     <Dialog :showDialog="showDialog" text="Yakin mau menghapus ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
+    <dform :show="showForm" :target-id="targetId" @onClose="showForm = false" @onAdd="addData"/>
+
   </div>
 </template>
 
@@ -42,9 +45,10 @@ import axios from "axios"
 import { global } from "~/mixins"
 import _ from "lodash"
 import Dialog from "~/components/Dialog"
+import { dform } from "~/components/contacts"
 
 export default {
-  components: { Dialog },
+  components: { Dialog, dform },
   mixins: [global],
   data() {
     return {
@@ -57,7 +61,13 @@ export default {
       ],
       items: [],
       showDialog: false,
-      dataToDelete: null
+      dataToDelete: null,
+      showForm: false
+    }
+  },
+  computed: {
+    targetId() {
+      return this.currentEdit.schedulle.target.id || null
     }
   },
   watch: {
@@ -68,6 +78,7 @@ export default {
       deep: true
     }
   },
+
   mounted() {
     this.pupulateTable()
   },
@@ -109,6 +120,10 @@ export default {
         this.deactivateLoader()
         catchError(e)
       }
+    },
+    addData(data) {
+      this.items.unshift(data)
+      this.showForm = false
     },
     showConfirm(data) {
       this.showDialog = true
