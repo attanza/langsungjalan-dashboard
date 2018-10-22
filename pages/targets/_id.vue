@@ -6,8 +6,14 @@
       <v-tab href="#detail">
         Detail
       </v-tab>
+      <v-tab href="#schedulles">
+        Jadwal
+      </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
+      </v-tab-item>
+      <v-tab-item :id="'schedulles'">
+        <schedulles/>
       </v-tab-item>
     </v-tabs>
   </div>
@@ -16,7 +22,7 @@
 <script>
 import { TARGET_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
-import { detail, dform } from "~/components/targets"
+import { detail, dform, schedulles } from "~/components/targets"
 import catchError from "~/utils/catchError"
 
 export default {
@@ -34,7 +40,7 @@ export default {
       catchError(e)
     }
   },
-  components: { detail, dform }
+  components: { detail, dform, schedulles }
 }
 </script>
 

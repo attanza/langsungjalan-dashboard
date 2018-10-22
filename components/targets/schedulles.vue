@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h2 class="primary--text mb-3">{{ title }}</h2>
     <v-card class="pt-3">
       <v-toolbar card color="transparent">
         <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
@@ -40,7 +39,7 @@
         </template>
       </v-data-table>
     </v-card>
-    <dform :show="showForm" @onClose="showForm = false" @onAdd="addData"/>
+    <dform :show="showForm" :target-id="targetId" @onClose="showForm = false" @onAdd="addData"/>
     <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" model="Schedulle" @onClose="showDownloadDialog = false"/>
   </div>
 </template>
@@ -49,7 +48,7 @@ import { SCHEDULLE_URL } from "~/utils/apis"
 import { global } from "~/mixins"
 import { dform } from "~/components/schedulles"
 import axios from "axios"
-import catchError from "~/utils/catchError"
+// import catchError from "~/utils/catchError"
 import DownloadDialog from "~/components/DownloadDialog"
 import debounce from "lodash/debounce"
 export default {
@@ -57,7 +56,7 @@ export default {
   components: { dform, DownloadDialog },
   mixins: [global],
   data: () => ({
-    title: "Jadwal Marketing",
+    title: "Jadwal",
     headers: [
       { text: "Kode Target", align: "left", value: "code" },
       { text: "Kode Jadwal", align: "left", value: "code" },
@@ -80,6 +79,11 @@ export default {
     ],
     typeDates: ["created_at"]
   }),
+  computed: {
+    targetId() {
+      return this.currentEdit.id || null
+    }
+  },
   watch: {
     pagination: {
       handler: debounce(function() {
@@ -100,7 +104,9 @@ export default {
         this.loading = true
 
         const { descending, sortBy } = this.pagination
-        const endPoint = `${SCHEDULLE_URL}?${this.getQueryParams()}`
+        const endPoint = `${SCHEDULLE_URL}?${this.getQueryParams()}&marketing_target_id=${
+          this.currentEdit.id
+        }`
 
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
@@ -126,7 +132,8 @@ export default {
       } catch (e) {
         this.loading = false
         this.deactivateLoader()
-        catchError(e)
+        console.log(e)
+        // catchError(e)
       }
     },
     toDetail(data) {

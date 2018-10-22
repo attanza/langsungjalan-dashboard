@@ -9,7 +9,7 @@
           <v-container grid-list-md>
             <form>
               <v-layout row wrap>
-                <v-flex xs12>
+                <v-flex v-if="targetId == 0" xs12>
                   <label>Kode Target Marketing</label>
                   <v-autocomplete
                     v-validate="'required|integer'"
@@ -40,11 +40,11 @@
 
                   />
                 </v-flex>
-                <v-flex v-if="comboData" xs12>
+                <v-flex v-if="marketings" xs12>
                   <label>Marketing</label>                
                   <v-autocomplete
                     v-validate="'required|numeric'"
-                    :items="comboData"
+                    :items="marketings"
                     :error-messages="errors.collect('marketing_id')"
                     :data-vv-name="'marketing_id'"
                     :data-vv-as="'Marketing'"
@@ -56,11 +56,11 @@
                     cache-items
                   />
                 </v-flex>
-                <v-flex v-if="comboData2" xs12>
+                <v-flex v-if="actions" xs12>
                   <label>Aksi</label>                
                   <v-autocomplete
                     v-validate="'required|numeric'"
-                    :items="comboData2"
+                    :items="actions"
                     :error-messages="errors.collect('marketing_action_id')"
                     :data-vv-name="'marketing_action_id'"
                     :data-vv-as="'Aksi'"
@@ -177,6 +177,11 @@ export default {
     show: {
       type: Boolean,
       required: true
+    },
+    targetId: {
+      type: Number,
+      required: false,
+      default: 0
     }
   },
   data() {
@@ -195,7 +200,9 @@ export default {
       menu: false,
       menuTime: false,
       schedulleDate: null,
-      schedulleTime: null
+      schedulleTime: null,
+      marketings: [],
+      actions: []
     }
   },
   computed: {
@@ -217,7 +224,27 @@ export default {
       }
     }
   },
+  created() {
+    this.initData()
+    if (this.targetId && this.targetId != 0) {
+      this.marketing_target_id = this.targetId
+    }
+  },
   methods: {
+    async initData() {
+      try {
+        this.setAuth()
+        this.marketings = await axios
+          .get(COMBO_DATA_URL + "MarketingAll")
+          .then(res => res.data)
+
+        this.actions = await axios
+          .get(COMBO_DATA_URL + "Action")
+          .then(res => res.data)
+      } catch (e) {
+        catchError(e)
+      }
+    },
     getMarketingTarget: debounce(async function() {
       try {
         this.targetComboLoading = true

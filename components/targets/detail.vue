@@ -3,13 +3,14 @@
     <v-card>
       <v-container grid-list-md fluid style="padding-top: 5px;">
         <v-toolbar color="transparent" card>
+          <Tbtn :bottom="true" tooltip-text="Buat Jadwal" text="Buat Jadwal" color="primary" @onClick="schedulleFormShow = true"/>
           <v-spacer/>
           <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Kembali" @onClick="toHome"/>
           <Tbtn color="primary" icon="save" icon-mode tooltip-text="Simpan" @onClick="submit"/>              
           <Tbtn color="primary" icon="refresh" icon-mode tooltip-text="Refresh" @onClick="setField"/>  
           <Tbtn color="primary" icon="delete" icon-mode tooltip-text="Hapus" @onClick="confirmDelete"/>  
         </v-toolbar> 
-        <form>
+        <form class="mt-3">
           <v-layout row wrap>
             <v-flex xs12>
               <label>Kode</label>
@@ -65,6 +66,8 @@
       </v-container>
     </v-card>
     <Dialog :showDialog="dialog" text="Yakin mau menghapus ?" @onClose="dialog = false" @onConfirmed="removeData"/>
+    <schedulle-form :show="schedulleFormShow" :target-id="targetId" @onClose="schedulleFormShow = false" @onAdd="addSchedulle"/>
+
   </div>
 </template>
 
@@ -74,11 +77,12 @@ import { TARGET_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import Dialog from "~/components/Dialog"
 import catchError, { showNoty } from "~/utils/catchError"
+import schedulleForm from "~/components/schedulles/dform"
 export default {
   $_veeValidate: {
     validator: "new"
   },
-  components: { Dialog },
+  components: { Dialog, schedulleForm },
   mixins: [global],
   data() {
     return {
@@ -88,7 +92,13 @@ export default {
       university_id: "",
       study_program_id: "",
       description: "",
-      autoCompleteLoading: false
+      autoCompleteLoading: false,
+      schedulleFormShow: false
+    }
+  },
+  computed: {
+    targetId() {
+      return this.currentEdit.id || null
     }
   },
   watch: {
@@ -180,6 +190,9 @@ export default {
         this.deactivateLoader()
         catchError(e)
       }
+    },
+    addSchedulle(data) {
+      this.$router.push("/schedulles/" + data.id)
     }
   }
 }
