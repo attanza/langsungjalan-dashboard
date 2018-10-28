@@ -24,7 +24,6 @@
         </v-list>
       </v-toolbar>
       <v-list>
-          
         <div v-for="(item, i) in items" :key="i" >
           <v-list-tile
             v-if="!item.hasChild"

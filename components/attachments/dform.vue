@@ -21,7 +21,7 @@
 
                   />
                 </div>
-                <div v-if="f.key == 'marketing_target_id'">
+                <div v-if="f.key == 'marketing_target_id' && targetId == 0">
                   <label>Kode Target</label>
                   <v-autocomplete
                     v-validate="'required|integer'"
@@ -98,8 +98,14 @@ export default {
       type: Object,
       required: false,
       default: null
+    },
+    targetId: {
+      type: Number,
+      required: false,
+      default: 0
     }
   },
+
   data() {
     return {
       dialog: false,
@@ -188,6 +194,9 @@ export default {
           id: this.formData.target.id,
           code: this.formData.target.code
         })
+      }
+      if (this.targetId && this.targetId != 0) {
+        this.formData["marketing_target_id"] = this.targetId
       }
     },
     pickFile() {

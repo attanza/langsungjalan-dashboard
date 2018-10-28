@@ -124,7 +124,6 @@ export default {
         this.activateLoader()
 
         if (this.currentEdit) {
-          this.formData.role_id = 3
           const resp = await axios
             .put(MARKETING_URL + "/" + this.currentEdit.id, this.formData)
             .then(res => res.data)

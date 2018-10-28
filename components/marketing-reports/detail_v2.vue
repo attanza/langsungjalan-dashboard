@@ -3,14 +3,23 @@
     <marketingTable :data="currentEdit"/>
     <contactTable/>
     <yearsTable/>
+    <attachmentTable/>
     <table class="table is-fullwidth mt-3">
       <tbody>
         <tr>
-          <th width="30%">Birokrasi Perizinan</th>
+          <th width="30%">Perizinan</th>
           <td width="70%">{{ currentEdit.terms }}</td>
         </tr>
         <tr>
-          <th>Kodisi Lapangan</th>
+          <th>Hasil</th>
+          <td>{{ currentEdit.result }}</td>
+        </tr>
+        <tr>
+          <th>Catatan</th>
+          <td>{{ currentEdit.note }}</td>
+        </tr>
+        <tr>
+          <th>Deskripsi</th>
           <td>{{ currentEdit.description }}</td>
         </tr>
       </tbody>
@@ -22,9 +31,10 @@ import { global } from "~/mixins"
 import marketingTable from "./marketingTable"
 import contactTable from "./contactTable"
 import yearsTable from "./yearsTable"
+import attachmentTable from "./attachmentTable"
 
 export default {
-  components: { marketingTable, contactTable, yearsTable },
+  components: { marketingTable, contactTable, yearsTable, attachmentTable },
   mixins: [global],
 
   data() {

@@ -9,7 +9,7 @@
           <form>
             <v-layout row wrap class="mt-3 px-2">
               <v-flex v-for="(f, index) in fillable" :key="index" xs12>
-                <div v-if="!inArray(notIncluded, f.key)">
+                <div v-if="!inArray(notIncluded, f.key) && inArray(fieldShow, f.key)">
                   <label>{{ f.caption }}</label>
                   <v-text-field
                     v-validate="f.rules"
@@ -20,7 +20,7 @@
                     :data-vv-as="f.caption"
                   />
                 </div>
-                <div v-if="f.key == 'schedulle_id'">
+                <div v-if="f.key == 'schedulle_id' && schedulleId == 0">
                   <label>Kode Jadwal</label>
                   <v-autocomplete
                     v-validate="'required|integer'"
@@ -139,6 +139,11 @@ export default {
     show: {
       type: Boolean,
       required: true
+    },
+    schedulleId: {
+      type: Number,
+      required: false,
+      default: 0
     }
   },
   data() {
@@ -165,16 +170,41 @@ export default {
           rules: "required|max:30"
         },
         { key: "date", caption: "Tanggal", value: "", rules: "" },
-        { key: "terms", caption: "Persyaratan", value: "", rules: "max:250" },
-        { key: "result", caption: "Hasil", value: "", rules: "max:250" },
-        { key: "note", caption: "Catatan", value: "", rules: "max:250" },
-        { key: "lat", caption: "Latitude", value: "", rules: "decimal" },
-        { key: "lng", caption: "Longitude", value: "", rules: "decimal" },
+        {
+          key: "terms",
+          caption: "Persyaratan",
+          value: "",
+          rules: "max:250"
+        },
+        {
+          key: "result",
+          caption: "Hasil",
+          value: "",
+          rules: "max:250"
+        },
+        {
+          key: "note",
+          caption: "Catatan",
+          value: "",
+          rules: "max:250"
+        },
         {
           key: "description",
           caption: "Deskripsi",
           value: "",
           rules: "max:250"
+        },
+        {
+          key: "lat",
+          caption: "Latitude",
+          value: "",
+          rules: "decimal"
+        },
+        {
+          key: "lng",
+          caption: "Longitude",
+          value: "",
+          rules: "decimal"
         }
       ],
       notIncluded: ["description", "date", "schedulle_id"],
@@ -185,7 +215,19 @@ export default {
       menu: false,
       menuTime: false,
       reportDate: null,
-      reportTime: null
+      reportTime: null,
+      fieldShow: [
+        "code",
+        "schedulleId",
+        "method",
+        "date",
+        "terms",
+        "note",
+        "result",
+        "description",
+        "lat",
+        "lng"
+      ]
     }
   },
   computed: {
@@ -209,6 +251,7 @@ export default {
   },
   mounted() {
     this.setFields()
+    this.checkFormShow()
   },
   methods: {
     setFields() {
@@ -216,6 +259,28 @@ export default {
       this.reportDate = moment(Date.now()).format("YYYY-MM-DD")
       this.reportTime = moment(Date.now()).format("HH:mm:ss")
       this.errors.clear()
+      if (this.schedulleId && this.schedulleId != 0) {
+        this.formData["schedulle_id"] = this.schedulleId
+      }
+    },
+    checkFormShow() {
+      if (
+        this.currentEdit &&
+        this.currentEdit.action &&
+        (this.currentEdit.action.id === 2 || this.currentEdit.action.id === 3)
+      ) {
+        this.fieldShow = [
+          "code",
+          "method",
+          "date",
+          "schedulle_id",
+          "note",
+          "result",
+          "description",
+          "lat",
+          "lng"
+        ]
+      }
     },
     getSchedulle: debounce(async function() {
       try {
