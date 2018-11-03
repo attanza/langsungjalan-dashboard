@@ -52,6 +52,7 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    analyze: true,
     vendor: [
       "~/plugins/vuetify.js",
       "axios",

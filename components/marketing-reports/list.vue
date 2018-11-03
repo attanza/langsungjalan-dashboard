@@ -46,11 +46,19 @@ import { MARKETING_REPORTS_URL, COMBO_DATA_URL } from "~/utils/apis"
 import { global } from "~/mixins"
 import catchError from "~/utils/catchError"
 import axios from "axios"
-import { dform } from "~/components/marketing-reports"
+import dform from "./dform"
 
 export default {
   components: { dform },
   mixins: [global],
+
+  props: {
+    schedulleId: {
+      type: String,
+      required: false,
+      default: ""
+    }
+  },
   data: () => ({
     title: "Laporan Marketing",
     headers: [
@@ -66,12 +74,6 @@ export default {
     showConfirm: false,
     showForm: false
   }),
-
-  computed: {
-    schedulleId() {
-      return this.cuurentEdit ? this.currentEdit.id : ""
-    }
-  },
 
   watch: {
     pagination: {
@@ -102,7 +104,7 @@ export default {
       try {
         this.activateLoader()
         const { descending, sortBy } = this.pagination
-        const endPoint = `${MARKETING_REPORTS_URL}?${this.getQueryParams()}&schedulle_id=${
+        const endPoint = `${MARKETING_REPORTS_URL}?${this.getQueryParams()}schedulle_id=${
           this.schedulleId
         }`
 

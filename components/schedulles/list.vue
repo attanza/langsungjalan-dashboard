@@ -46,17 +46,18 @@
 <script>
 import { SCHEDULLE_URL } from "~/utils/apis"
 import { global } from "~/mixins"
-import { dform } from "~/components/schedulles"
+import dform from "./dform"
 import axios from "axios"
-// import catchError from "~/utils/catchError"
+import catchError from "~/utils/catchError"
 import DownloadDialog from "~/components/DownloadDialog"
 import debounce from "lodash/debounce"
 export default {
   middleware: "auth",
-  components: { dform, DownloadDialog },
+  components: { DownloadDialog, dform },
   mixins: [global],
+
   data: () => ({
-    title: "Jadwal",
+    title: "Jadwal Marketing",
     headers: [
       { text: "Kode Target", align: "left", value: "code" },
       { text: "Kode Jadwal", align: "left", value: "code" },
@@ -79,11 +80,18 @@ export default {
     ],
     typeDates: ["created_at"]
   }),
+
   computed: {
     targetId() {
-      return this.currentEdit.id || null
+      if (this.currentEdit && this.currentEdit.study_program_id) {
+        // Make sure current edit is Marketing Target
+        return this.currentEdit.id
+      } else {
+        return ""
+      }
     }
   },
+
   watch: {
     pagination: {
       handler: debounce(function() {
@@ -104,8 +112,8 @@ export default {
         this.loading = true
 
         const { descending, sortBy } = this.pagination
-        const endPoint = `${SCHEDULLE_URL}?${this.getQueryParams()}&marketing_target_id=${
-          this.currentEdit.id
+        const endPoint = `${SCHEDULLE_URL}?${this.getQueryParams()}marketing_target_id=${
+          this.targetId
         }`
 
         const res = await axios.get(endPoint).then(res => res.data)
@@ -132,8 +140,7 @@ export default {
       } catch (e) {
         this.loading = false
         this.deactivateLoader()
-        console.log(e)
-        // catchError(e)
+        catchError(e)
       }
     },
     toDetail(data) {

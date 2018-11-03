@@ -9,7 +9,7 @@
           <v-container grid-list-md>
             <form>
               <v-layout row wrap>
-                <v-flex v-if="targetId == 0" xs12>
+                <v-flex v-if="targetId === ''" xs12>
                   <label>Kode Target Marketing</label>
                   <v-autocomplete
                     v-validate="'required|integer'"
