@@ -7,7 +7,7 @@
         Detail
       </v-tab>
       <v-tab href="#report">
-        Report
+        Laporan
       </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>

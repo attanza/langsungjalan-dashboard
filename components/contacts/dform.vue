@@ -9,7 +9,7 @@
           <v-container grid-list-md>
             <form>
               <v-layout row wrap>
-                <v-flex v-for="(f, index) in fillable" v-if="f.key != 'marketing_target_id'" :key="index" sm6 xs12>
+                <v-flex v-for="(f, index) in fillable" v-if="f.key != 'marketing_target_id'" :key="index" xs12>
                   <label>{{ f.caption }}</label>
                   <v-text-field
                     v-validate="f.rules"
@@ -21,7 +21,7 @@
 
                   />
                 </v-flex>
-                <v-flex v-for="(f, index) in fillable" v-if="targetId == 0 && f.key == 'marketing_target_id'" :key="index" sm6 xs12>
+                <v-flex v-for="(f, index) in fillable" v-if="targetId == 0 && f.key == 'marketing_target_id'" :key="index" xs12>
                   <label>Kode Jadwal</label>
                   <v-autocomplete
                     v-validate="'required|integer'"
@@ -74,6 +74,16 @@ export default {
       type: Number,
       required: false,
       default: 0
+    },
+    isEdit: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    dataToEdit: {
+      type: Object,
+      required: false,
+      default: null
     }
   },
   data() {
@@ -126,6 +136,12 @@ export default {
       if (this.searchTarget && this.searchTarget.length > 2) {
         this.getTarget()
       }
+    },
+    isEdit() {
+      this.dialog = this.isEdit
+      if (this.isEdit) {
+        this.populateData()
+      }
     }
   },
   created() {
@@ -145,6 +161,9 @@ export default {
       }
     }, 500),
     onClose() {
+      this.formTitle = "Tambah Kontak"
+      this.formData = {}
+      this.setFields()
       this.$emit("onClose")
     },
     setFields() {
@@ -165,18 +184,39 @@ export default {
     async saveData() {
       try {
         this.activateLoader()
-        const resp = await axios
-          .post(CONTACT_URL, this.formData)
-          .then(res => res.data)
-        if (resp.meta.status === 201) {
-          showNoty("Data disimpan", "success")
-          this.$emit("onAdd", resp.data)
-          this.setFields()
+        if (this.isEdit) {
+          const resp = await axios
+            .put(`${CONTACT_URL}/${this.dataToEdit.id}`, this.formData)
+            .then(res => res.data)
+          if (resp.meta.status === 200) {
+            showNoty("Data diperbaharui", "success")
+            this.$emit("onEdit", resp.data)
+            this.setFields()
+          }
+        } else {
+          const resp = await axios
+            .post(CONTACT_URL, this.formData)
+            .then(res => res.data)
+          if (resp.meta.status === 201) {
+            showNoty("Data disimpan", "success")
+            this.$emit("onAdd", resp.data)
+            this.setFields()
+          }
         }
         this.deactivateLoader()
       } catch (e) {
         this.deactivateLoader()
         catchError(e)
+      }
+    },
+    populateData() {
+      if (this.dataToEdit) {
+        this.formTitle = "Edit Kontak"
+        this.formData.marketing_target_id = this.dataToEdit.marketing_target_id
+        this.formData.name = this.dataToEdit.name
+        this.formData.title = this.dataToEdit.title
+        this.formData.email = this.dataToEdit.email
+        this.formData.phone = this.dataToEdit.phone
       }
     }
   }

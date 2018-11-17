@@ -39,7 +39,7 @@
         </template>
       </v-data-table>
     </v-card>
-    <dform :show="showForm" :target-id="targetId" @onClose="showForm = false" @onAdd="addData"/>
+    <dform :show="showForm" :target-id="parseInt(targetId)" @onClose="showForm = false" @onAdd="addData"/>
     <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" model="Schedulle" @onClose="showDownloadDialog = false"/>
   </div>
 </template>

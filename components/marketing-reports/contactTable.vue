@@ -28,12 +28,14 @@
         <td>{{ props.item.phone }}</td>
         <td>{{ props.item.email }}</td>
         <td class="justify-center layout px-0">
+          <Tbtn :tooltip-text="'Edit'" icon-mode flat color="primary" icon="edit" @onClick="getEdit(props.item)"/>
           <Tbtn :tooltip-text="'Hapus'" icon-mode flat color="primary" icon="delete" @onClick="showConfirm(props.item)"/>
+
         </td>
       </template>
     </v-data-table>
     <Dialog :showDialog="showDialog" text="Yakin mau menghapus ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
-    <dform :show="showForm" :target-id="targetId" @onClose="showForm = false" @onAdd="addData"/>
+    <dform :show="showForm" :target-id="targetId" :is-edit="isEdit" :data-to-edit="dataToEdit" @onClose="closeDForm" @onAdd="addData" @onEdit="editData"/>
 
   </div>
 </template>
@@ -62,7 +64,9 @@ export default {
       items: [],
       showDialog: false,
       dataToDelete: null,
-      showForm: false
+      showForm: false,
+      dataToEdit: null,
+      isEdit: false
     }
   },
   computed: {
@@ -121,9 +125,19 @@ export default {
         catchError(e)
       }
     },
+    closeDForm() {
+      this.showForm = false
+      this.isEdit = false
+      this.dataToEdit = null
+    },
     addData(data) {
       this.items.unshift(data)
-      this.showForm = false
+      this.closeDForm()
+    },
+    editData(data) {
+      let index = _.findIndex(this.items, { id: data.id })
+      this.items.splice(index, 1, data)
+      this.closeDForm()
     },
     showConfirm(data) {
       this.showDialog = true
@@ -133,6 +147,10 @@ export default {
       return data.schedulle && data.schedulle.target
         ? data.schedulle.target.id
         : null
+    },
+    getEdit(data) {
+      this.dataToEdit = data
+      this.isEdit = true
     },
     removeData() {
       try {

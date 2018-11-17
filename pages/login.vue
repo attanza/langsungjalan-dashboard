@@ -4,7 +4,7 @@
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md6>
           <v-card class="elevation-12">
-            <v-toolbar>
+            <v-toolbar color="primary" dark>
               <v-toolbar-title>Login</v-toolbar-title>
               <v-spacer/>
             </v-toolbar>
@@ -16,7 +16,7 @@
                   :error-messages="errors.collect('email')"
                   name="email"
                   prepend-icon="email"
-                  label="E-mail Address"
+                  label="Alamat Email"
                   data-vv-name="email"
                 />
 
@@ -28,7 +28,7 @@
                   :error-messages="errors.collect('password')"
                   prepend-icon="lock"
                   name="password"
-                  label="Enter your password"
+                  label="Password"
                   hint="At least 6 characters"
                   min="6"
                 />
@@ -37,7 +37,7 @@
             <v-card-actions>
               <v-btn flat @click="showResetForm = true"><span>Lupa Password ?</span></v-btn>
               <v-spacer/>
-              <v-btn :loading="loading" :disabled="loading" @click="submit">Login</v-btn>
+              <v-btn :loading="loading" :disabled="loading" color="primary" @click="submit">Login</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
