@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="mt-4">
+    <h3 class="subheading ml-3">Lampiran</h3>
     <v-card class="pt-3">
       <v-toolbar card color="transparent">
         <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
@@ -167,15 +168,14 @@ export default {
     editData(data) {
       let index = _.findIndex(this.items, item => item.id == data.id)
       this.items.splice(index, 1, data)
-      this.dataToEdit = null
-      this.isEdit = false
-      this.showForm = false
+      this.formClose()
     },
     formClose() {
       this.isEdit = false
       this.idToEdit = ""
       this.showForm = false
       this.showDialog = false
+      this.dataToEdit = null
     },
     prepareDelete(data) {
       this.dataToEdit = data

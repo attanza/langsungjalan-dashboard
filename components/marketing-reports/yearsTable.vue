@@ -1,7 +1,6 @@
 <template>
   <div class="mt-4">
     <h3 class="subheading ml-3">Angkatan</h3>
-
     <v-toolbar flat color="transparent">
       <Tbtn :bottom="true" tooltip-text="Tambah angkatan" icon-mode color="primary" icon="add" @onClick="showForm = true"/>
       <v-spacer/>
@@ -28,12 +27,13 @@
         <td>{{ props.item.class }}</td>
         <td>{{ props.item.students }}</td>
         <td class="justify-center layout px-0">
+          <Tbtn :tooltip-text="'Edit'" icon-mode flat color="primary" icon="edit" @onClick="getEdit(props.item)"/>
           <Tbtn :tooltip-text="'Hapus'" icon-mode flat color="primary" icon="delete" @onClick="showConfirm(props.item)"/>
         </td>
       </template>
     </v-data-table>
     <Dialog :showDialog="showDialog" text="Yakin mau menghapus ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
-    <year-form :show="showForm" :target-id="targetId" @onClose="showForm = false" @onAdd="addData"/>
+    <year-form :show="showForm" :target-id="targetId" :is-edit="isEdit" :data-to-edit="dataToEdit" @onClose="closeDForm" @onAdd="addData" @onEdit="editData"/>
   </div>
 </template>
 
@@ -60,7 +60,9 @@ export default {
       items: [],
       showDialog: false,
       dataToDelete: null,
-      showForm: false
+      showForm: false,
+      dataToEdit: null,
+      isEdit: false
     }
   },
   computed: {
@@ -129,9 +131,24 @@ export default {
       this.showDialog = true
       this.dataToDelete = data
     },
+    closeDForm() {
+      this.showForm = false
+      this.isEdit = false
+      this.dataToEdit = null
+      this.dataToDelete = null
+    },
     addData(data) {
       this.items.unshift(data)
-      this.showForm = false
+      this.closeDForm()
+    },
+    editData(data) {
+      let index = _.findIndex(this.items, { id: data.id })
+      this.items.splice(index, 1, data)
+      this.closeDForm()
+    },
+    getEdit(data) {
+      this.dataToEdit = data
+      this.isEdit = true
     },
     removeData() {
       try {

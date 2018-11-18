@@ -9,7 +9,7 @@
           <v-container grid-list-md>
             <form>
               <v-layout row wrap>
-                <v-flex v-for="(f, index) in fillable" v-if="f.key != 'marketing_target_id' && f.show" :key="index" sm6 xs12>
+                <v-flex v-for="(f, index) in fillable" v-if="f.key != 'marketing_target_id' && f.show" :key="index" xs12>
                   <label>{{ f.caption }}</label>
                   <v-text-field
                     v-validate="f.rules"
@@ -22,7 +22,7 @@
 
                   />
                 </v-flex>
-                <v-flex v-for="(f, index) in fillable" v-if="targetId == 0 && f.key == 'marketing_target_id'" :key="index" sm6 xs12>
+                <v-flex v-for="(f, index) in fillable" v-if="targetId == 0 && f.key == 'marketing_target_id'" :key="index" xs12>
                   <label>Kode Jadwal</label>
                   <v-autocomplete
                     v-validate="'required|integer'"
@@ -75,6 +75,16 @@ export default {
       type: Number,
       required: false,
       default: 0
+    },
+    isEdit: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    dataToEdit: {
+      type: Object,
+      required: false,
+      default: null
     }
   },
   data() {
@@ -180,6 +190,12 @@ export default {
       if (this.searchTarget && this.searchTarget.length > 2) {
         this.getTarget()
       }
+    },
+    isEdit() {
+      this.dialog = this.isEdit
+      if (this.isEdit) {
+        this.populateData()
+      }
     }
   },
   created() {
@@ -199,6 +215,9 @@ export default {
       }
     }, 500),
     onClose() {
+      this.formTitle = "Tambah Kontak"
+      this.formData = {}
+      this.setFields()
       this.$emit("onClose")
     },
     setFields() {
@@ -226,16 +245,42 @@ export default {
         }
       })
     },
+    populateData() {
+      if (this.dataToEdit) {
+        this.formTitle = "Edit Kontak"
+        this.formData.marketing_target_id = this.dataToEdit.marketing_target_id
+        this.formData.year = this.dataToEdit.year
+        this.formData.class = this.dataToEdit.class
+        this.formData.students = this.dataToEdit.students
+        this.formData.count_attendence = this.dataToEdit.count_attendence
+        this.formData.people_dp = this.dataToEdit.people_dp
+        this.formData.count_dp = this.dataToEdit.count_dp
+        this.formData.count_add = this.dataToEdit.count_add
+        this.formData.count_cancel = this.dataToEdit.count_cancel
+        this.formData.count_packages = this.dataToEdit.count_packages
+      }
+    },
     async saveData() {
       try {
         this.activateLoader()
-        const resp = await axios
-          .post(TARGET_YEARS, this.formData)
-          .then(res => res.data)
-        if (resp.meta.status === 201) {
-          showNoty("Data disimpan", "success")
-          this.$emit("onAdd", resp.data)
-          this.setFields()
+        if (this.isEdit) {
+          const resp = await axios
+            .put(`${TARGET_YEARS}/${this.dataToEdit.id}`, this.formData)
+            .then(res => res.data)
+          if (resp.meta.status === 200) {
+            showNoty("Data diperbaharui", "success")
+            this.$emit("onEdit", resp.data)
+            this.setFields()
+          }
+        } else {
+          const resp = await axios
+            .post(TARGET_YEARS, this.formData)
+            .then(res => res.data)
+          if (resp.meta.status === 201) {
+            showNoty("Data disimpan", "success")
+            this.$emit("onAdd", resp.data)
+            this.setFields()
+          }
         }
         this.deactivateLoader()
       } catch (e) {

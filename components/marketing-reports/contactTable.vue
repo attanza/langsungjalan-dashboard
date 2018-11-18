@@ -129,6 +129,7 @@ export default {
       this.showForm = false
       this.isEdit = false
       this.dataToEdit = null
+      this.dataToDelete = null
     },
     addData(data) {
       this.items.unshift(data)
