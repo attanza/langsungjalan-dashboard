@@ -144,6 +144,16 @@ export default {
       type: Number,
       required: false,
       default: 0
+    },
+    isEdit: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    dataToEdit: {
+      type: Object,
+      required: false,
+      default: null
     }
   },
   data() {
@@ -247,6 +257,12 @@ export default {
       if (this.searchSchedulle && this.searchSchedulle.length > 2) {
         this.getSchedulle()
       }
+    },
+    isEdit() {
+      this.dialog = this.isEdit
+      if (this.dataToEdit) {
+        this.populateData(this.dataToEdit)
+      }
     }
   },
   mounted() {
@@ -255,6 +271,7 @@ export default {
   },
   methods: {
     setFields() {
+      this.formTitle = "Tambah Data"
       this.fillable.forEach(data => (this.formData[data.key] = data.value))
       this.reportDate = moment(Date.now()).format("YYYY-MM-DD")
       this.reportTime = moment(Date.now()).format("HH:mm:ss")
@@ -298,6 +315,25 @@ export default {
       this.setFields()
       this.$emit("onClose")
     },
+    populateData(data) {
+      if (data instanceof Object) {
+        this.formTitle = "Edit Data"
+        for (var key in data) {
+          if (data.hasOwnProperty(key)) {
+            this.formData[key] = data[key]
+          }
+        }
+
+        this.schedulleEntries.push({
+          id: data.schedulle.id,
+          code: data.schedulle.code
+        })
+
+        this.reportDate = moment(data.date).format("YYYY-MM-DD")
+        this.reportTime = moment(data.date).format("HH:mm:ss")
+
+      }
+    },
     submit() {
       this.$validator.validateAll().then(result => {
         if (result) {
@@ -322,14 +358,29 @@ export default {
           delete this.formData["lng"]
         }
 
-        const resp = await axios
-          .post(MARKETING_REPORTS_URL, this.formData)
-          .then(res => res.data)
+        if (this.isEdit) {
+          const resp = await axios
+            .put(
+              `${MARKETING_REPORTS_URL}/${this.dataToEdit.id}`,
+              this.formData
+            )
+            .then(res => res.data)
 
-        if (resp.meta.status === 201) {
-          showNoty("Data disimpan", "success")
-          this.$emit("onAdd", resp.data)
-          this.setFields()
+          if (resp.meta.status === 200) {
+            showNoty("Data perbaharui", "success")
+            this.$emit("onEdit", resp.data)
+            this.setFields()
+          }
+        } else {
+          const resp = await axios
+            .post(MARKETING_REPORTS_URL, this.formData)
+            .then(res => res.data)
+
+          if (resp.meta.status === 201) {
+            showNoty("Data disimpan", "success")
+            this.$emit("onAdd", resp.data)
+            this.setFields()
+          }
         }
         this.deactivateLoader()
       } catch (e) {

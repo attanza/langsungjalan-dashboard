@@ -30,6 +30,9 @@
           <td>{{ props.item.method }}</td>
           <td>{{ props.item.date | moment("DD MMM YYYY HH:mm:ss") }}</td>
           <td class="justify-center layout px-0">
+            <v-btn icon class="mx-0" @click="getEdit(props.item)">
+              <v-icon color="primary">edit</v-icon>
+            </v-btn>
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
               <v-icon color="primary">remove_red_eye</v-icon>
             </v-btn>
@@ -37,11 +40,12 @@
         </template>
       </v-data-table>
     </v-card>
-    <dform :show="showForm" @onClose="onClose" @onAdd="addData"/>
+    <dform :show="showForm" :is-edit="isEdit" :data-to-edit="dataToEdit" @onClose="onClose" @onAdd="addData" @onEdit="editData"/>
   </div>
 </template>
 <script>
 import debounce from "lodash/debounce"
+import findIndex from "lodash/findIndex"
 import { MARKETING_REPORTS_URL, COMBO_DATA_URL } from "~/utils/apis"
 import { global } from "~/mixins"
 import catchError from "~/utils/catchError"
@@ -72,7 +76,9 @@ export default {
     items: [],
     confirmMessage: "Yakin mau menghapus ?",
     showConfirm: false,
-    showForm: false
+    showForm: false,
+    isEdit: false,
+    dataToEdit: null
   }),
 
   watch: {
@@ -137,12 +143,23 @@ export default {
     toDetail(data) {
       this.$router.push(`/marketing-reports/${data.id}`)
     },
+    getEdit(data) {
+      this.dataToEdit = data
+      this.isEdit = true
+    },
     addData(data) {
       this.items.unshift(data)
       this.showForm = false
     },
+    editData(data) {
+      let index = findIndex(this.items, { id: data.id })
+      this.items.splice(index, 1, data)
+      this.onClose()
+    },
     onClose() {
       this.showForm = false
+      this.dataToEdit = null
+      this.isEdit = false
     }
   }
 }
