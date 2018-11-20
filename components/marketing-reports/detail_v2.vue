@@ -30,7 +30,7 @@
 import { global } from "~/mixins"
 import marketingTable from "./marketingTable"
 import contactTable from "./contactTable"
-import yearsTable from "./yearsTable"
+import yearsTable from "./yearsTable/yearsTable"
 import attachmentTable from "./attachmentTable"
 
 export default {

@@ -231,11 +231,37 @@ export default {
     showFormField() {
       if (this.actionId === 1) {
         let shouldShow = ["year", "class", "students"]
-        shouldShow.map(f => {
-          let fill = _.find(this.fillable, ["key", f])
-          fill.show = true
-        })
-      }
+        this.setShouldShow(shouldShow)
+      } else if (this.actionId === 2) {
+        let shouldShow = [
+          "year",
+          "class",
+          "students",
+          "count_attendence",
+          "people_dp",
+          "count_dp"
+        ]
+        this.setShouldShow(shouldShow)
+      } else if (this.actionId === 3) {
+        let shouldShow = [
+          "year",
+          "class",
+          "students",
+          "count_attendence",
+          "people_dp",
+          "count_dp",
+          "count_add",
+          "count_cancel",
+          "count_packages"
+        ]
+        this.setShouldShow(shouldShow)
+      } else return null
+    },
+    setShouldShow(shouldShow) {
+      shouldShow.map(f => {
+        let fill = _.find(this.fillable, ["key", f])
+        fill.show = true
+      })
     },
     submit() {
       this.$validator.validateAll().then(result => {
@@ -260,12 +286,22 @@ export default {
         this.formData.count_packages = this.dataToEdit.count_packages
       }
     },
+    parseFormData(dataToParse) {
+      let data = {}
+      for (var key in dataToParse) {
+        if (dataToParse.hasOwnProperty(key)) {
+          data[key] = dataToParse[key]
+        }
+      }
+      return data
+    },
     async saveData() {
       try {
         this.activateLoader()
+        let httpData = this.parseFormData(this.formData)
         if (this.isEdit) {
           const resp = await axios
-            .put(`${TARGET_YEARS}/${this.dataToEdit.id}`, this.formData)
+            .put(`${TARGET_YEARS}/${this.dataToEdit.id}`, httpData)
             .then(res => res.data)
           if (resp.meta.status === 200) {
             showNoty("Data diperbaharui", "success")
@@ -274,7 +310,7 @@ export default {
           }
         } else {
           const resp = await axios
-            .post(TARGET_YEARS, this.formData)
+            .post(TARGET_YEARS, httpData)
             .then(res => res.data)
           if (resp.meta.status === 201) {
             showNoty("Data disimpan", "success")
@@ -284,6 +320,7 @@ export default {
         }
         this.deactivateLoader()
       } catch (e) {
+        console.log(e)
         this.deactivateLoader()
         catchError(e)
       }

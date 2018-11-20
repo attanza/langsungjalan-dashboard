@@ -13,7 +13,7 @@
       />
     </v-toolbar>
     <v-data-table
-      :headers="headers"
+      :headers="getHeaders"
       :items="items"
       :loading="loading"
       :pagination.sync="pagination"
@@ -23,9 +23,15 @@
 
     >
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.year }}</td>
-        <td>{{ props.item.class }}</td>
-        <td>{{ props.item.students }}</td>
+        <td v-if="getActionId() === 1 || getActionId() === 2 || getActionId() === 3">{{ props.item.year }}</td>
+        <td v-if="getActionId() === 1">{{ props.item.class }}</td>
+        <td v-if="getActionId() === 1">{{ props.item.students }}</td>
+        <td v-if="getActionId() === 2">{{ props.item.count_attendence }}</td>
+        <td v-if="getActionId() === 2">{{ props.item.people_dp }}</td>
+        <td v-if="getActionId() === 2">{{ props.item.count_dp }}</td>
+        <td v-if="getActionId() === 3">{{ props.item.count_add }}</td>
+        <td v-if="getActionId() === 3">{{ props.item.count_cancel }}</td>
+        <td v-if="getActionId() === 3">{{ props.item.count_packages }}</td>
         <td class="justify-center layout px-0">
           <Tbtn :tooltip-text="'Edit'" icon-mode flat color="primary" icon="edit" @onClick="getEdit(props.item)"/>
           <Tbtn :tooltip-text="'Hapus'" icon-mode flat color="primary" icon="delete" @onClick="showConfirm(props.item)"/>
@@ -57,6 +63,20 @@ export default {
         { text: "Rata-rata Siswa per Kelas", align: "left", value: "phone" },
         { text: "Aksi", value: "name", align: "center", sortable: false }
       ],
+      headers2: [
+        { text: "Angkatan", align: "left", value: "name" },
+        { text: "Jumlah Hadir", align: "left", value: "count_attendence" },
+        { text: "Jumlah Orang DP", align: "left", value: "people_dp" },
+        { text: "Total DP Diterima", align: "left", value: "count_dp" },
+        { text: "Aksi", value: "name", align: "center", sortable: false }
+      ],
+      headers3: [
+        { text: "Angkatan", align: "left", value: "name" },
+        { text: "Jumlah Tambah", align: "left", value: "count_add" },
+        { text: "Jumlah Batal", align: "left", value: "count_cancel" },
+        { text: "Jumlah Bagi Paket", align: "left", value: "count_packages" },
+        { text: "Aksi", value: "name", align: "center", sortable: false }
+      ],
       items: [],
       showDialog: false,
       dataToDelete: null,
@@ -68,6 +88,27 @@ export default {
   computed: {
     targetId() {
       return this.currentEdit.schedulle.target.id || null
+    },
+    getHeaders() {
+      if (
+        this.currentEdit &&
+        this.currentEdit.schedulle &&
+        this.currentEdit.schedulle.action
+      ) {
+        let actionId = this.currentEdit.schedulle.action.id
+        switch (actionId) {
+          case 1:
+            return this.headers
+
+          case 2:
+            return this.headers2
+
+          case 3:
+            return this.headers3
+          default:
+            return null
+        }
+      }
     }
   },
   watch: {
@@ -121,6 +162,15 @@ export default {
         this.deactivateLoader()
         catchError(e)
       }
+    },
+    getActionId() {
+      if (
+        this.currentEdit &&
+        this.currentEdit.schedulle &&
+        this.currentEdit.schedulle.action
+      )
+        return this.currentEdit.schedulle.action.id
+      else null
     },
     getTargetId(data) {
       return data.schedulle && data.schedulle.target

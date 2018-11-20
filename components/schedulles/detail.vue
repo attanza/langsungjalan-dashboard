@@ -268,7 +268,6 @@ export default {
     async editData() {
       try {
         this.activateLoader()
-        console.log(this.getData())
         if (this.currentEdit) {
           const resp = await axios
             .put(SCHEDULLE_URL + "/" + this.currentEdit.id, this.getData())

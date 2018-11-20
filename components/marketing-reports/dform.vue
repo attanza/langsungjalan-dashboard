@@ -331,7 +331,6 @@ export default {
 
         this.reportDate = moment(data.date).format("YYYY-MM-DD")
         this.reportTime = moment(data.date).format("HH:mm:ss")
-
       }
     },
     submit() {
