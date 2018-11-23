@@ -61,21 +61,21 @@ export default {
         { text: "Angkatan", align: "left", value: "year" },
         { text: "Jumlah Kelas", align: "left", value: "class" },
         { text: "Rata-rata Siswa per Kelas", align: "left", value: "students" },
-        { text: "Aksi", value: "name", align: "center", sortable: false }
+        { text: "Aksi", value: "", align: "center", sortable: false }
       ],
       headers2: [
-        { text: "Angkatan", align: "left", value: "name" },
+        { text: "Angkatan", align: "left", value: "year" },
         { text: "Jumlah Hadir", align: "left", value: "count_attendence" },
         { text: "Jumlah Orang DP", align: "left", value: "people_dp" },
         { text: "Total DP Diterima", align: "left", value: "count_dp" },
-        { text: "Aksi", value: "name", align: "center", sortable: false }
+        { text: "Aksi", value: "", align: "center", sortable: false }
       ],
       headers3: [
-        { text: "Angkatan", align: "left", value: "name" },
+        { text: "Angkatan", align: "left", value: "year" },
         { text: "Jumlah Tambah", align: "left", value: "count_add" },
         { text: "Jumlah Batal", align: "left", value: "count_cancel" },
         { text: "Jumlah Bagi Paket", align: "left", value: "count_packages" },
-        { text: "Aksi", value: "name", align: "center", sortable: false }
+        { text: "Aksi", value: "", align: "center", sortable: false }
       ],
       items: [],
       showDialog: false,
