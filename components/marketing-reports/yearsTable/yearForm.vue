@@ -290,7 +290,7 @@ export default {
       let data = {}
       for (var key in dataToParse) {
         if (dataToParse.hasOwnProperty(key)) {
-          data[key] = dataToParse[key]
+          data[key] = dataToParse[key] == "" ? null : dataToParse[key]
         }
       }
       return data
@@ -299,6 +299,7 @@ export default {
       try {
         this.activateLoader()
         let httpData = this.parseFormData(this.formData)
+        console.log(httpData)
         if (this.isEdit) {
           const resp = await axios
             .put(`${TARGET_YEARS}/${this.dataToEdit.id}`, httpData)

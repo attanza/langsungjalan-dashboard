@@ -58,9 +58,9 @@ export default {
   data() {
     return {
       headers: [
-        { text: "Angkatan", align: "left", value: "name" },
-        { text: "Jumlah Kelas", align: "left", value: "title" },
-        { text: "Rata-rata Siswa per Kelas", align: "left", value: "phone" },
+        { text: "Angkatan", align: "left", value: "year" },
+        { text: "Jumlah Kelas", align: "left", value: "class" },
+        { text: "Rata-rata Siswa per Kelas", align: "left", value: "students" },
         { text: "Aksi", value: "name", align: "center", sortable: false }
       ],
       headers2: [
@@ -136,7 +136,7 @@ export default {
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
         this.totalItems = res.meta.total
-        if (this.pagination.sortBy) {
+        if (sortBy) {
           this.items = this.items.sort((a, b) => {
             const sortA = a[sortBy]
             const sortB = b[sortBy]

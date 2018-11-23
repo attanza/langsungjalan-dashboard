@@ -66,7 +66,7 @@ export default {
     password: "P4sw0rd@langsungjalan.com",
     e1: false,
     loading: false,
-    allowedLogin: ["super-administrator", "administrator"],
+    allowedLogin: ["super-administrator", "administrator", "supervisor"],
     showResetForm: false
   }),
   methods: {
