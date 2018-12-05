@@ -151,7 +151,7 @@ export default {
           hasChild: true,
           children: [
             {
-              title: "Universitas",
+              title: "Perguruan Tinggi",
               icon: "account_balance",
               to: "/universities"
             },
@@ -205,11 +205,11 @@ export default {
           icon: "donut_small",
           to: "/products"
         },
-        {
-          title: "Kontak",
-          icon: "contact_phone",
-          to: "/contacts"
-        },
+        // {
+        //   title: "Kontak",
+        //   icon: "contact_phone",
+        //   to: "/contacts"
+        // },
         {
           title: "Lampiran",
           icon: "attach_file",

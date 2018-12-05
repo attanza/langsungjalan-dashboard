@@ -103,7 +103,7 @@ export default {
           value: "",
           rules: "required|max:50"
         },
-        { key: "email", caption: "Email", value: "", rules: "required|email" },
+        { key: "email", caption: "Email", value: "", rules: "email" },
         {
           key: "phone",
           caption: "Telepon",

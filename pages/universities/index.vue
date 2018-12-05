@@ -58,9 +58,9 @@ export default {
   components: { dform, DownloadDialog },
   mixins: [global],
   data: () => ({
-    title: "Universitas",
+    title: "Perguruan Tinggi",
     headers: [
-      { text: "Universitas", align: "left", value: "name" },
+      { text: "Perguruan Tinggi", align: "left", value: "name" },
       // { text: "Address", value: "address", align: "left" },
       { text: "Nama Kontak", value: "contact_person", align: "left" },
       { text: "Telepon", value: "phone", align: "left" },
