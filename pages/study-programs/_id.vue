@@ -12,6 +12,9 @@
       <v-tab href="#maps">
         Peta
       </v-tab>
+      <v-tab href="#targets">
+        Target
+      </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
       </v-tab-item>
@@ -20,6 +23,9 @@
       </v-tab-item>
       <v-tab-item :id="'maps'">
         <maps/>
+      </v-tab-item>
+      <v-tab-item :id="'targets'">
+        <targets :target-id="targetId"/>
       </v-tab-item>
     </v-tabs>
   </div>
@@ -30,6 +36,7 @@ import { STUDIES_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import { detail, dform, maps } from "~/components/studies"
 import { list } from "~/components/studies/years"
+import { list as targets } from "~/components/targets"
 
 import catchError from "~/utils/catchError"
 export default {
@@ -47,7 +54,15 @@ export default {
       catchError(e)
     }
   },
-  components: { detail, dform, maps, list }
+  components: { detail, dform, maps, list, targets },
+  data() {
+    return {
+      targetId: ""
+    }
+  },
+  created() {
+    this.targetId = this.$store.state.currentEdit.id.toString()
+  }
 }
 </script>
 
