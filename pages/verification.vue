@@ -12,11 +12,11 @@
               <form>
                 <v-text-field
                   v-validate="'required|max:20'"
-                  v-model="targetId"
-                  :error-messages="errors.collect('targetId')"
-                  name="targetId"
+                  v-model="targetCode"
+                  :error-messages="errors.collect('targetCode')"
+                  name="targetCode"
                   prepend-icon="code"
-                  label="15426xxxxx"
+                  label="Kode"
                   data-vv-name="Kode Target"
                 />
                 <v-text-field
@@ -88,8 +88,8 @@
 // import superagent from "superagent"
 import axios from "axios"
 import SetClientToken from "~/utils/SetClientToken"
-import { CHECK_TARGET_CODE_URL } from "~/utils/apis"
-import catchError from "~/utils/catchError"
+import { CHECK_TARGET_CODE_URL, STORE_DP_URL } from "~/utils/apis"
+import catchError, { showNoty } from "~/utils/catchError"
 
 export default {
   layout: "guest",
@@ -98,6 +98,7 @@ export default {
   },
   mixins: [global],
   data: () => ({
+    targetCode: "",
     targetId: "",
     university: "",
     study: "",
@@ -107,11 +108,11 @@ export default {
     isVerified: false,
     loading: false,
     checkBtnDisabled: true,
-    btnSubmitDisabled: true
+    btnSubmitDisabled: false
   }),
   watch: {
-    targetId() {
-      if (this.targetId.length > 8) {
+    targetCode() {
+      if (this.targetCode.length > 6) {
         this.checkBtnDisabled = false
       } else {
         this.checkBtnDisabled = true
@@ -128,9 +129,9 @@ export default {
   methods: {
     async checkVerified() {
       try {
-        if (this.targetId.length > 8) {
+        if (this.targetCode.length > 6) {
           const date = Math.floor(Date.now() / 1000).toString()
-          const endpoint = `${CHECK_TARGET_CODE_URL}/${this.targetId}`
+          const endpoint = `${CHECK_TARGET_CODE_URL}/${this.targetCode}`
           const response = await axios
             .get(endpoint, {
               headers: {
@@ -139,24 +140,70 @@ export default {
               }
             })
             .then(resp => resp.data)
-          console.log(response)
           if (response) {
             this.study = response.study.studyName.name
             this.university = response.study.university.name
             this.isVerified = true
+            this.targetId = response.id
           }
         }
       } catch (e) {
-        console.log(e)
         catchError(e)
       }
     },
     submit() {
       this.$validator.validateAll().then(result => {
         if (result) {
+          this.submitDp()
           return
         }
       })
+    },
+    async submitDp() {
+      try {
+        if (this.targetId) {
+          this.loading = true
+          const date = Math.floor(Date.now() / 1000).toString()
+          const endpoint = `${STORE_DP_URL}`
+          const response = await axios
+            .post(endpoint, this.getData(), {
+              headers: {
+                token: SetClientToken(date),
+                "x-dsi-restful": date
+              }
+            })
+            .then(resp => resp.data)
+          if (response.meta.status === 201) {
+            showNoty("Data berhasil disimpan. Terimakasih.", "success")
+            this.resetData()
+          }
+        }
+      } catch (e) {
+        this.resetData()
+
+        catchError(e)
+      }
+    },
+    getData() {
+      return {
+        marketing_target_id: this.targetId,
+        name: this.name,
+        phone: this.phone,
+        dp: this.dp
+      }
+    },
+    resetData() {
+      this.targetId = ""
+      this.targetCode = ""
+      this.university = ""
+      this.study = ""
+      this.name = ""
+      this.phone = ""
+      this.dp = 0
+      this.isVerified = false
+      this.loading = false
+      this.checkBtnDisabled = true
+      this.btnSubmitDisabled = true
     }
   }
 }
