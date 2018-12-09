@@ -201,15 +201,15 @@ export default {
           ]
         },
         {
-          title: "Produk",
-          icon: "donut_small",
-          to: "/products"
+          title: "Down Payment",
+          icon: "money",
+          to: "/down-payments"
         },
-        // {
-        //   title: "Kontak",
-        //   icon: "contact_phone",
-        //   to: "/contacts"
-        // },
+        {
+          title: "Kontak",
+          icon: "contact_phone",
+          to: "/contacts"
+        },
         {
           title: "Lampiran",
           icon: "attach_file",
