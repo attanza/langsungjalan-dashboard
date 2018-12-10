@@ -7,7 +7,7 @@
         <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>       
         <v-spacer/>
         <v-text-field
-          v-model="search"
+          v-model="pagination.search"
           append-icon="search"
           label="Cari"
           single-line
@@ -86,15 +86,10 @@ export default {
 
   watch: {
     pagination: {
-      handler() {
+      handler: debounce(function() {
         this.pupulateTable()
-      },
+      }, 500),
       deep: true
-    },
-    search() {
-      if (this.search == "" || this.search.length > 2) {
-        this.searchQuery()
-      }
     }
   },
 
@@ -103,17 +98,14 @@ export default {
   },
 
   methods: {
-    searchQuery: debounce(function() {
-      this.pupulateTable()
-    }, 500),
     async pupulateTable() {
       try {
         this.activateLoader()
         this.loading = true
-        const { page, rowsPerPage, descending, sortBy } = this.pagination
-        const endPoint = `${USER_URL}?page=${page}&limit=${rowsPerPage}&search=${
-          this.search
-        }`
+
+        const { descending, sortBy } = this.pagination
+        const endPoint = `${USER_URL}?${this.getQueryParams()}`
+
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
         this.totalItems = res.meta.total
@@ -137,7 +129,6 @@ export default {
         this.deactivateLoader()
       } catch (e) {
         this.loading = false
-        this.showForm = false
         this.deactivateLoader()
         catchError(e)
       }

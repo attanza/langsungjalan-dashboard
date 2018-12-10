@@ -8,7 +8,7 @@
 
         <v-spacer/>
         <v-text-field
-          v-model="search"
+          v-model="pagination.search"
           append-icon="search"
           label="Cari"
           single-line

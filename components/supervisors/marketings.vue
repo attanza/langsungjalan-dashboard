@@ -5,7 +5,7 @@
         <v-toolbar card color="transparent">
           <v-toolbar-items>
             <v-text-field
-              v-model="search"
+              v-model="pagination.search"
               append-icon="search"
               label="Cari"
               single-line
@@ -113,10 +113,9 @@ export default {
 
         if (this.currentEdit) {
           this.loading = true
-          const { page, rowsPerPage } = this.pagination
-          const endPoint = `${MARKETING_URL}?page=${page}&limit=${rowsPerPage}&search=${
-            this.search
-          }&role_id=3&supervisor_id=${this.currentEdit.id}`
+          const endPoint = `${MARKETING_URL}?${this.getQueryParams()}supervisor_id=${
+            this.currentEdit.id
+          }`
           const resp = await axios.get(endPoint).then(res => res.data)
           this.marketings = resp.data
           this.totalItems = resp.meta.total
