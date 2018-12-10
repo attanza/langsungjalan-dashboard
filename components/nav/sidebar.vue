@@ -112,110 +112,13 @@
 
 <script>
 import Cookie from "js-cookie"
-
+import { adminItems, supervisorItems } from "./menu"
 export default {
   data() {
     return {
       clipped: false,
       drawer: true,
-      items: [
-        { title: "Dashboard", icon: "dashboard", to: "/" },
-        {
-          title: "Role dan Permission",
-          icon: "pan_tool",
-          to: "/roles",
-          hasChild: true,
-          children: [
-            { title: "Role", icon: "format_line_spacing", to: "/roles" },
-            {
-              title: "Permission",
-              icon: "format_list_bulleted",
-              to: "/permissions"
-            }
-          ]
-        },
-        {
-          title: "User",
-          icon: "account_circle",
-          to: "/users",
-          hasChild: true,
-          children: [
-            { title: "User", icon: "perm_identity", to: "/users" },
-            { title: "Supervisor", icon: "perm_identity", to: "/supervisors" }
-          ]
-        },
-        {
-          title: "Kampus",
-          icon: "account_balance",
-          to: "/universities",
-          hasChild: true,
-          children: [
-            {
-              title: "Perguruan Tinggi",
-              icon: "account_balance",
-              to: "/universities"
-            },
-            {
-              title: "Nama Studi",
-              icon: "description",
-              to: "/study-names"
-            },
-            {
-              title: "Program Studi",
-              icon: "library_books",
-              to: "/study-programs"
-            }
-          ]
-        },
-        {
-          title: "Marketing",
-          icon: "supervised_user_circle",
-          to: "/marketings",
-          hasChild: true,
-          children: [
-            {
-              title: "List",
-              icon: "supervised_user_circle",
-              to: "/marketings"
-            },
-            {
-              title: "Aksi",
-              icon: "list",
-              to: "/marketing-actions"
-            },
-            {
-              title: "Target",
-              icon: "launch",
-              to: "/targets"
-            },
-            {
-              title: "Jadwal",
-              icon: "date_range",
-              to: "/schedulles"
-            },
-            {
-              title: "Laporan",
-              icon: "find_in_page",
-              to: "/marketing-reports"
-            }
-          ]
-        },
-        {
-          title: "Down Payment",
-          icon: "money",
-          to: "/down-payments"
-        },
-        {
-          title: "Kontak",
-          icon: "contact_phone",
-          to: "/contacts"
-        },
-        {
-          title: "Lampiran",
-          icon: "attach_file",
-          to: "/attachments"
-        }
-      ],
+      items: null,
       mini: false,
       right: true,
       rightDrawer: false,
@@ -237,7 +140,32 @@ export default {
       return "/images/user.png"
     }
   },
+  mounted() {
+    this.getMenus()
+  },
   methods: {
+    getMenus() {
+      if (this.user && this.user.roles) {
+        const role = this.user.roles[0].slug
+        switch (role) {
+          case "super-administrator":
+            this.items = adminItems
+            break
+
+          case "administrator":
+            this.items = adminItems
+            break
+
+          case "supervisor":
+            this.items = supervisorItems
+            break
+
+          default:
+            this.items = null
+            break
+        }
+      }
+    },
     logout() {
       Cookie.remove("lj_token")
       this.$store.commit("token", null)

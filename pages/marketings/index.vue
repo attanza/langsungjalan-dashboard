@@ -30,10 +30,6 @@
           <td>{{ props.item.email }}</td>
           <td>{{ props.item.phone }}</td>
           <td>
-            <span v-if="props.item.supervisors.length > 0">{{ props.item.supervisors[0].name }}</span>
-            <span v-else/>
-          </td>
-          <td>
             <span v-if="props.item.is_active"><v-chip color="green" text-color="white">Active</v-chip></span>
             <span v-else><v-chip>Not Active</v-chip></span>
           </td>
@@ -90,6 +86,18 @@ export default {
     typeDates: ["created_at"]
   }),
 
+  computed: {
+    supervisorId() {
+      if (this.user && this.user.roles) {
+        const role = this.user.roles[0].slug
+        if (role === "supervisor") {
+          return this.user.id
+        }
+      }
+      return ""
+    }
+  },
+
   watch: {
     pagination: {
       handler() {
@@ -116,9 +124,10 @@ export default {
       try {
         this.activateLoader()
         this.loading = true
-        const { page, rowsPerPage, descending, sortBy } = this.pagination
-        const endPoint = `${MARKETING_URL}?page=${page}&limit=${rowsPerPage}&search=${
-          this.search
+        const { descending, sortBy } = this.pagination
+
+        const endPoint = `${MARKETING_URL}?${this.getQueryParams()}supervisor_id=${
+          this.supervisorId
         }`
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
