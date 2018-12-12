@@ -24,7 +24,7 @@
 
       >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.code }}</td>
+          <td><a @click="toDetail(props.item)">{{ props.item.code }}</a></td>
           <td>{{ props.item.schedulle ? props.item.schedulle.code : "" }}</td>
           <td>{{ props.item.schedulle && props.item.schedulle.marketing ? props.item.schedulle.marketing.name : "" }}</td>
           <td>{{ props.item.method }}</td>
@@ -32,9 +32,6 @@
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="getEdit(props.item)">
               <v-icon color="primary">edit</v-icon>
-            </v-btn>
-            <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <v-icon color="primary">remove_red_eye</v-icon>
             </v-btn>
           </td>
         </template>
@@ -71,7 +68,7 @@ export default {
       { text: "Marketing", align: "left", value: "schedulle.marketing.name" },
       { text: "Metode", align: "left", value: "method" },
       { text: "Tanggal", align: "left", value: "date" },
-      { text: "Aksi", value: "", align: "center", sortable: false }
+      { text: "Aksi", align: "center", value: "", sortable: false }
     ],
     items: [],
     confirmMessage: "Yakin mau menghapus ?",

@@ -26,18 +26,13 @@
 
       >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.target ? props.item.target.code : '' }}</td>
+          <td><a @click="toDetail(props.item)">{{ props.item.target ? props.item.target.code : '' }}</a></td>
           <td>{{ props.item.name }}</td>
           <td>{{ props.item.phone }}</td>
           <td>{{ props.item.dp.toLocaleString('id') }}</td>
           <td>
             <span v-if="props.item.is_verified"><v-chip color="green" text-color="white">Verified</v-chip></span>
             <span v-else><v-chip>Not Verified</v-chip></span>
-          </td>
-          <td class="justify-center layout px-0">
-            <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <v-icon color="primary">remove_red_eye</v-icon>
-            </v-btn>
           </td>
         </template>
       </v-data-table>
@@ -66,8 +61,7 @@ export default {
       { text: "Nama", align: "left", value: "name" },
       { text: "Telepon", align: "left", value: "phone" },
       { text: "DP", align: "left", value: "dp" },
-      { text: "Verified", align: "left", value: "is_verified" },
-      { text: "Aksi", value: "", sortable: false }
+      { text: "Verified", align: "left", value: "is_verified" }
     ],
     items: [],
     confirmMessage: "Yakin mau menghapus ?",

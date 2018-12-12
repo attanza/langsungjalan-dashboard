@@ -26,17 +26,11 @@
 
       >
         <template slot="items" slot-scope="props">
-          <td v-if="props.item.studyName">{{ props.item.studyName.name }}</td>
+          <td v-if="props.item.studyName"><a @click="toDetail(props.item)">{{ props.item.studyName.name }}</a></td>
           <td v-if="props.item.university">{{ props.item.university.name }}</td>
-          <!-- <td>{{ props.item.address }}</td> -->
           <td>{{ props.item.contact_person }}</td>
           <td>{{ props.item.phone }}</td>
           <td>{{ props.item.email }}</td>
-          <td class="justify-center layout px-0">
-            <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <Tbtn :tooltip-text="'Show '+title" icon-mode flat color="primary" icon="remove_red_eye" @onClick="toDetail(props.item)"/>
-            </v-btn>
-          </td>
         </template>
       </v-data-table>
     </v-card>
@@ -64,11 +58,9 @@ export default {
     headers: [
       { text: "Nama", align: "left", value: "study_name_id" },
       { text: "Universitas", align: "left", value: "university_id" },
-      // { text: "Address", value: "address", align: "left" },
       { text: "Nama kontak", value: "contact_person", align: "left" },
       { text: "Telepon", value: "phone", align: "left" },
-      { text: "Email", value: "email", align: "left" },
-      { text: "Aksi", align: "center", value: "", sortable: false }
+      { text: "Email", value: "email", align: "left" }
     ],
     items: [],
     confirmMessage: "Yakin mau menghapus ?",

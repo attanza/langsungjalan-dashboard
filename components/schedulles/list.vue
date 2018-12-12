@@ -25,17 +25,11 @@
 
       >
         <template slot="items" slot-scope="props">
+          <td><a @click="toDetail(props.item)">{{ props.item.code }}</a></td>
           <td >{{ props.item.target ? props.item.target.code : "" }}</td>
-          <td >{{ props.item.code }}</td>
           <td v-if="props.item.marketing">{{ props.item.marketing.name }}</td>
           <td v-if="props.item.action">{{ props.item.action.name }}</td>
           <td>{{ props.item.date | moment("DD MMM YYYY HH:mm:ss") }}</td>
-          <!-- <td>{{ props.item.description }}</td> -->
-          <td class="justify-center layout px-0">
-            <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <v-icon color="primary">remove_red_eye</v-icon>
-            </v-btn>
-          </td>
         </template>
       </v-data-table>
     </v-card>
@@ -59,13 +53,11 @@ export default {
   data: () => ({
     title: "Jadwal Marketing",
     headers: [
-      { text: "Kode Target", align: "left", value: "code" },
       { text: "Kode Jadwal", align: "left", value: "code" },
+      { text: "Kode Target", align: "left", value: "code" },
       { text: "Marketing", align: "left", value: "marketing_id" },
       { text: "Aksi Kegiatan", align: "left", value: "marketing_action_id" },
-      { text: "Tanggal", align: "left", value: "date" },
-      // { text: "Description", align: "left", value: "description" },
-      { text: "Aksi", value: "", align: "center", sortable: false }
+      { text: "Tanggal", align: "left", value: "date" }
     ],
     items: [],
     showSearch: false,

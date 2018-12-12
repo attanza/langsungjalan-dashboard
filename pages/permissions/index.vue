@@ -27,14 +27,8 @@
 
       >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.name }}</td>
-          <!-- <td>{{ props.item.slug }}</td> -->
+          <td><a @click="toDetail(props.item)">{{ props.item.name }}</a></td>
           <td>{{ props.item.description }}</td>
-          <td class="justify-center layout px-0">
-            <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <v-icon color="primary">remove_red_eye</v-icon>
-            </v-btn>
-          </td>
         </template>
       </v-data-table>
     </v-card>
@@ -60,9 +54,7 @@ export default {
     title: "Permission",
     headers: [
       { text: "Permission", align: "left", value: "name" },
-      // { text: "Slug", align: "left", value: "slug" },
-      { text: "Deskripsi", align: "left", value: "description" },
-      { text: "Aksi", value: "", align: "center", sortable: false }
+      { text: "Deskripsi", align: "left", value: "description" }
     ],
     items: [],
     confirmMessage: "Yakin mau menghapus ?",

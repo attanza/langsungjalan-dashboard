@@ -25,16 +25,11 @@
 
       >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.target.code }}</td>
+          <td><a @click="toDetail(props.item)">{{ props.item.target.code }}</a></td>
           <td>{{ props.item.name }}</td>
           <td>{{ props.item.title }}</td>
           <td>{{ props.item.email }}</td>
           <td>{{ props.item.phone }}</td>
-          <td class="justify-center layout px-0">
-            <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <v-icon color="primary">remove_red_eye</v-icon>
-            </v-btn>
-          </td>
         </template>
       </v-data-table>
     </v-card>
@@ -63,8 +58,7 @@ export default {
       { text: "Nama", align: "left", value: "name" },
       { text: "Jabatan", align: "left", value: "title" },
       { text: "Email", align: "left", value: "email" },
-      { text: "Telepon", align: "left", value: "phone" },
-      { text: "Aksi", value: "", sortable: false }
+      { text: "Telepon", align: "left", value: "phone" }
     ],
     items: [],
     confirmMessage: "Yakin mau menghapus ?",

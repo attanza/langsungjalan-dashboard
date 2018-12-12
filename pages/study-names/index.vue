@@ -26,13 +26,8 @@
 
       >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.name }}</td>
+          <td><a @click="toDetail(props.item)">{{ props.item.name }}</a></td>
           <td>{{ props.item.description }}</td>
-          <td class="justify-center layout px-0">
-            <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <Tbtn :tooltip-text="'Detail '+title" icon-mode flat color="primary" icon="remove_red_eye" @onClick="toDetail(props.item)"/>
-            </v-btn>
-          </td>
         </template>
       </v-data-table>
     </v-card>
@@ -58,8 +53,7 @@ export default {
     title: "Nama Studi",
     headers: [
       { text: "Nama", align: "left", value: "name" },
-      { text: "Deskripsi", align: "left", value: "description" },
-      { text: "Aksi", value: "", align: "center", sortable: false }
+      { text: "Deskripsi", align: "left", value: "description" }
     ],
     items: [],
     confirmMessage: "Yakin mau menghapus ?",

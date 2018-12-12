@@ -101,7 +101,7 @@ export default {
       ],
       notIncluded: ["description", "address"],
       formData: {},
-      formTitle: "Tambah universitas"
+      formTitle: "Tambah Perguruan Tinggi"
     }
   },
   watch: {

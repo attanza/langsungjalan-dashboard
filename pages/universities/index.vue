@@ -25,17 +25,11 @@
 
       >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.name }}</td>
-          <!-- <td class="text-xs-left">{{ props.item.address }}</td> -->
+          <td><a @click="toDetail(props.item)">{{ props.item.name }}</a></td>
           <td class="text-xs-left">{{ props.item.contact_person }}</td>
           <td class="text-xs-left">{{ props.item.phone }}</td>
           <td class="text-xs-left">{{ props.item.email }}</td>
           <td class="text-xs-left">{{ props.item.city }}</td>
-          <td class="justify-center layout px-0">
-            <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <Tbtn :tooltip-text="'Show '+title" icon-mode flat color="primary" icon="remove_red_eye" @onClick="toDetail(props.item)"/>
-            </v-btn>
-          </td>
         </template>
       </v-data-table>
     </v-card>
@@ -61,12 +55,10 @@ export default {
     title: "Perguruan Tinggi",
     headers: [
       { text: "Perguruan Tinggi", align: "left", value: "name" },
-      // { text: "Address", value: "address", align: "left" },
       { text: "Nama Kontak", value: "contact_person", align: "left" },
       { text: "Telepon", value: "phone", align: "left" },
       { text: "Email", value: "email", align: "left" },
-      { text: "Kota", value: "city", align: "left" },
-      { text: "Aksi", value: "name", sortable: false }
+      { text: "Kota", value: "city", align: "left" }
     ],
     items: [],
     confirmMessage: "Yakin mau menghapus ?",

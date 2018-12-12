@@ -25,16 +25,11 @@
 
       >
         <template slot="items" slot-scope="props">
-          <td >{{ props.item.code }}</td>
+          <td><a @click="toDetail(props.item)">{{ props.item.code }}</a></td>
           <td vif="props.item.study.university">{{ props.item.study.university.name }}</td>
           <td v-if="props.item.study.studyName">{{ props.item.study.studyName.name }} </td>
           <td>{{ props.item.description }}</td>
           <td>{{ props.item.created_at | moment("DD MMM YYYY HH:mm:ss") }}</td>
-          <td class="justify-center layout px-0">
-            <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <v-icon color="primary">remove_red_eye</v-icon>
-            </v-btn>
-          </td>
         </template>
       </v-data-table>
     </v-card>
@@ -69,8 +64,7 @@ export default {
       { text: "Universitas", align: "left", value: "study_program_id" },
       { text: "Studi Program", align: "left", value: "study_program_id" },
       { text: "Deskripsi", align: "left", value: "description" },
-      { text: "Tanggal", align: "left", value: "created_at" },
-      { text: "Aksi", value: "", align: "center", sortable: false }
+      { text: "Tanggal", align: "left", value: "created_at" }
     ],
     items: [],
     showSearch: false,

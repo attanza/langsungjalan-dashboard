@@ -26,17 +26,12 @@
 
       >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.name }}</td>
+          <td><a @click="toDetail(props.item)">{{ props.item.name }}</a></td>
           <td>{{ props.item.email }}</td>
           <td>{{ props.item.phone }}</td>
           <td>
             <span v-if="props.item.is_active"><v-chip color="green" text-color="white">Active</v-chip></span>
             <span v-else><v-chip>Not Active</v-chip></span>
-          </td>
-          <td class="justify-center layout px-0">
-            <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <Tbtn :tooltip-text="'Show '+title" icon-mode flat color="primary" icon="remove_red_eye" @onClick="toDetail(props.item)"/>
-            </v-btn>
           </td>
         </template>
       </v-data-table>
@@ -65,9 +60,7 @@ export default {
       { text: "Nama", align: "left", value: "name" },
       { text: "Email", align: "left", value: "email" },
       { text: "Telepon", align: "left", value: "phone" },
-      { text: "Supervisor", align: "left", value: "supervisor_id" },
-      { text: "Status", align: "left", value: "is_active" },
-      { text: "Aksi", value: "name", sortable: false }
+      { text: "Status", align: "left", value: "is_active" }
     ],
     items: [],
     confirmMessage: "Yakin mau menghapus ?",
