@@ -18,6 +18,7 @@
                     :name="f.key"
                     :data-vv-name="f.key"
                     :data-vv-as="f.caption"
+                    :ref="f.key"
                     type="password"
                   />
                 </v-flex>
