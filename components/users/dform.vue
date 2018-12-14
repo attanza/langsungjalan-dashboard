@@ -104,7 +104,7 @@ export default {
           key: "address",
           caption: "Alamat",
           value: "",
-          rules: "required|max:250"
+          rules: "max:250"
         },
         {
           key: "description",

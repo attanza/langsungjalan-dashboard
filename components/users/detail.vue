@@ -30,10 +30,14 @@
                 color="primary"
               />
             </v-flex>
+            <v-flex sm6 xs12>
+              <Tbtn :bottom="true" tooltip-text="Reset password" text="Reset Password" color="primary" icon="vpn_key" @onClick="showReset = true"/>
+            </v-flex>
           </v-layout>     
         </form>
       </v-container>
     </v-card>
+    <reset-password-form :show="showReset" @onClose="showReset = false"/>
     <Dialog :showDialog="showDialog" text="Yakin mau menghapus ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
   </div>
 </template>
@@ -44,12 +48,13 @@ import { USER_URL } from "~/utils/apis"
 import axios from "axios"
 import Dialog from "~/components/Dialog"
 import catchError, { showNoty } from "~/utils/catchError"
+import resetPasswordForm from "./resetPasswordForm"
 
 export default {
   $_veeValidate: {
     validator: "new"
   },
-  components: { Dialog },
+  components: { Dialog, resetPasswordForm },
   mixins: [global],
   data() {
     return {
@@ -78,7 +83,7 @@ export default {
           key: "address",
           caption: "Alamat",
           value: "",
-          rules: "required|max:250"
+          rules: "max:250"
         },
         {
           key: "description",
@@ -91,7 +96,8 @@ export default {
       formData: {},
       showDialog: false,
       switch1: false,
-      roles: []
+      roles: [],
+      showReset: false
     }
   },
   watch: {
