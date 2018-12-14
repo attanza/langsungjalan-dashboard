@@ -9,11 +9,23 @@
       <v-tab href="#schedulles">
         Jadwal
       </v-tab>
+      <v-tab href="#reports">
+        Laporan
+      </v-tab>
+      <v-tab href="#dps">
+        Down Payment
+      </v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
       </v-tab-item>
       <v-tab-item :id="'schedulles'">
         <schedulleList/>
+      </v-tab-item>
+      <v-tab-item :id="'reports'">
+        <reportList :target-id="targetId"/>
+      </v-tab-item>
+      <v-tab-item :id="'dps'">
+        <dpList :target-id="targetId"/>
       </v-tab-item>
     </v-tabs>
   </div>
@@ -24,6 +36,9 @@ import { TARGET_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import { detail } from "~/components/targets"
 import { schedulleList } from "~/components/schedulles"
+import { reportList } from "~/components/marketing-reports"
+import { dpList } from "~/components/down-payments"
+
 import catchError from "~/utils/catchError"
 
 export default {
@@ -41,9 +56,11 @@ export default {
       catchError(e)
     }
   },
-  components: { schedulleList, detail }
+  components: { schedulleList, detail, reportList, dpList },
+  computed: {
+    targetId() {
+      return this.$route.params ? this.$route.params.id : ""
+    }
+  }
 }
 </script>
-
-<style scoped>
-</style>

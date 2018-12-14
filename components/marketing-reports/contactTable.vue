@@ -71,7 +71,7 @@ export default {
   },
   computed: {
     targetId() {
-      return this.currentEdit.schedulle.target.id || null
+      return this.$route.params ? this.$route.params.id.toString() : ""
     }
   },
   watch: {

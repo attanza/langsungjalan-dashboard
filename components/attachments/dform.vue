@@ -100,9 +100,9 @@ export default {
       default: null
     },
     targetId: {
-      type: Number,
+      type: String,
       required: false,
-      default: 0
+      default: ""
     }
   },
 

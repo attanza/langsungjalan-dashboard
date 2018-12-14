@@ -71,9 +71,9 @@ export default {
       required: true
     },
     targetId: {
-      type: Number,
+      type: String,
       required: false,
-      default: 0
+      default: ""
     },
     isEdit: {
       type: Boolean,

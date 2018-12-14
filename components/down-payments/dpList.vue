@@ -24,41 +24,40 @@
 
       >
         <template slot="items" slot-scope="props">
-          <td><a @click="toDetail(props.item)">{{ props.item.code }}</a></td>
-          <td>{{ props.item.schedulle ? props.item.schedulle.code : "" }}</td>
-          <td>{{ props.item.schedulle && props.item.schedulle.marketing ? props.item.schedulle.marketing.name : "" }}</td>
-          <td>{{ props.item.method }}</td>
-          <td>{{ props.item.date | moment("DD MMM YYYY HH:mm:ss") }}</td>
-          <td class="justify-center layout px-0">
-            <v-btn icon class="mx-0" @click="getEdit(props.item)">
-              <v-icon color="primary">edit</v-icon>
-            </v-btn>
+          <td>
+            <v-checkbox
+              :input-value="props.item.is_verified"
+              hide-details
+              color="primary"
+              @change="editData(props.item)"
+            />
           </td>
+          <td><a @click="toDetail(props.item)">{{ props.item.target ? props.item.target.code : '' }}</a></td>
+          <td>{{ props.item.name }}</td>
+          <td>{{ props.item.phone }}</td>
+          <td>{{ props.item.dp.toLocaleString('id') }}</td>
         </template>
       </v-data-table>
     </v-card>
-    <dform :show="showForm" :is-edit="isEdit" :data-to-edit="dataToEdit" @onClose="onClose" @onAdd="addData" @onEdit="editData"/>
+    <dform :show="showForm" @onClose="showForm = false" @onAdd="addData"/>
+    <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" model="Down Payments" @onClose="showDownloadDialog = false"/>
+
   </div>
 </template>
 <script>
 import debounce from "lodash/debounce"
-import findIndex from "lodash/findIndex"
-import { MARKETING_REPORTS_URL } from "~/utils/apis"
+import { DP_URL } from "~/utils/apis"
 import { global } from "~/mixins"
-import catchError from "~/utils/catchError"
-import axios from "axios"
 import dform from "./dform"
+import axios from "axios"
+import DownloadDialog from "~/components/DownloadDialog"
+import catchError, { showNoty } from "~/utils/catchError"
 
 export default {
-  components: { dform },
+  components: { dform, DownloadDialog },
   mixins: [global],
 
   props: {
-    schedulleId: {
-      type: String,
-      required: false,
-      default: ""
-    },
     targetId: {
       type: String,
       required: false,
@@ -66,21 +65,21 @@ export default {
     }
   },
   data: () => ({
-    title: "Laporan Marketing",
+    title: "Down Payment",
     headers: [
-      { text: "Kode Laporan", align: "left", value: "code" },
-      { text: "Kode Jadwal", align: "left", value: "schedulle.code" },
-      { text: "Marketing", align: "left", value: "schedulle.marketing.name" },
-      { text: "Metode", align: "left", value: "method" },
-      { text: "Tanggal", align: "left", value: "date" },
-      { text: "Aksi", align: "center", value: "", sortable: false }
+      { text: "Verified", align: "left", value: "is_verified" },
+      { text: "Kode Target", align: "left", value: "marketing_target_id" },
+      { text: "Nama", align: "left", value: "name" },
+      { text: "Telepon", align: "left", value: "phone" },
+      { text: "DP", align: "left", value: "dp" }
     ],
     items: [],
     confirmMessage: "Yakin mau menghapus ?",
     showConfirm: false,
-    showForm: false,
-    isEdit: false,
-    dataToEdit: null
+    dataToExport: [],
+    fillable: ["id", "marketing_target_id", "name", "phone", "dp"],
+    typeDates: ["created_at"],
+    checkbox: false
   }),
 
   watch: {
@@ -101,9 +100,9 @@ export default {
       try {
         this.activateLoader()
         const { descending, sortBy } = this.pagination
-        const endPoint = `${MARKETING_REPORTS_URL}?${this.getQueryParams()}schedulle_id=${
-          this.schedulleId
-        }&marketing_target_id=${this.targetId}`
+        const endPoint = `${DP_URL}?${this.getQueryParams()}&marketing_target_id=${
+          this.targetId
+        }`
 
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
@@ -132,25 +131,43 @@ export default {
       }
     },
     toDetail(data) {
-      this.$router.push(`/marketing-reports/${data.id}`)
-    },
-    getEdit(data) {
-      this.dataToEdit = data
-      this.isEdit = true
+      this.$router.push(`/down-payments/${data.id}`)
     },
     addData(data) {
       this.items.unshift(data)
       this.showForm = false
     },
-    editData(data) {
-      let index = findIndex(this.items, { id: data.id })
-      this.items.splice(index, 1, data)
-      this.onClose()
+    downloadData() {
+      this.dataToExport = []
+      this.items.forEach(data => {
+        let d = Object.assign({}, data)
+
+        // Target Marketing
+        delete d.target
+        delete d.marketing_target_id
+        if (data.target) d.target = data.target.code
+
+        this.dataToExport.push(d)
+      })
+      if (this.dataToExport.length) {
+        this.showDownloadDialog = true
+      }
     },
-    onClose() {
-      this.showForm = false
-      this.dataToEdit = null
-      this.isEdit = false
+    async editData(data) {
+      try {
+        data.is_verified = !data.is_verified
+        this.activateLoader()
+        const resp = await axios
+          .put(`${DP_URL}/${data.id}`, data)
+          .then(res => res.data)
+        if (resp.meta.status === 200) {
+          showNoty("Data diperbaharui", "success")
+        }
+        this.deactivateLoader()
+      } catch (e) {
+        this.deactivateLoader()
+        catchError(e)
+      }
     }
   }
 }
