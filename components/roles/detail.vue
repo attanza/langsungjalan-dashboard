@@ -75,7 +75,8 @@ export default {
   },
   methods: {
     toHome() {
-      this.$router.push("/roles")
+      // this.$router.push("/roles")
+      this.$router.go(-1)
     },
     setFields() {
       this.errors.clear()

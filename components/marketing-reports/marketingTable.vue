@@ -78,6 +78,7 @@ export default {
   methods: {
     toHome() {
       this.$router.push("/marketing-reports")
+      this.$router.go(-1)
     },
     formatDate(date) {
       return moment(date).format("dddd / D MMMM YYYY")

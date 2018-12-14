@@ -129,7 +129,8 @@ export default {
       }
     }, 500),
     toHome() {
-      this.$router.push("/contacts")
+      // this.$router.push("/contacts")
+      this.$router.go(-1)
     },
     setFields() {
       this.errors.clear()

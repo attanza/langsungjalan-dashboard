@@ -146,7 +146,8 @@ export default {
   },
   methods: {
     toHome() {
-      this.$router.push("/study-programs")
+      // this.$router.push("/study-programs")
+      this.$router.go(-1)
     },
     setFields() {
       this.errors.clear()

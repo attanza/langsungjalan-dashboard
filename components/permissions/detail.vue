@@ -68,7 +68,8 @@ export default {
   },
   methods: {
     toHome() {
-      this.$router.push("/permissions")
+      // this.$router.push("/permissions")
+      this.$router.go(-1)
     },
     setFields() {
       this.errors.clear()

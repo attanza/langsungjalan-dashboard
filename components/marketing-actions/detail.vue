@@ -71,7 +71,8 @@ export default {
   },
   methods: {
     toHome() {
-      this.$router.push("/marketing-actions")
+      // this.$router.push("/marketing-actions")
+      this.$router.go(-1)
     },
     setFields() {
       this.errors.clear()

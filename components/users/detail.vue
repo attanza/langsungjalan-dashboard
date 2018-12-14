@@ -106,7 +106,8 @@ export default {
   },
   methods: {
     toHome() {
-      this.$router.push("/users")
+      // this.$router.push("/users")
+      this.$router.go(-1)
     },
     setFields() {
       this.errors.clear()

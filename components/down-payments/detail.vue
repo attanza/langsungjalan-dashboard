@@ -142,7 +142,8 @@ export default {
       }
     }, 500),
     toHome() {
-      this.$router.push("/down-payments")
+      // this.$router.push("/down-payments")
+      this.$router.go(-1)
     },
     setFields() {
       this.errors.clear()

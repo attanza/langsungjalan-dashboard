@@ -136,7 +136,8 @@ export default {
       }
     },
     toHome() {
-      this.$router.push("/targets")
+      // this.$router.push("/targets")
+      this.$router.go(-1)
     },
     submit() {
       this.$validator.validateAll().then(result => {

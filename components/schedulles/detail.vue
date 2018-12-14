@@ -255,7 +255,8 @@ export default {
       }
     },
     toHome() {
-      this.$router.push("/schedulles")
+      // this.$router.push("/schedulles")
+      this.$router.go(-1)
     },
     submit() {
       this.$validator.validateAll().then(result => {

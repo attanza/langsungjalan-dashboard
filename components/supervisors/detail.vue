@@ -105,7 +105,8 @@ export default {
   },
   methods: {
     toHome() {
-      this.$router.push("/supervisors")
+      // this.$router.push("/supervisors")
+      this.$router.go(-1)
     },
     setFields() {
       this.errors.clear()
