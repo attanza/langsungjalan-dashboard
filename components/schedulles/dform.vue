@@ -235,7 +235,7 @@ export default {
       try {
         this.setAuth()
         this.marketings = await axios
-          .get(COMBO_DATA_URL + "MarketingAll")
+          .get(COMBO_DATA_URL + `MarketingAll&supervisor_id=${this.user.id}`)
           .then(res => res.data)
 
         this.actions = await axios
