@@ -25,16 +25,10 @@
 
       >
         <template slot="items" slot-scope="props">
-          <td v-if="props.item.studyName">{{ props.item.studyName.name }}</td>
-          <!-- <td>{{ props.item.address }}</td> -->
+          <td v-if="props.item.studyName"> <a @click="toDetail(props.item)">{{ props.item.studyName.name }}</a> </td>
           <td>{{ props.item.contact_person }}</td>
           <td>{{ props.item.phone }}</td>
           <td>{{ props.item.email }}</td>
-          <td class="justify-center layout px-0">
-            <v-btn icon class="mx-0" @click="toDetail(props.item)">
-              <Tbtn :tooltip-text="'Show '+title" icon-mode flat color="primary" icon="remove_red_eye" @onClick="toDetail(props.item)"/>
-            </v-btn>
-          </td>
         </template>
       </v-data-table>
     </v-card>

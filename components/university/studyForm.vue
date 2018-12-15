@@ -31,7 +31,7 @@
                       :data-vv-name="'study_name_id'"
                       :data-vv-as="'Nama studi'"
                       v-model="formData['study_name_id']"
-                      label="Select Study Program Name"
+                      label="Pilih nama program studi"
                       single-line
                       item-text="name"
                       item-value="id"
