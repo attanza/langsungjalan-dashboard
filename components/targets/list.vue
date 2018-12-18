@@ -2,7 +2,14 @@
   <div>
     <v-card class="pt-3">
       <v-toolbar card color="transparent">
-        <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
+        <Tbtn
+          :bottom="true"
+          :tooltip-text="'Tambah ' + title "
+          icon-mode
+          color="primary"
+          icon="add"
+          @onClick="showForm = true"
+        />
         <!-- <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>        -->
         <v-spacer/>
         <v-text-field
@@ -12,7 +19,6 @@
           single-line
           hide-details
         />
-
       </v-toolbar>
       <v-data-table
         :headers="headers"
@@ -22,19 +28,26 @@
         :total-items="totalItems"
         :rows-per-page-items="rowsPerPage"
         class="elevation-1"
-
       >
         <template slot="items" slot-scope="props">
-          <td><a @click="toDetail(props.item)">{{ props.item.code }}</a></td>
+          <td>
+            <a @click="toDetail(props.item)">{{ props.item.code }}</a>
+          </td>
           <td vif="props.item.study.university">{{ props.item.study.university.name }}</td>
-          <td v-if="props.item.study.studyName">{{ props.item.study.studyName.name }} </td>
-          <td>{{ props.item.description }}</td>
+          <td v-if="props.item.study.studyName">{{ props.item.study.studyName.name }}</td>
           <td>{{ props.item.created_at | moment("DD MMM YYYY HH:mm:ss") }}</td>
         </template>
       </v-data-table>
     </v-card>
     <dform :show="showForm" @onClose="showForm = false" @onAdd="addData"/>
-    <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" model="Schedulle" @onClose="showDownloadDialog = false"/>
+    <DownloadDialog
+      :show-dialog="showDownloadDialog"
+      :data-to-export="dataToExport"
+      :fillable="fillable"
+      :type-dates="typeDates"
+      model="Schedulle"
+      @onClose="showDownloadDialog = false"
+    />
   </div>
 </template>
 <script>
@@ -63,7 +76,6 @@ export default {
       { text: "Kode", align: "left", value: "code" },
       { text: "Universitas", align: "left", value: "study_program_id" },
       { text: "Studi Program", align: "left", value: "study_program_id" },
-      { text: "Deskripsi", align: "left", value: "description" },
       { text: "Tanggal", align: "left", value: "created_at" }
     ],
     items: [],

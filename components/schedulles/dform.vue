@@ -37,11 +37,10 @@
                     name="code"
                     data-vv-name="code"
                     data-vv-as="Kode jadwal"
-
                   />
                 </v-flex>
                 <v-flex v-if="marketings" xs12>
-                  <label>Marketing</label>                
+                  <label>Marketing</label>
                   <v-autocomplete
                     v-validate="'required|numeric'"
                     :items="marketings"
@@ -57,7 +56,7 @@
                   />
                 </v-flex>
                 <v-flex v-if="actions" xs12>
-                  <label>Aksi</label>                
+                  <label>Aksi</label>
                   <v-autocomplete
                     v-validate="'required|numeric'"
                     :items="actions"
@@ -75,7 +74,7 @@
               </v-layout>
               <v-layout>
                 <v-flex sm6 xs12>
-                  <label>Tanggal</label>                
+                  <label>Tanggal</label>
                   <v-menu
                     ref="menu"
                     :close-on-content-click="false"
@@ -99,12 +98,11 @@
                       readonly
                     />
                     <v-date-picker v-model="schedulleDate" @input="$refs.menu.save(schedulleDate)"/>
-
                   </v-menu>
                 </v-flex>
 
                 <v-flex sm6 xs12>
-                  <label>Waktu</label>                
+                  <label>Waktu</label>
                   <v-menu
                     ref="menuTime"
                     :close-on-content-click="false"
@@ -179,9 +177,9 @@ export default {
       required: true
     },
     targetId: {
-      type: Number,
+      type: String,
       required: false,
-      default: 0
+      default: ""
     }
   },
   data() {

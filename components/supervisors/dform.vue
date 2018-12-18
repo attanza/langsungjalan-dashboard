@@ -20,18 +20,14 @@
                       :data-vv-name="f.key"
                       :data-vv-as="f.caption"
                       :type="f.key == 'password' ? 'password' : 'text'"
-                      color="purple darken-2"                      
+                      color="purple darken-2"
                     />
                   </div>
                   <div v-if="f.key == 'is_active'">
-                    <v-switch
-                      v-model="formData['is_active']"
-                      label="Aktif"
-                      color="primary"
-                    />
+                    <v-switch v-model="formData['is_active']" label="Aktif" color="primary"/>
                   </div>
                 </v-flex>
-              </v-layout>     
+              </v-layout>
             </form>
           </v-container>
         </v-card-text>
@@ -88,7 +84,7 @@ export default {
           key: "address",
           caption: "Alamat",
           value: "",
-          rules: "required|max:250"
+          rules: "max:250"
         },
         {
           key: "description",

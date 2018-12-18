@@ -2,17 +2,25 @@
   <div>
     <v-card class="pt-3">
       <v-toolbar card color="transparent">
-        <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
-        <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>       
+        <Tbtn
+          :bottom="true"
+          :tooltip-text="'Tambah ' + title "
+          icon-mode
+          color="primary"
+          icon="add"
+          @onClick="showForm = true"
+        />
+        <Tbtn
+          :bottom="true"
+          :tooltip-text="'Download ' + title + ' data'"
+          icon-mode
+          color="primary"
+          icon="cloud_download"
+          @onClick="downloadData"
+        />
 
         <v-spacer/>
-        <v-text-field
-          v-model="search"
-          append-icon="search"
-          label="Cari"
-          single-line
-          hide-details
-        />
+        <v-text-field v-model="search" append-icon="search" label="Cari" single-line hide-details/>
       </v-toolbar>
       <v-data-table
         :headers="headers"
@@ -22,10 +30,11 @@
         :total-items="totalItems"
         :rows-per-page-items="rowsPerPage"
         class="elevation-1"
-
       >
         <template slot="items" slot-scope="props">
-          <td v-if="props.item.studyName"> <a @click="toDetail(props.item)">{{ props.item.studyName.name }}</a> </td>
+          <td v-if="props.item.studyName">
+            <a @click="toDetail(props.item)">{{ props.item.studyName.name }}</a>
+          </td>
           <td>{{ props.item.contact_person }}</td>
           <td>{{ props.item.phone }}</td>
           <td>{{ props.item.email }}</td>
@@ -33,8 +42,14 @@
       </v-data-table>
     </v-card>
     <studyForm :show="showForm" @onClose="showForm = false" @onAdd="addData"/>
-    <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" model="StudyProgram" @onClose="showDownloadDialog = false"/>
-
+    <DownloadDialog
+      :show-dialog="showDownloadDialog"
+      :data-to-export="dataToExport"
+      :fillable="fillable"
+      :type-dates="typeDates"
+      model="StudyProgram"
+      @onClose="showDownloadDialog = false"
+    />
   </div>
 </template>
 <script>
@@ -55,11 +70,9 @@ export default {
 
     headers: [
       { text: "Nama", align: "left", value: "study_name_id" },
-      // { text: "Address", value: "address", align: "left" },
-      { text: "Nama kontal", value: "contact_person", align: "left" },
+      { text: "Nama kontak", value: "contact_person", align: "left" },
       { text: "Telepon", value: "phone", align: "left" },
-      { text: "Email", value: "email", align: "left" },
-      { text: "Aksi", align: "center", value: "", sortable: false }
+      { text: "Email", value: "email", align: "left" }
     ],
     items: [],
     confirmMessage: "Yakin mau menghapus ?",

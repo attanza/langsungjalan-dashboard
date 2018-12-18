@@ -3,13 +3,37 @@
     <v-card>
       <v-container grid-list-md fluid style="padding-top: 5px;">
         <v-toolbar color="transparent" card>
-          <Tbtn :bottom="true" tooltip-text="Buat Jadwal" text="Buat Jadwal" color="primary" @onClick="schedulleFormShow = true"/>
+          <Tbtn
+            :bottom="true"
+            tooltip-text="Buat Jadwal"
+            text="Buat Jadwal"
+            color="primary"
+            @onClick="schedulleFormShow = true"
+          />
           <v-spacer/>
-          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Kembali" @onClick="toHome"/>
-          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Simpan" @onClick="submit"/>              
-          <Tbtn color="primary" icon="refresh" icon-mode tooltip-text="Refresh" @onClick="setField"/>  
-          <Tbtn color="primary" icon="delete" icon-mode tooltip-text="Hapus" @onClick="confirmDelete"/>  
-        </v-toolbar> 
+          <Tbtn
+            color="primary"
+            icon="chevron_left"
+            icon-mode
+            tooltip-text="Kembali"
+            @onClick="toHome"
+          />
+          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Simpan" @onClick="submit"/>
+          <Tbtn
+            color="primary"
+            icon="refresh"
+            icon-mode
+            tooltip-text="Refresh"
+            @onClick="setField"
+          />
+          <Tbtn
+            color="primary"
+            icon="delete"
+            icon-mode
+            tooltip-text="Hapus"
+            @onClick="confirmDelete"
+          />
+        </v-toolbar>
         <form class="mt-3">
           <v-layout row wrap>
             <v-flex xs12>
@@ -24,7 +48,7 @@
               />
             </v-flex>
             <v-flex v-if="comboData" xs12>
-              <label>Universitas</label>                
+              <label>Universitas</label>
               <v-autocomplete
                 :items="comboData"
                 v-model="university_id"
@@ -36,7 +60,7 @@
               />
             </v-flex>
             <v-flex v-if="comboData2" xs12>
-              <label>Studi Program</label>                
+              <label>Studi Program</label>
               <v-autocomplete
                 v-validate="'required|numeric'"
                 :items="comboData2"
@@ -65,9 +89,18 @@
         </form>
       </v-container>
     </v-card>
-    <Dialog :showDialog="dialog" text="Yakin mau menghapus ?" @onClose="dialog = false" @onConfirmed="removeData"/>
-    <schedulle-form :show="schedulleFormShow" :target-id="targetId" @onClose="schedulleFormShow = false" @onAdd="addSchedulle"/>
-
+    <Dialog
+      :showDialog="dialog"
+      text="Yakin mau menghapus ?"
+      @onClose="dialog = false"
+      @onConfirmed="removeData"
+    />
+    <schedulle-form
+      :show="schedulleFormShow"
+      :target-id="targetId"
+      @onClose="schedulleFormShow = false"
+      @onAdd="addSchedulle"
+    />
   </div>
 </template>
 
@@ -98,7 +131,7 @@ export default {
   },
   computed: {
     targetId() {
-      return this.currentEdit.id || null
+      return this.currentEdit.id.toString() || null
     }
   },
   watch: {

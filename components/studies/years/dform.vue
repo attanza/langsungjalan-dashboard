@@ -11,7 +11,6 @@
               <v-layout row wrap class="mt-3 px-2">
                 <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
                   <div v-if="!inArray(notIncluded, f.key)">
-
                     <label>{{ f.caption }}</label>
                     <v-text-field
                       v-validate="f.rules"
@@ -23,7 +22,7 @@
                     />
                   </div>
                 </v-flex>
-              </v-layout>       
+              </v-layout>
             </form>
           </v-container>
         </v-card-text>
@@ -92,7 +91,7 @@ export default {
       ],
       formData: {},
       formTitle: "Tambah Angkatan",
-      typeNumber: ["class_per_year", "students_per_class"],
+      typeNumber: ["class_per_year", "students_per_class", "year"],
       notIncluded: ["study_program_id"]
     }
   },

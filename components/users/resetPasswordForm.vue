@@ -22,7 +22,7 @@
                     type="password"
                   />
                 </v-flex>
-              </v-layout>     
+              </v-layout>
             </form>
           </v-container>
         </v-card-text>
@@ -106,7 +106,6 @@ export default {
         delete postData["marketings"]
         delete postData["roles"]
         delete postData["supervisors"]
-        console.log("postData", postData)
         const resp = await axios
           .put(`${USER_URL}/${this.currentEdit.id}`, postData)
           .then(res => res.data)

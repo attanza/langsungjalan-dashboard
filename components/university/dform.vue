@@ -9,7 +9,7 @@
           <v-container grid-list-md>
             <form>
               <v-layout row wrap>
-                <v-flex v-for="(f, index) in fillable" v-if="!inArray(notIncluded, f.key)" :key="index" sm6 xs12>
+                <v-flex v-for="(f, index) in fillable" v-if="!inArray(notIncluded, f.key)" :key="index" xs12>
                   <label>{{ f.caption }}</label>
                   <v-text-field
                     v-validate="f.rules"
@@ -21,7 +21,7 @@
 
                   />
                 </v-flex>
-                <v-flex v-for="(f, index) in fillable" v-if="inArray(notIncluded, f.key)" :key="index" sm6 xs12>
+                <v-flex v-for="(f, index) in fillable" v-if="inArray(notIncluded, f.key)" :key="index" xs12>
                   <label>{{ f.caption }}</label>
                   <v-textarea
                     v-validate="f.rules"

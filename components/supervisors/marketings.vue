@@ -26,18 +26,39 @@
             />
           </v-toolbar-items>
           <v-spacer/>
-          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Kembali" @onClick="toHome"/>
-          <Tbtn v-if="!addMode" color="primary" icon="add" icon-mode tooltip-text="Tambah Marketing" @onClick="addMode = true"/>  
-          <Tbtn v-if="addMode" color="primary" icon="save" icon-mode tooltip-text="Simpan" @onClick="addMarketing"/>      
-          <Tbtn color="primary" icon="refresh" icon-mode tooltip-text="Refresh" @onClick="repopulateData"/>              
-
+          <Tbtn
+            color="primary"
+            icon="chevron_left"
+            icon-mode
+            tooltip-text="Kembali"
+            @onClick="toHome"
+          />
+          <Tbtn
+            v-if="!addMode"
+            color="primary"
+            icon="add"
+            icon-mode
+            tooltip-text="Tambah Marketing"
+            @onClick="addMode = true"
+          />
+          <Tbtn
+            v-if="addMode"
+            color="primary"
+            icon="save"
+            icon-mode
+            tooltip-text="Simpan"
+            @onClick="addMarketing"
+          />
+          <Tbtn
+            color="primary"
+            icon="refresh"
+            icon-mode
+            tooltip-text="Refresh"
+            @onClick="repopulateData"
+          />
         </v-toolbar>
         <v-layout row wrap>
-          <v-flex
-            v-for="marketing in marketings"
-            :key="marketing.id"
-            md4 sm6 xs12
-          >
+          <v-flex v-for="marketing in marketings" :key="marketing.id" md4 sm6 xs12>
             <v-card color="primary" dark>
               <v-img
                 :src="marketing.photo !== '' ? marketing.photo: '/images/user.png'"
@@ -61,9 +82,13 @@
         </v-layout>
       </v-container>
     </v-card>
-    <Dialog :showDialog="showDialog" text="Yakin mau menghapus ?" @onClose="clear" @onConfirmed="detachMarketing"/>
+    <Dialog
+      :showDialog="showDialog"
+      text="Yakin mau menghapus ?"
+      @onClose="clear"
+      @onConfirmed="detachMarketing"
+    />
     <Loader :loading="loading"/>
-
   </div>
 </template>
 
@@ -94,10 +119,11 @@ export default {
     }
   },
   watch: {
-    search() {
-      if (this.search != "") {
-        this.searchMarketing()
-      }
+    pagination: {
+      handler: debounce(function() {
+        this.getMarketings()
+      }, 500),
+      deep: true
     }
   },
   mounted() {

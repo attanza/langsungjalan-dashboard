@@ -3,6 +3,22 @@
     <v-card>
       <v-card class="pt-3">
         <v-toolbar card color="transparent">
+          <Tbtn
+            color="primary"
+            icon="chevron_left"
+            icon-mode
+            tooltip-text="Kembali"
+            @onClick="toHome"
+          />
+          <Tbtn
+            :bottom="true"
+            :tooltip-text="'Tambah ' + title "
+            icon-mode
+            color="primary"
+            icon="add"
+            @onClick="showForm = true"
+          />
+          <v-spacer/>
           <v-text-field
             v-model="search"
             append-icon="search"
@@ -10,10 +26,6 @@
             single-line
             hide-details
           />
-          <v-spacer/>
-          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Kembali" @onClick="toHome"/>
-          <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
-          
         </v-toolbar>
         <v-data-table
           :headers="headers"
@@ -23,7 +35,6 @@
           :total-items="totalItems"
           :rows-per-page-items="rowsPerPage"
           class="elevation-1"
-
         >
           <template slot="items" slot-scope="props">
             <td>{{ props.item.year }}</td>
@@ -40,10 +51,22 @@
           </template>
         </v-data-table>
       </v-card>
-      <dform :form="showForm" :is-edit="isEdit" :year-edit="yearEdit" @onClose="showForm = false" @onAdd="addData" @onEdit="editData"/>
-      <Dialog :showDialog="showDialog" text="Yakin mau menghapus ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
-
-  </v-card></div>
+      <dform
+        :form="showForm"
+        :is-edit="isEdit"
+        :year-edit="yearEdit"
+        @onClose="showForm = false"
+        @onAdd="addData"
+        @onEdit="editData"
+      />
+      <Dialog
+        :showDialog="showDialog"
+        text="Yakin mau menghapus ?"
+        @onClose="showDialog = false"
+        @onConfirmed="removeData"
+      />
+    </v-card>
+  </div>
 </template>
 <script>
 import _ from "lodash"

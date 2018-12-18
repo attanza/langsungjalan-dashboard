@@ -33,7 +33,7 @@
         </template>
       </v-data-table>
     </v-card>
-    <dform :show="showForm" :target-id="parseInt(targetId)" @onClose="showForm = false" @onAdd="addData"/>
+    <dform :show="showForm" :target-id="targetId" @onClose="showForm = false" @onAdd="addData"/>
     <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" model="Schedulle" @onClose="showDownloadDialog = false"/>
   </div>
 </template>
@@ -76,8 +76,7 @@ export default {
   computed: {
     targetId() {
       if (this.currentEdit && this.currentEdit.study_program_id) {
-        // Make sure current edit is Marketing Target
-        return this.currentEdit.id
+        return this.currentEdit.id.toString()
       } else {
         return ""
       }
