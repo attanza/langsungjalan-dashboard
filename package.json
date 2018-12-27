@@ -14,7 +14,7 @@
     "test:unit": "TEST=unit yarn ava ./test/specs/*.js --verbose",
     "test:e2e": "TEST=e2e yarn ava ./test/e2e/*.js --verbose",
     "test": "yarn test:unit & yarn test:e2e",
-    "prod": "pm2 start npm ecosystem.config.js --name dashboard -- start"
+    "prod": "pm2 delete dashboard && pm2 start npm ecosystem.config.js --name dashboard -- start"
   },
   "config": {
     "nuxt": {

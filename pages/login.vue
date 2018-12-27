@@ -59,8 +59,8 @@ export default {
   },
   mixins: [global],
   data: () => ({
-    email: "super_administrator@langsungjalan.com",
-    password: "P4sw0rd@langsungjalan.com",
+    email: "",
+    password: "",
     e1: false,
     loading: false,
     allowedLogin: ["super-administrator", "administrator", "supervisor"]
