@@ -3,8 +3,22 @@
     <h2 class="primary--text mb-3">{{ title }}</h2>
     <v-card class="pt-3">
       <v-toolbar card color="transparent">
-        <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
-        <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>       
+        <Tbtn
+          :bottom="true"
+          :tooltip-text="'Tambah ' + title "
+          icon-mode
+          color="primary"
+          icon="add"
+          @onClick="showForm = true"
+        />
+        <Tbtn
+          :bottom="true"
+          :tooltip-text="'Download ' + title + ' data'"
+          icon-mode
+          color="primary"
+          icon="cloud_download"
+          @onClick="downloadData"
+        />
 
         <v-spacer/>
         <v-text-field
@@ -23,32 +37,43 @@
         :total-items="totalItems"
         :rows-per-page-items="rowsPerPage"
         class="elevation-1"
-
       >
         <template slot="items" slot-scope="props">
-          <td><a @click="toDetail(props.item)">{{ props.item.name }}</a></td>
+          <td>
+            <a @click="toDetail(props.item)">{{ props.item.name }}</a>
+          </td>
           <td>{{ props.item.email }}</td>
           <td>{{ props.item.phone }}</td>
           <td>
-            <span v-if="props.item.is_active"><v-chip color="green" text-color="white">Active</v-chip></span>
-            <span v-else><v-chip>Not Active</v-chip></span>
+            <span v-if="props.item.is_active">
+              <v-chip color="green" text-color="white">Active</v-chip>
+            </span>
+            <span v-else>
+              <v-chip>Not Active</v-chip>
+            </span>
           </td>
         </template>
       </v-data-table>
     </v-card>
     <dform :show="showForm" @onClose="showForm = false" @onAdd="addData"/>
-    <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" model="Marketing" @onClose="showDownloadDialog = false"/>
-
+    <DownloadDialog
+      :show-dialog="showDownloadDialog"
+      :data-to-export="dataToExport"
+      :fillable="fillable"
+      :type-dates="typeDates"
+      model="Marketing"
+      @onClose="showDownloadDialog = false"
+    />
   </div>
 </template>
 <script>
-import _ from "lodash"
 import { MARKETING_URL } from "~/utils/apis"
 import { global } from "~/mixins"
 import { dform } from "~/components/marketings"
 import axios from "axios"
 import catchError from "~/utils/catchError"
 import DownloadDialog from "~/components/DownloadDialog"
+import debounce from "lodash/debounce"
 
 export default {
   middleware: "auth",
@@ -93,9 +118,9 @@ export default {
 
   watch: {
     pagination: {
-      handler() {
+      handler: debounce(function() {
         this.pupulateTable()
-      },
+      }, 500),
       deep: true
     },
     search() {
@@ -105,14 +130,7 @@ export default {
     }
   },
 
-  mounted() {
-    this.pupulateTable()
-  },
-
   methods: {
-    searchQuery: _.debounce(function() {
-      this.pupulateTable()
-    }, 500),
     async pupulateTable() {
       try {
         this.activateLoader()

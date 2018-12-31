@@ -103,6 +103,8 @@ import {
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
 import debounce from "lodash/debounce"
+import union from "lodash/union"
+
 import Dialog from "~/components/Dialog"
 import Loader from "~/components/Loader"
 
@@ -165,9 +167,13 @@ export default {
 
       this.loading = true
       if (this.marketingsToAdd.length > 0 && this.currentEdit) {
+        let exisitingMarketings = []
+        if (this.marketings.length) {
+          this.marketings.map(m => exisitingMarketings.push(m.id))
+        }
         let data = {
           supervisor_id: this.currentEdit.id,
-          marketings: this.marketingsToAdd
+          marketings: union(exisitingMarketings, this.marketingsToAdd)
         }
         axios
           .post(ADD_MARKETING_URL, data)

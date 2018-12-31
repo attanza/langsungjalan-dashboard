@@ -137,9 +137,7 @@ export default {
     },
     setFields() {
       this.errors.clear()
-      if (this.currentEdit) {
-        this.fillable.forEach(data => (this.formData[data.key] = data.value))
-      }
+      this.fillable.forEach(data => (this.formData[data.key] = data.value))
     },
     submit() {
       this.$validator.validateAll().then(result => {

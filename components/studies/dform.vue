@@ -155,13 +155,12 @@ export default {
   },
   methods: {
     onClose() {
+      this.formData = {}
       this.$emit("onClose")
     },
     setFields() {
       this.errors.clear()
-      if (this.currentEdit) {
-        this.fillable.forEach(data => (this.formData[data.key] = data.value))
-      }
+      this.fillable.forEach(data => (this.formData[data.key] = data.value))
     },
     setYears() {
       for (let i = 2000; i < 2030; i++) {

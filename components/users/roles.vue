@@ -3,19 +3,43 @@
     <v-card>
       <v-container fluid>
         <v-toolbar color="transparent" card>
-          <v-text-field
+          <!-- <v-text-field
             v-model="search"
             append-icon="search"
             label="Cari"
             single-line
             hide-details
-          />
+          />-->
           <v-spacer/>
-          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Kembali" @onClick="toHome"/>
-          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Simpan" @onClick="showDialog = true"/>              
+          <Tbtn
+            color="primary"
+            icon="chevron_left"
+            icon-mode
+            tooltip-text="Kembali"
+            @onClick="toHome"
+          />
+          <Tbtn
+            color="primary"
+            icon="save"
+            icon-mode
+            tooltip-text="Simpan"
+            @onClick="showDialog = true"
+          />
 
-          <Tbtn color="primary" tooltip-text="Tandai sama" icon-mode icon="check_box" @onClick="selectAll"/>
-          <Tbtn color="primary" tooltip-text="Tidak ditandai semua" icon-mode icon="check_box_outline_blank" @onClick="clearAll"/> 
+          <Tbtn
+            color="primary"
+            tooltip-text="Tandai sama"
+            icon-mode
+            icon="check_box"
+            @onClick="selectAll"
+          />
+          <Tbtn
+            color="primary"
+            tooltip-text="Tidak ditandai semua"
+            icon-mode
+            icon="check_box_outline_blank"
+            @onClick="clearAll"
+          />
         </v-toolbar>
         <v-card-text>
           <v-layout v-if="items" row wrap>
@@ -26,7 +50,12 @@
         </v-card-text>
       </v-container>
     </v-card>
-    <Dialog :showDialog="showDialog" text="Yakin akan diperbaharui ?" @onClose="showDialog = false" @onConfirmed="attachRoles"/>
+    <Dialog
+      :showDialog="showDialog"
+      text="Yakin akan diperbaharui ?"
+      @onClose="showDialog = false"
+      @onConfirmed="attachRoles"
+    />
   </div>
 </template>
 

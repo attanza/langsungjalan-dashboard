@@ -18,10 +18,9 @@
                     :name="f.key"
                     :data-vv-name="f.key"
                     :data-vv-as="f.caption"
-
                   />
                 </v-flex>
-              </v-layout>     
+              </v-layout>
             </form>
           </v-container>
         </v-card-text>
@@ -74,6 +73,7 @@ export default {
   methods: {
     onClose() {
       this.$emit("onClose")
+      this.formData = {}
     },
     submit() {
       this.$validator.validateAll().then(result => {
@@ -98,6 +98,7 @@ export default {
         this.deactivateLoader()
       } catch (e) {
         this.deactivateLoader()
+        this.onClose()
         catchError(e)
       }
     }
