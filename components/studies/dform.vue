@@ -19,11 +19,10 @@
                       :name="f.key"
                       :data-vv-name="f.key"
                       :data-vv-as="f.caption"
-
                     />
                   </div>
                   <div v-if="f.key == 'study_name_id' && comboData2">
-                    <label>Nama Studi</label>                
+                    <label>Nama Studi</label>
                     <v-autocomplete
                       v-validate="'required|numeric'"
                       :items="comboData2"
@@ -35,11 +34,10 @@
                       single-line
                       item-text="name"
                       item-value="id"
-                      cache-items
                     />
                   </div>
                   <div v-if="f.key == 'university_id' && comboData">
-                    <label>Universitas</label>                
+                    <label>Universitas</label>
                     <v-autocomplete
                       v-validate="'required|numeric'"
                       :items="comboData"
@@ -51,7 +49,6 @@
                       single-line
                       item-text="name"
                       item-value="id"
-                      cache-items
                     />
                   </div>
                   <div v-if="f.key == 'address' || f.key == 'description'">
@@ -66,7 +63,7 @@
                     />
                   </div>
                 </v-flex>
-              </v-layout>      
+              </v-layout>
             </form>
           </v-container>
         </v-card-text>

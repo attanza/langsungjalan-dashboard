@@ -22,7 +22,7 @@
                     />
                   </div>
                   <div v-if="f.key == 'roles' && comboData">
-                    <label>Role</label>                
+                    <label>Role</label>
                     <v-autocomplete
                       v-validate="'required|numeric'"
                       :items="comboData"
@@ -34,19 +34,14 @@
                       single-line
                       item-text="name"
                       item-value="id"
-                      cache-items
                       multiple
                     />
                   </div>
                   <div v-if="f.key == 'is_active'">
-                    <v-switch
-                      v-model="formData['is_active']"
-                      label="Status aktif"
-                      color="primary"
-                    />
+                    <v-switch v-model="formData['is_active']" label="Status aktif" color="primary"/>
                   </div>
                 </v-flex>
-              </v-layout>     
+              </v-layout>
             </form>
           </v-container>
         </v-card-text>

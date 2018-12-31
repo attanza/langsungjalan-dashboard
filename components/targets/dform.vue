@@ -21,7 +21,7 @@
                   />
                 </v-flex>
                 <v-flex v-if="universities" xs12>
-                  <label>Universitas</label>                
+                  <label>Universitas</label>
                   <v-autocomplete
                     :items="universities"
                     v-model="university_id"
@@ -29,11 +29,10 @@
                     single-line
                     item-text="name"
                     item-value="id"
-                    cache-items
                   />
                 </v-flex>
                 <v-flex v-if="studies" xs12>
-                  <label>Studi Program</label>                
+                  <label>Studi Program</label>
                   <v-autocomplete
                     v-validate="'required|numeric'"
                     :items="studies"
