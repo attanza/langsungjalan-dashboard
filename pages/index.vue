@@ -35,7 +35,7 @@
           </v-layout>
         </v-card>
       </v-flex>
-      <v-flex xs12 sm6 md4>
+      <!-- <v-flex xs12 sm6 md4>
         <v-card v-if="dashboardData" light class="elevation-8 mb-2" max-height="200px">
           <v-layout>
             <v-flex xs4 class="flex-all-centered">
@@ -51,7 +51,7 @@
             </v-flex>
           </v-layout>
         </v-card>
-      </v-flex>
+      </v-flex> -->
     </v-layout>
   </div>
 </template>
