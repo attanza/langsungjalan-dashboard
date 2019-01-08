@@ -29,7 +29,7 @@
                       hide-selected
                     />
                   </div>
-                  <div v-if="!inArray(notIncluded, f.key)" >
+                  <div v-if="!inArray(notIncluded, f.key)">
                     <label>{{ f.caption }}</label>
                     <v-text-field
                       v-validate="f.rules"
@@ -41,14 +41,10 @@
                     />
                   </div>
                   <div v-if="f.key == 'is_verified'">
-                    <v-switch
-                      v-model="formData['is_verified']"
-                      label="Verified"
-                      color="primary"
-                    />
+                    <v-switch v-model="formData['is_verified']" label="Verified" color="primary"/>
                   </div>
                 </v-flex>
-              </v-layout>     
+              </v-layout>
             </form>
           </v-container>
         </v-card-text>
@@ -88,7 +84,12 @@ export default {
           value: "",
           rules: "required|integer"
         },
-        { key: "name", caption: "Nama", value: "", rules: "required|max:50" },
+        {
+          key: "name",
+          caption: "Nama",
+          value: "",
+          rules: "required|max:50"
+        },
         {
           key: "phone",
           caption: "Telepon",
@@ -154,11 +155,15 @@ export default {
     onClose() {
       this.$emit("onClose")
     },
-    setFields() {
+    async setFields() {
+      this.setAuth()
       this.errors.clear()
       if (this.currentEdit) {
         this.fillable.forEach(data => (this.formData[data.key] = data.value))
       }
+      this.targetEntries = await axios
+        .get(COMBO_DATA_URL + "MarketingTarget")
+        .then(res => res.data)
     },
     submit() {
       this.$validator.validateAll().then(result => {

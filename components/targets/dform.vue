@@ -145,8 +145,7 @@ export default {
         )
         this.universities = universities
       } catch (e) {
-        // catchError(e)
-        console.log(e)
+        catchError(e)
       }
     },
     submit() {

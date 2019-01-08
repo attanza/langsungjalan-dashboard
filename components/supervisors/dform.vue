@@ -60,8 +60,18 @@ export default {
     return {
       dialog: false,
       fillable: [
-        { key: "name", caption: "Nama", value: "", rules: "required|max:50" },
-        { key: "email", caption: "Email", value: "", rules: "required|email" },
+        {
+          key: "name",
+          caption: "Nama",
+          value: "",
+          rules: "required|max:50"
+        },
+        {
+          key: "email",
+          caption: "Email",
+          value: "",
+          rules: "required|email"
+        },
         {
           key: "phone",
           caption: "Telepon",

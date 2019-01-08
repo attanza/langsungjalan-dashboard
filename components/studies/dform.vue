@@ -114,14 +114,24 @@ export default {
           value: "",
           rules: "required|max:30"
         },
-        { key: "email", caption: "Email", value: "", rules: "required|email" },
+        {
+          key: "email",
+          caption: "Email",
+          value: "",
+          rules: "required|email"
+        },
         {
           key: "contact_person",
           caption: "Nama kontak",
           value: "",
           rules: "required|max:50"
         },
-        { key: "address", caption: "Alamat", value: "", rules: "max:250" },
+        {
+          key: "address",
+          caption: "Alamat",
+          value: "",
+          rules: "max:250"
+        },
         {
           key: "description",
           caption: "Deskripsi",

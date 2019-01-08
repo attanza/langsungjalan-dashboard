@@ -23,14 +23,10 @@
                     />
                   </div>
                   <div v-if="f.key == 'is_active'">
-                    <v-switch
-                      v-model="formData['is_active']"
-                      label="Aktif"
-                      color="primary"
-                    />
+                    <v-switch v-model="formData['is_active']" label="Aktif" color="primary"/>
                   </div>
                 </v-flex>
-              </v-layout>     
+              </v-layout>
             </form>
           </v-container>
         </v-card-text>
@@ -63,8 +59,18 @@ export default {
     return {
       dialog: false,
       fillable: [
-        { key: "name", caption: "Nama", value: "", rules: "required|max:50" },
-        { key: "email", caption: "Email", value: "", rules: "required|email" },
+        {
+          key: "name",
+          caption: "Nama",
+          value: "",
+          rules: "required|max:50"
+        },
+        {
+          key: "email",
+          caption: "Email",
+          value: "",
+          rules: "required|email"
+        },
         {
           key: "phone",
           caption: "Telepon",
@@ -87,7 +93,7 @@ export default {
           key: "address",
           caption: "Alamat",
           value: "",
-          rules: "required|max:250"
+          rules: "max:250"
         },
         {
           key: "description",
@@ -138,6 +144,7 @@ export default {
         if (resp.meta.status === 201) {
           showNoty("Data disimpan", "success")
           this.$emit("onAdd", resp.data)
+          this.formData = {}
         }
         this.deactivateLoader()
       } catch (e) {

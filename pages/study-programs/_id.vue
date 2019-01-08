@@ -1,20 +1,12 @@
 <template>
   <div>
-    <h2 class="primary--text mb-2"> Detail Program Studi</h2>    
+    <h2 class="primary--text mb-2">Detail Program Studi</h2>
     <v-tabs align-with-title color="primary" class="white elevation-1" dark>
       <v-tabs-slider color="white"/>
-      <v-tab href="#detail">
-        Detail
-      </v-tab>
-      <v-tab href="#years">
-        Angkatan
-      </v-tab>
-      <v-tab href="#maps">
-        Peta
-      </v-tab>
-      <v-tab href="#targets">
-        Target
-      </v-tab>
+      <v-tab href="#detail">Detail</v-tab>
+      <v-tab href="#years">Angkatan</v-tab>
+      <v-tab href="#maps">Peta</v-tab>
+      <v-tab href="#targets">Target</v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
       </v-tab-item>
@@ -25,7 +17,7 @@
         <maps/>
       </v-tab-item>
       <v-tab-item :id="'targets'">
-        <targets :target-id="targetId"/>
+        <targets :study-id="studyId"/>
       </v-tab-item>
     </v-tabs>
   </div>
@@ -57,11 +49,11 @@ export default {
   components: { detail, dform, maps, list, targets },
   data() {
     return {
-      targetId: ""
+      studyId: ""
     }
   },
   created() {
-    this.targetId = this.$store.state.currentEdit.id.toString()
+    this.studyId = this.$route.params.id ? this.$route.params.id.toString() : ""
   }
 }
 </script>

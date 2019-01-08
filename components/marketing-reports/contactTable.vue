@@ -2,7 +2,14 @@
   <div class="mt-4">
     <h3 class="subheading ml-3">Contact Person</h3>
     <v-toolbar flat color="transparent">
-      <Tbtn :bottom="true" tooltip-text="Tambah kontak" icon-mode color="primary" icon="add" @onClick="showForm = true"/>
+      <Tbtn
+        :bottom="true"
+        tooltip-text="Tambah kontak"
+        icon-mode
+        color="primary"
+        icon="add"
+        @onClick="showForm = true"
+      />
       <v-spacer/>
       <v-text-field
         v-model="pagination.search"
@@ -20,7 +27,6 @@
       :total-items="totalItems"
       :rows-per-page-items="rowsPerPage"
       class="elevation-1"
-
     >
       <template slot="items" slot-scope="props">
         <td>{{ props.item.name }}</td>
@@ -28,15 +34,39 @@
         <td>{{ props.item.phone }}</td>
         <td>{{ props.item.email }}</td>
         <td class="justify-center layout px-0">
-          <Tbtn :tooltip-text="'Edit'" icon-mode flat color="primary" icon="edit" @onClick="getEdit(props.item)"/>
-          <Tbtn :tooltip-text="'Hapus'" icon-mode flat color="primary" icon="delete" @onClick="showConfirm(props.item)"/>
-
+          <Tbtn
+            :tooltip-text="'Edit'"
+            icon-mode
+            flat
+            color="primary"
+            icon="edit"
+            @onClick="getEdit(props.item)"
+          />
+          <Tbtn
+            :tooltip-text="'Hapus'"
+            icon-mode
+            flat
+            color="primary"
+            icon="delete"
+            @onClick="showConfirm(props.item)"
+          />
         </td>
       </template>
     </v-data-table>
-    <Dialog :showDialog="showDialog" text="Yakin mau menghapus ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
-    <dform :show="showForm" :target-id="targetId" :is-edit="isEdit" :data-to-edit="dataToEdit" @onClose="closeDForm" @onAdd="addData" @onEdit="editData"/>
-
+    <Dialog
+      :showDialog="showDialog"
+      text="Yakin mau menghapus ?"
+      @onClose="showDialog = false"
+      @onConfirmed="removeData"
+    />
+    <dform
+      :show="showForm"
+      :is-edit="isEdit"
+      :data-to-edit="dataToEdit"
+      @onClose="closeDForm"
+      @onAdd="addData"
+      @onEdit="editData"
+    />
   </div>
 </template>
 
@@ -59,7 +89,12 @@ export default {
         { text: "Jabatan", align: "left", value: "title" },
         { text: "Telepon", align: "left", value: "phone" },
         { text: "Email", align: "left", value: "email" },
-        { text: "Aksi", value: "name", align: "center", sortable: false }
+        {
+          text: "Aksi",
+          value: "name",
+          align: "center",
+          sortable: false
+        }
       ],
       items: [],
       showDialog: false,
@@ -67,11 +102,6 @@ export default {
       showForm: false,
       dataToEdit: null,
       isEdit: false
-    }
-  },
-  computed: {
-    targetId() {
-      return this.$route.params ? this.$route.params.id.toString() : ""
     }
   },
   watch: {

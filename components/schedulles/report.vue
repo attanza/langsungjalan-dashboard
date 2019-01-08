@@ -56,7 +56,11 @@ export default {
     headers: [
       { text: "Kode Laporan", align: "left", value: "code" },
       { text: "Kode Jadwal", align: "left", value: "schedulle.code" },
-      { text: "Marketing", align: "left", value: "schedulle.marketing.name" },
+      {
+        text: "Marketing",
+        align: "left",
+        value: "schedulle.marketing.name"
+      },
       { text: "Metode", align: "left", value: "method" },
       { text: "Tanggal", align: "left", value: "date" },
       { text: "Aksi", value: "", align: "center", sortable: false }

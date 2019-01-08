@@ -65,8 +65,18 @@ export default {
     return {
       dialog: false,
       fillable: [
-        { key: "code", caption: "Kode", value: "", rules: "required|max:30" },
-        { key: "name", caption: "Nama", value: "", rules: "required|max:50" },
+        {
+          key: "code",
+          caption: "Kode",
+          value: "",
+          rules: "required|max:30"
+        },
+        {
+          key: "name",
+          caption: "Nama",
+          value: "",
+          rules: "required|max:50"
+        },
         {
           key: "measurement",
           caption: "Satuan",

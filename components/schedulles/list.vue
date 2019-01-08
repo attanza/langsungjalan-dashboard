@@ -2,7 +2,14 @@
   <div>
     <v-card class="pt-3">
       <v-toolbar card color="transparent">
-        <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
+        <Tbtn
+          :bottom="true"
+          :tooltip-text="'Tambah ' + title "
+          icon-mode
+          color="primary"
+          icon="add"
+          @onClick="showForm = true"
+        />
         <!-- <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>        -->
         <v-spacer/>
         <v-text-field
@@ -12,7 +19,6 @@
           single-line
           hide-details
         />
-
       </v-toolbar>
       <v-data-table
         :headers="headers"
@@ -22,29 +28,38 @@
         :total-items="totalItems"
         :rows-per-page-items="rowsPerPage"
         class="elevation-1"
-
       >
         <template slot="items" slot-scope="props">
-          <td><a @click="toDetail(props.item)">{{ props.item.code }}</a></td>
-          <td >{{ props.item.target ? props.item.target.code : "" }}</td>
+          <td>
+            <a @click="toDetail(props.item)">{{ props.item.code }}</a>
+          </td>
+          <td>{{ props.item.target ? props.item.target.code : "" }}</td>
           <td v-if="props.item.marketing">{{ props.item.marketing.name }}</td>
           <td v-if="props.item.action">{{ props.item.action.name }}</td>
           <td>{{ props.item.date | moment("DD MMM YYYY HH:mm:ss") }}</td>
         </template>
       </v-data-table>
     </v-card>
-    <dform :show="showForm" :target-id="targetId" @onClose="showForm = false" @onAdd="addData"/>
-    <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" model="Schedulle" @onClose="showDownloadDialog = false"/>
+    <dform :show="showForm" @onClose="showForm = false" @onAdd="addData"/>
+    <DownloadDialog
+      :show-dialog="showDownloadDialog"
+      :data-to-export="dataToExport"
+      :fillable="fillable"
+      :type-dates="typeDates"
+      model="Schedulle"
+      @onClose="showDownloadDialog = false"
+    />
   </div>
 </template>
 <script>
 import { SCHEDULLE_URL } from "~/utils/apis"
-import { global } from "~/mixins"
 import dform from "./dform"
 import axios from "axios"
 import catchError from "~/utils/catchError"
 import DownloadDialog from "~/components/DownloadDialog"
 import debounce from "lodash/debounce"
+import { global } from "~/mixins"
+
 export default {
   middleware: "auth",
   components: { DownloadDialog, dform },
@@ -56,7 +71,11 @@ export default {
       { text: "Kode Jadwal", align: "left", value: "code" },
       { text: "Kode Target", align: "left", value: "code" },
       { text: "Marketing", align: "left", value: "marketing_id" },
-      { text: "Aksi Kegiatan", align: "left", value: "marketing_action_id" },
+      {
+        text: "Aksi Kegiatan",
+        align: "left",
+        value: "marketing_action_id"
+      },
       { text: "Tanggal", align: "left", value: "date" }
     ],
     items: [],
@@ -72,16 +91,6 @@ export default {
     ],
     typeDates: ["created_at"]
   }),
-
-  computed: {
-    targetId() {
-      if (this.currentEdit && this.currentEdit.study_program_id) {
-        return this.currentEdit.id.toString()
-      } else {
-        return ""
-      }
-    }
-  },
 
   watch: {
     pagination: {
@@ -104,7 +113,7 @@ export default {
 
         const { descending, sortBy } = this.pagination
         const endPoint = `${SCHEDULLE_URL}?${this.getQueryParams()}marketing_target_id=${
-          this.targetId
+          this.targetId ? this.targetId : ""
         }`
 
         const res = await axios.get(endPoint).then(res => res.data)

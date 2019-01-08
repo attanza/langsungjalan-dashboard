@@ -53,7 +53,12 @@ export default {
     return {
       dialog: false,
       fillable: [
-        { key: "name", caption: "Nama", value: "", rules: "required|max:50" },
+        {
+          key: "name",
+          caption: "Nama",
+          value: "",
+          rules: "required|max:50"
+        },
         {
           key: "description",
           caption: "Deskripsi",

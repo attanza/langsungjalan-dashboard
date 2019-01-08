@@ -2,7 +2,14 @@
   <div>
     <v-card class="pt-3">
       <v-toolbar card color="transparent">
-        <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
+        <Tbtn
+          :bottom="true"
+          :tooltip-text="'Tambah ' + title "
+          icon-mode
+          color="primary"
+          icon="add"
+          @onClick="showForm = true"
+        />
         <v-spacer/>
         <v-text-field
           v-model="pagination.search"
@@ -12,7 +19,7 @@
           hide-details
         />
       </v-toolbar>
-      <v-data-table 
+      <v-data-table
         v-if="items"
         :headers="headers"
         :items="items"
@@ -21,10 +28,11 @@
         :total-items="totalItems"
         :rows-per-page-items="rowsPerPage"
         class="elevation-1"
-
       >
         <template slot="items" slot-scope="props">
-          <td><a @click="toDetail(props.item)">{{ props.item.code }}</a></td>
+          <td>
+            <a @click="toDetail(props.item)">{{ props.item.code }}</a>
+          </td>
           <td>{{ props.item.schedulle ? props.item.schedulle.code : "" }}</td>
           <td>{{ props.item.schedulle && props.item.schedulle.marketing ? props.item.schedulle.marketing.name : "" }}</td>
           <td>{{ props.item.method }}</td>
@@ -37,7 +45,14 @@
         </template>
       </v-data-table>
     </v-card>
-    <dform :show="showForm" :is-edit="isEdit" :data-to-edit="dataToEdit" @onClose="onClose" @onAdd="addData" @onEdit="editData"/>
+    <dform
+      :show="showForm"
+      :is-edit="isEdit"
+      :data-to-edit="dataToEdit"
+      @onClose="onClose"
+      @onAdd="addData"
+      @onEdit="editData"
+    />
   </div>
 </template>
 <script>
@@ -70,7 +85,11 @@ export default {
     headers: [
       { text: "Kode Laporan", align: "left", value: "code" },
       { text: "Kode Jadwal", align: "left", value: "schedulle.code" },
-      { text: "Marketing", align: "left", value: "schedulle.marketing.name" },
+      {
+        text: "Marketing",
+        align: "left",
+        value: "schedulle.marketing.name"
+      },
       { text: "Metode", align: "left", value: "method" },
       { text: "Tanggal", align: "left", value: "date" },
       { text: "Aksi", align: "center", value: "", sortable: false }
@@ -103,7 +122,7 @@ export default {
         const { descending, sortBy } = this.pagination
         const endPoint = `${MARKETING_REPORTS_URL}?${this.getQueryParams()}schedulle_id=${
           this.schedulleId
-        }&marketing_target_id=${this.targetId}`
+        }&marketing_target_id=${this.targetId ? this.targetId : ""}`
 
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data

@@ -49,7 +49,12 @@ export default {
   data() {
     return {
       fillable: [
-        { key: "name", caption: "Nama", value: "", rules: "required|max:50" },
+        {
+          key: "name",
+          caption: "Nama",
+          value: "",
+          rules: "required|max:50"
+        },
         {
           key: "description",
           caption: "Deskripsi",

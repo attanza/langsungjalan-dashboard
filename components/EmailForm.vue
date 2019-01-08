@@ -90,7 +90,10 @@ export default {
     async sendResetPassword() {
       try {
         const resp = await axios
-          .post(RESET_PASSWORD_URL, { email: this.email, phone: this.phone })
+          .post(RESET_PASSWORD_URL, {
+            email: this.email,
+            phone: this.phone
+          })
           .then(res => res.data)
         if (resp.meta.status === 200) {
           showNoty("Your new has been sent to you", "success")

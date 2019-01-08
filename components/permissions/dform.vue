@@ -31,7 +31,7 @@
                     data-vv-as="Deskripsi"
                   />
                 </v-flex>
-              </v-layout>     
+              </v-layout>
             </form>
           </v-container>
         </v-card-text>
@@ -64,15 +64,8 @@ export default {
   data() {
     return {
       dialog: false,
-      fillable: [
-        { key: "name", value: "", rules: "required|max:50" },
-        // { key: "slug", value: "", rules: "required|max:100" },
-        { key: "description", value: "", rules: "max:250" }
-      ],
-      formData: {},
       formTitle: "Tambah Permission",
       name: "",
-      slug: "",
       description: ""
     }
   },
@@ -86,13 +79,13 @@ export default {
   },
   methods: {
     onClose() {
+      this.clearForm()
       this.$emit("onClose")
     },
-    setFields() {
+    clearForm() {
+      this.name = ""
+      this.description = ""
       this.errors.clear()
-      if (this.currentEdit) {
-        this.fillable.forEach(data => (this.formData[data.key] = data.value))
-      }
     },
     submit() {
       this.$validator.validateAll().then(result => {
@@ -115,7 +108,7 @@ export default {
         if (resp.meta.status === 201) {
           showNoty("Data disimpan", "success")
           this.$emit("onAdd", resp.data)
-          this.setFields()
+          this.clearForm()
         }
         this.deactivateLoader()
       } catch (e) {

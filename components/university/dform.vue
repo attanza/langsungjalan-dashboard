@@ -65,14 +65,24 @@ export default {
     return {
       dialog: false,
       fillable: [
-        { key: "name", caption: "Nama", value: "", rules: "required|max:50" },
+        {
+          key: "name",
+          caption: "Nama",
+          value: "",
+          rules: "required|max:50"
+        },
         {
           key: "phone",
           caption: "Telepon",
           value: "",
           rules: "required|max:30"
         },
-        { key: "email", caption: "Email", value: "", rules: "required|email" },
+        {
+          key: "email",
+          caption: "Email",
+          value: "",
+          rules: "required|email"
+        },
         {
           key: "contact_person",
           caption: "Nama kontak",
@@ -85,7 +95,12 @@ export default {
           value: "",
           rules: "required|max:50"
         },
-        { key: "city", caption: "Kota", value: "", rules: "required|max:50" },
+        {
+          key: "city",
+          caption: "Kota",
+          value: "",
+          rules: "required|max:50"
+        },
         {
           key: "address",
           caption: "Alamat",

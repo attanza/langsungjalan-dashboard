@@ -7,12 +7,18 @@
 
 <script>
 import { schedulleList } from "~/components/schedulles"
+import { global } from "~/mixins"
 export default {
   components: { schedulleList },
+  mixins: [global],
+
   data() {
     return {
       title: "Jadwal"
     }
+  },
+  mounted() {
+    this.clearStore()
   }
 }
 </script>

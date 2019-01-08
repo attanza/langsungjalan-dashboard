@@ -85,7 +85,11 @@ export default {
     title: "Angkatan",
     headers: [
       { text: "Angkatan", align: "left", value: "year" },
-      { text: "Kelas per Angkatan", align: "left", value: "class_per_year" },
+      {
+        text: "Kelas per Angkatan",
+        align: "left",
+        value: "class_per_year"
+      },
       { text: "Siswa per Kelas", value: "students_per_class" },
       { text: "Aksi", value: "name", sortable: false }
     ],
@@ -162,6 +166,7 @@ export default {
     addData(data) {
       this.items.unshift(data)
       this.showForm = false
+      this.isEdit = false
     },
     editData(data) {
       let index = _.findIndex(this.items, item => item.id == data.id)

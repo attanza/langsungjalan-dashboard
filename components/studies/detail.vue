@@ -110,7 +110,12 @@ export default {
           value: "",
           rules: "required|max:30"
         },
-        { key: "email", caption: "Email", value: "", rules: "required|email" },
+        {
+          key: "email",
+          caption: "Email",
+          value: "",
+          rules: "required|email"
+        },
         {
           key: "contact_person",
           caption: "Nama kontak",
@@ -119,7 +124,12 @@ export default {
         },
         { key: "lat", caption: "Latitude", value: null, rules: "" },
         { key: "lng", caption: "Longitude", value: null, rules: "" },
-        { key: "address", caption: "Alamat", value: "", rules: "max:250" },
+        {
+          key: "address",
+          caption: "Alamat",
+          value: "",
+          rules: "max:250"
+        },
         {
           key: "description",
           caption: "Deskripsi",

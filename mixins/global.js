@@ -35,6 +35,7 @@ export default {
   mounted() {
     this.setAuth()
   },
+
   methods: {
     inArray(keys, searchedKey) {
       let result = false
@@ -85,6 +86,7 @@ export default {
     },
     getQueryParams() {
       let query = ""
+      this.pagination.limit = this.pagination.rowsPerPage
       for (let key in this.pagination) {
         if (
           this.pagination.hasOwnProperty(key) &&
@@ -108,6 +110,12 @@ export default {
         sort_by: null,
         sort_mode: null
       }
+    },
+    clearStore() {
+      this.$store.commit("currentEdit", null)
+      this.$store.commit("currentEdit2", null)
+      this.$store.commit("comboData", null)
+      this.$store.commit("comboData2", null)
     }
   },
   computed: {
@@ -119,7 +127,8 @@ export default {
       "comboData3",
       "permissions",
       "user",
-      "dashboardData"
+      "dashboardData",
+      "targetId"
     ])
   }
 }

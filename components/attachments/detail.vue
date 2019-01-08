@@ -73,14 +73,24 @@ export default {
           value: "",
           rules: "required|integer"
         },
-        { key: "name", caption: "Nama", value: "", rules: "required|max:50" },
+        {
+          key: "name",
+          caption: "Nama",
+          value: "",
+          rules: "required|max:50"
+        },
         {
           key: "title",
           caption: "Jabatan",
           value: "",
           rules: "required|max:50"
         },
-        { key: "email", caption: "Email", value: "", rules: "required|email" },
+        {
+          key: "email",
+          caption: "Email",
+          value: "",
+          rules: "required|email"
+        },
         {
           key: "phone",
           caption: "Telepon",

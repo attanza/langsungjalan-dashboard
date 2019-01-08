@@ -81,7 +81,12 @@ export default {
           value: "",
           rules: "required|integer"
         },
-        { key: "name", caption: "Nama", value: "", rules: "required|max:50" },
+        {
+          key: "name",
+          caption: "Nama",
+          value: "",
+          rules: "required|max:50"
+        },
         {
           key: "phone",
           caption: "Telepon",

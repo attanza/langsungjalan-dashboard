@@ -68,7 +68,11 @@ export default {
     title: "Down Payment",
     headers: [
       { text: "Verified", align: "left", value: "is_verified" },
-      { text: "Kode Target", align: "left", value: "marketing_target_id" },
+      {
+        text: "Kode Target",
+        align: "left",
+        value: "marketing_target_id"
+      },
       { text: "Nama", align: "left", value: "name" },
       { text: "Telepon", align: "left", value: "phone" },
       { text: "DP", align: "left", value: "dp" }

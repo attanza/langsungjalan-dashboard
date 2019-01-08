@@ -4,15 +4,38 @@
       <v-container grid-list-md fluid style="padding-top: 0px;">
         <v-toolbar color="transparent" card>
           <v-spacer/>
-          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Kembali" @onClick="toHome"/>
-          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Simpan" @onClick="submit"/>              
-          <Tbtn color="primary" icon="refresh" icon-mode tooltip-text="Refresh" @onClick="setFields"/>  
-          <Tbtn color="primary" icon="delete" icon-mode tooltip-text="Hapus" @onClick="confirmDelete"/>  
-        </v-toolbar>  
+          <Tbtn
+            color="primary"
+            icon="chevron_left"
+            icon-mode
+            tooltip-text="Kembali"
+            @onClick="toHome"
+          />
+          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Simpan" @onClick="submit"/>
+          <Tbtn
+            color="primary"
+            icon="refresh"
+            icon-mode
+            tooltip-text="Refresh"
+            @onClick="setFields"
+          />
+          <Tbtn
+            color="primary"
+            icon="delete"
+            icon-mode
+            tooltip-text="Hapus"
+            @onClick="confirmDelete"
+          />
+        </v-toolbar>
         <form>
           <v-layout row wrap class="mt-3 px-2">
-            
-            <v-flex v-for="(f, index) in fillable" v-if="!inArray(['is_active', 'password'], f.key)" :key="index" sm6 xs12>
+            <v-flex
+              v-for="(f, index) in fillable"
+              v-if="!inArray(['is_active', 'password'], f.key)"
+              :key="index"
+              sm6
+              xs12
+            >
               <label>{{ f.caption }}</label>
               <v-text-field
                 v-validate="f.rules"
@@ -24,17 +47,18 @@
               />
             </v-flex>
             <v-flex sm6 xs12>
-              <v-switch
-                v-model="switch1"
-                label="Aktif"
-                color="primary"
-              />
+              <v-switch v-model="switch1" label="Aktif" color="primary"/>
             </v-flex>
-          </v-layout>     
+          </v-layout>
         </form>
       </v-container>
     </v-card>
-    <Dialog :showDialog="showDialog" text="Yakin mau menghapus?" @onClose="showDialog = false" @onConfirmed="removeData"/>
+    <Dialog
+      :showDialog="showDialog"
+      text="Yakin mau menghapus?"
+      @onClose="showDialog = false"
+      @onConfirmed="removeData"
+    />
   </div>
 </template>
 
@@ -54,8 +78,18 @@ export default {
   data() {
     return {
       fillable: [
-        { key: "name", caption: "Nama", value: "", rules: "required|max:50" },
-        { key: "email", caption: "Email", value: "", rules: "required|email" },
+        {
+          key: "name",
+          caption: "Nama",
+          value: "",
+          rules: "required|max:50"
+        },
+        {
+          key: "email",
+          caption: "Email",
+          value: "",
+          rules: "required|email"
+        },
         {
           key: "phone",
           caption: "Telepon",
@@ -72,7 +106,7 @@ export default {
           key: "address",
           caption: "Alamat",
           value: "",
-          rules: "required|max:250"
+          rules: "max:250"
         },
         {
           key: "description",

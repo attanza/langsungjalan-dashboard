@@ -74,8 +74,18 @@ export default {
     return {
       dialog: false,
       fillable: [
-        { key: "name", caption: "Nama", value: "", rules: "required|max:50" },
-        { key: "email", caption: "Email", value: "", rules: "required|email" },
+        {
+          key: "name",
+          caption: "Nama",
+          value: "",
+          rules: "required|max:50"
+        },
+        {
+          key: "email",
+          caption: "Email",
+          value: "",
+          rules: "required|email"
+        },
         {
           key: "phone",
           caption: "Telepon",
@@ -88,7 +98,12 @@ export default {
           value: "",
           rules: "required|min:6"
         },
-        { key: "roles", caption: "Role", value: [], rules: "required|array" },
+        {
+          key: "roles",
+          caption: "Role",
+          value: [],
+          rules: "required|array"
+        },
         {
           key: "is_active",
           caption: "Status aktif",

@@ -64,7 +64,7 @@ export default {
   components: { dform, DownloadDialog },
   mixins: [global],
   props: {
-    targetId: {
+    studyId: {
       type: String,
       required: false,
       default: ""
@@ -108,7 +108,7 @@ export default {
 
         const { descending, sortBy } = this.pagination
         const endPoint = `${TARGET_URL}?${this.getQueryParams()}study_id=${
-          this.targetId
+          this.studyId ? this.studyId : ""
         }`
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data

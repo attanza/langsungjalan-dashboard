@@ -100,9 +100,7 @@ export default {
       this.dialog = this.form
     },
     isEdit() {
-      if (this.isEdit) {
-        this.setFields()
-      }
+      this.setFields()
     }
   },
   created() {
@@ -110,6 +108,7 @@ export default {
   },
   methods: {
     onClose() {
+      this.formData = {}
       this.$emit("onClose")
     },
     setFields() {

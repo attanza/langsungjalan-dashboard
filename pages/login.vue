@@ -91,7 +91,9 @@ export default {
             if (this.inArray(this.allowedLogin, r.slug)) allowed = true
           })
           if (allowed) {
-            Cookie.set("lj_token", JSON.stringify(resp.data), { expires: 1 })
+            Cookie.set("lj_token", JSON.stringify(resp.data), {
+              expires: 1
+            })
             this.$store.commit("user", resp.data.user)
             this.$store.commit("token", resp.data.token)
             // this.$store.commit("SET_LANG", resp.data.user.lang)

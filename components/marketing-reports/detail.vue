@@ -216,7 +216,12 @@ export default {
           value: "",
           rules: "integer"
         },
-        { key: "count_dps", caption: "Jumlah DP", value: "", rules: "integer" },
+        {
+          key: "count_dps",
+          caption: "Jumlah DP",
+          value: "",
+          rules: "integer"
+        },
         {
           key: "count_payments",
           caption: "Jumlah Pembayaran",
@@ -239,7 +244,12 @@ export default {
         { key: "lng", caption: "Longitude", value: "", rules: "" },
         { key: "result", caption: "Hasil", value: "", rules: "" },
         { key: "terms", caption: "Persyaratan", value: "", rules: "" },
-        { key: "description", caption: "Deskripsi", value: "", rules: "" }
+        {
+          key: "description",
+          caption: "Deskripsi",
+          value: "",
+          rules: ""
+        }
       ],
       notIncluded: [
         "marketing_id",

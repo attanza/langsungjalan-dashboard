@@ -3,8 +3,22 @@
     <h2 class="primary--text mb-3">{{ title }}</h2>
     <v-card class="pt-3">
       <v-toolbar card color="transparent">
-        <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
-        <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>       
+        <Tbtn
+          :bottom="true"
+          :tooltip-text="'Tambah ' + title "
+          icon-mode
+          color="primary"
+          icon="add"
+          @onClick="showForm = true"
+        />
+        <Tbtn
+          :bottom="true"
+          :tooltip-text="'Download ' + title + ' data'"
+          icon-mode
+          color="primary"
+          icon="cloud_download"
+          @onClick="downloadData"
+        />
         <v-spacer/>
         <v-text-field
           v-model="pagination.search"
@@ -22,10 +36,11 @@
         :total-items="totalItems"
         :rows-per-page-items="rowsPerPage"
         class="elevation-1"
-
       >
         <template slot="items" slot-scope="props">
-          <td><a @click="toDetail(props.item)">{{ props.item.target.code }}</a></td>
+          <td>
+            <a @click="toDetail(props.item)">{{ props.item.target.code }}</a>
+          </td>
           <td>{{ props.item.name }}</td>
           <td>{{ props.item.title }}</td>
           <td>{{ props.item.email }}</td>
@@ -34,8 +49,14 @@
       </v-data-table>
     </v-card>
     <dform :show="showForm" @onClose="showForm = false" @onAdd="addData"/>
-    <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" model="Contact" @onClose="showDownloadDialog = false"/>
-
+    <DownloadDialog
+      :show-dialog="showDownloadDialog"
+      :data-to-export="dataToExport"
+      :fillable="fillable"
+      :type-dates="typeDates"
+      model="Contact"
+      @onClose="showDownloadDialog = false"
+    />
   </div>
 </template>
 <script>
@@ -79,6 +100,7 @@ export default {
 
   mounted() {
     this.pupulateTable()
+    this.clearStore()
   },
 
   methods: {

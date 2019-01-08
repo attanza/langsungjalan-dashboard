@@ -9,39 +9,40 @@
           <v-container grid-list-md>
             <form>
               <v-layout row wrap>
-                <v-flex v-for="(f, index) in fillable" v-if="f.key != 'marketing_target_id' && f.show" :key="index" xs12>
-                  <label>{{ f.caption }}</label>
-                  <v-text-field
-                    v-validate="f.rules"
-                    v-model="formData[f.key]"
-                    :error-messages="errors.collect(f.key)"
-                    :name="f.key"
-                    :data-vv-name="f.key"
-                    :data-vv-as="f.caption"
-                    type="number"
-
-                  />
+                <v-flex v-for="(f, index) in fillable" :key="index" xs12>
+                  <span v-if="f.key != 'marketing_target_id' && f.show">
+                    <label>{{ f.caption }}</label>
+                    <v-text-field
+                      v-validate="f.rules"
+                      v-model="formData[f.key]"
+                      :error-messages="errors.collect(f.key)"
+                      :name="f.key"
+                      :data-vv-name="f.key"
+                      :data-vv-as="f.caption"
+                      type="number"
+                    />
+                  </span>
+                  <span v-if="targetId == 0 && f.key == 'marketing_target_id'">
+                    <label>Kode Jadwal</label>
+                    <v-autocomplete
+                      v-validate="'required|integer'"
+                      v-model="formData['marketing_target_id']"
+                      :items="targetItems"
+                      :loading="targetComboLoading"
+                      :search-input.sync="searchTarget"
+                      :error-messages="errors.collect('marketing_target_id')"
+                      item-text="code"
+                      item-value="id"
+                      placeholder="Ketik untuk mencari kode target"
+                      name="marketing_target_id"
+                      data-vv-name="marketing_target_id"
+                      data-vv-as="Kode Target"
+                      hide-no-data
+                      hide-selected
+                    />
+                  </span>
                 </v-flex>
-                <v-flex v-for="(f, index) in fillable" v-if="targetId == 0 && f.key == 'marketing_target_id'" :key="index" xs12>
-                  <label>Kode Jadwal</label>
-                  <v-autocomplete
-                    v-validate="'required|integer'"
-                    v-model="formData['marketing_target_id']"
-                    :items="targetItems"
-                    :loading="targetComboLoading"
-                    :search-input.sync="searchTarget"
-                    :error-messages="errors.collect('marketing_target_id')"
-                    item-text="code"
-                    item-value="id"
-                    placeholder="Ketik untuk mencari kode target"
-                    name="marketing_target_id"
-                    data-vv-name="marketing_target_id"
-                    data-vv-as="Kode Target"
-                    hide-no-data
-                    hide-selected
-                  />
-                </v-flex>
-              </v-layout>     
+              </v-layout>
             </form>
           </v-container>
         </v-card-text>
@@ -70,11 +71,6 @@ export default {
     show: {
       type: Boolean,
       required: true
-    },
-    targetId: {
-      type: String,
-      required: false,
-      default: ""
     },
     isEdit: {
       type: Boolean,
@@ -299,7 +295,6 @@ export default {
       try {
         this.activateLoader()
         let httpData = this.parseFormData(this.formData)
-        console.log(httpData)
         if (this.isEdit) {
           const resp = await axios
             .put(`${TARGET_YEARS}/${this.dataToEdit.id}`, httpData)

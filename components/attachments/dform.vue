@@ -18,10 +18,9 @@
                     :name="f.key"
                     :data-vv-name="f.key"
                     :data-vv-as="f.caption"
-
                   />
                 </div>
-                <div v-if="f.key == 'marketing_target_id' && targetId == 0">
+                <div v-if="f.key == 'marketing_target_id' && !targetId">
                   <label>Kode Target</label>
                   <v-autocomplete
                     v-validate="'required|integer'"
@@ -49,12 +48,17 @@
                     accept="image/*"
                     @change="onFilePicked"
                   >
-                </div> -->
+                </div>-->
               </v-flex>
-            </v-layout>      
+            </v-layout>
           </form>
           <div v-if="!isEdit">
-            <v-text-field v-model="imageName" label="Select Image" prepend-icon="attach_file" @click="pickFile"/>
+            <v-text-field
+              v-model="imageName"
+              label="Select Image"
+              prepend-icon="attach_file"
+              @click="pickFile"
+            />
             <input
               ref="fileData"
               type="file"
@@ -98,11 +102,6 @@ export default {
       type: Object,
       required: false,
       default: null
-    },
-    targetId: {
-      type: String,
-      required: false,
-      default: ""
     }
   },
 

@@ -9,7 +9,7 @@
           <v-container grid-list-md>
             <form>
               <v-layout row wrap>
-                <v-flex v-if="targetId === ''" xs12>
+                <v-flex v-if="!targetId" xs12>
                   <label>Kode Target Marketing</label>
                   <v-autocomplete
                     v-validate="'required|integer'"
@@ -165,6 +165,7 @@ import { SCHEDULLE_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
 import debounce from "lodash/debounce"
+import union from "lodash/union"
 
 export default {
   $_veeValidate: {
@@ -175,11 +176,6 @@ export default {
     show: {
       type: Boolean,
       required: true
-    },
-    targetId: {
-      type: String,
-      required: false,
-      default: ""
     }
   },
   data() {
@@ -236,6 +232,10 @@ export default {
           .get(COMBO_DATA_URL + `MarketingAll&supervisor_id=${this.user.id}`)
           .then(res => res.data)
 
+        this.targetEntries = await axios
+          .get(COMBO_DATA_URL + "MarketingTarget")
+          .then(res => res.data)
+
         this.actions = await axios
           .get(COMBO_DATA_URL + "Action")
           .then(res => res.data)
@@ -246,9 +246,12 @@ export default {
     getMarketingTarget: debounce(async function() {
       try {
         this.targetComboLoading = true
-        this.targetEntries = await axios
+        let targetData = await axios
           .get(COMBO_DATA_URL + "MarketingTarget&search=" + this.searchTarget)
           .then(res => res.data)
+        if (targetData.length > 0) {
+          this.targetEntries = union(this.targetEntries, targetData)
+        }
         this.targetComboLoading = false
       } catch (e) {
         this.targetComboLoading = false

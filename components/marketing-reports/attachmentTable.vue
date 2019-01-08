@@ -3,7 +3,14 @@
     <h3 class="subheading ml-3">Lampiran</h3>
     <v-card class="pt-3">
       <v-toolbar card color="transparent">
-        <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
+        <Tbtn
+          :bottom="true"
+          :tooltip-text="'Tambah ' + title "
+          icon-mode
+          color="primary"
+          icon="add"
+          @onClick="showForm = true"
+        />
         <v-spacer/>
         <v-text-field
           v-model="pagination.search"
@@ -21,23 +28,23 @@
         :total-items="totalItems"
         :rows-per-page-items="rowsPerPage"
         class="elevation-1"
-
       >
         <template slot="items" slot-scope="props">
           <td>{{ props.item.target.code }}</td>
           <td>
-            <v-avatar
-              tile
-              size="40"
-              color="grey lighten-4"
-            >
+            <v-avatar tile size="40" color="grey lighten-4">
               <img :src="props.item.url" :alt="props.item.caption">
             </v-avatar>
           </td>
           <td>{{ props.item.caption }}</td>
           <td>{{ props.item.tags }}</td>
           <td class="justify-center layout px-0">
-            <v-btn v-if="props.item.url && props.item.url != ''" icon class="mx-0" @click="showPreviewHandler(props.item)">
+            <v-btn
+              v-if="props.item.url && props.item.url != ''"
+              icon
+              class="mx-0"
+              @click="showPreviewHandler(props.item)"
+            >
               <v-icon color="primary">remove_red_eye</v-icon>
             </v-btn>
             <v-btn icon class="mx-0" @click="prepareEdit(props.item)">
@@ -50,9 +57,21 @@
         </template>
       </v-data-table>
     </v-card>
-    <dform :show="showForm" :is-edit="isEdit" :data-to-edit="dataToEdit" :target-id="targetId" @onClose="formClose" @onAdd="addData" @onEdit="editData"/>
+    <dform
+      :show="showForm"
+      :is-edit="isEdit"
+      :data-to-edit="dataToEdit"
+      @onClose="formClose"
+      @onAdd="addData"
+      @onEdit="editData"
+    />
     <preview :show="showPreview" :url="attachmentUrl" @onClose="closePreview"/>
-    <Dialog :showDialog="showDialog" text="Yakin mau menghapus" @onClose="formClose" @onConfirmed="removeData"/>
+    <Dialog
+      :showDialog="showDialog"
+      text="Yakin mau menghapus"
+      @onClose="formClose"
+      @onConfirmed="removeData"
+    />
   </div>
 </template>
 <script>

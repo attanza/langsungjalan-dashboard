@@ -40,7 +40,7 @@
                   />
                 </div>
                 <div v-if="f.key == 'date'">
-                  <label>Tanggal</label>                
+                  <label>Tanggal</label>
                   <v-menu
                     ref="menu"
                     :close-on-content-click="false"
@@ -64,11 +64,10 @@
                       readonly
                     />
                     <v-date-picker v-model="reportDate" @input="$refs.menu.save(reportDate)"/>
-
                   </v-menu>
                 </div>
                 <div v-if="f.key == 'date'">
-                  <label>Waktu</label>                
+                  <label>Waktu</label>
                   <v-menu
                     ref="menuTime"
                     :close-on-content-click="false"
@@ -129,7 +128,9 @@ import { MARKETING_REPORTS_URL, COMBO_DATA_URL } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
 import debounce from "lodash/debounce"
+import union from "lodash/union"
 import moment from "moment"
+
 export default {
   $_veeValidate: {
     validator: "new"
@@ -270,7 +271,7 @@ export default {
     this.checkFormShow()
   },
   methods: {
-    setFields() {
+    async setFields() {
       this.formTitle = "Tambah Data"
       this.fillable.forEach(data => (this.formData[data.key] = data.value))
       this.reportDate = moment(Date.now()).format("YYYY-MM-DD")
@@ -279,6 +280,10 @@ export default {
       if (this.schedulleId && this.schedulleId != 0) {
         this.formData["schedulle_id"] = this.schedulleId
       }
+
+      this.schedulleEntries = await axios
+        .get(COMBO_DATA_URL + "Schedulle")
+        .then(res => res.data)
     },
     checkFormShow() {
       if (
@@ -302,9 +307,12 @@ export default {
     getSchedulle: debounce(async function() {
       try {
         this.schedulleComboLoading = true
-        this.schedulleEntries = await axios
+        let schedulleData = await axios
           .get(COMBO_DATA_URL + "Schedulle&search=" + this.searchSchedulle)
           .then(res => res.data)
+        if (schedulleData.length > 0) {
+          this.targetEntries = union(this.schedulleEntries, schedulleData)
+        }
         this.schedulleComboLoading = false
       } catch (e) {
         this.schedulleComboLoading = false

@@ -18,20 +18,9 @@
                     name="name"
                     data-vv-name="name"
                     data-vv-as="Role"
-
                   />
                 </v-flex>
                 <v-flex xs12>
-                  <label>Slug</label>
-                  <v-text-field
-                    v-validate="'required|max:80'"
-                    v-model="slug"
-                    :error-messages="errors.collect('slug')"
-                    name="slug"
-                    data-vv-name="slug"
-                  />
-                </v-flex>
-                <v-flex sm12>
                   <label>Deskripsi</label>
                   <v-textarea
                     v-validate="'max:250'"
@@ -40,10 +29,9 @@
                     name="description"
                     data-vv-name="description"
                     data-vv-as="Deskripsi"
-
                   />
                 </v-flex>
-              </v-layout>     
+              </v-layout>
             </form>
           </v-container>
         </v-card-text>
@@ -61,7 +49,6 @@ import { global } from "~/mixins"
 import { ROLE_URL } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
-import debounce from "lodash/debounce"
 export default {
   $_veeValidate: {
     validator: "new"
@@ -76,40 +63,25 @@ export default {
   data() {
     return {
       dialog: false,
-      fillable: [
-        { key: "name", value: "", rules: "required|max:50" },
-        { key: "slug", value: "", rules: "required|max:100" },
-        { key: "description", value: "", rules: "max:250" }
-      ],
       formData: {},
       formTitle: "Tambah Role",
       name: "",
-      slug: "",
-      description: "",
-      slugProcess: false
+      description: ""
     }
   },
   watch: {
     show() {
       this.dialog = this.show
-    },
-    name() {
-      this.slugProcess = true
-      this.createSlug(this.name)
     }
-  },
-  created() {
-    // this.setFields()
   },
   methods: {
     onClose() {
       this.$emit("onClose")
     },
-    setFields() {
+    clearForm() {
+      this.name = ""
+      this.description = ""
       this.errors.clear()
-      if (this.currentEdit) {
-        this.fillable.forEach(data => (this.formData[data.key] = data.value))
-      }
     },
     submit() {
       this.$validator.validateAll().then(result => {
@@ -131,7 +103,7 @@ export default {
         if (resp.meta.status === 201) {
           showNoty("Data Saved", "success")
           this.$emit("onAdd", resp.data)
-          this.setFields()
+          this.clearForm()
         }
         this.deactivateLoader()
       } catch (e) {
@@ -139,11 +111,7 @@ export default {
         this.deactivateLoader()
         catchError(e)
       }
-    },
-    createSlug: debounce(function(name) {
-      this.slug = this.setSnakeCase(name)
-      this.slugProcess = false
-    }, 500)
+    }
   }
 }
 </script>

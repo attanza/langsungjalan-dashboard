@@ -19,11 +19,10 @@
                       :name="f.key"
                       :data-vv-name="f.key"
                       :data-vv-as="f.caption"
-
                     />
                   </div>
                   <div v-if="f.key == 'study_name_id' && comboData">
-                    <label>Nama Studi</label>                
+                    <label>Nama Studi</label>
                     <v-autocomplete
                       v-validate="'required|numeric'"
                       :items="comboData"
@@ -35,7 +34,6 @@
                       single-line
                       item-text="name"
                       item-value="id"
-                      cache-items
                     />
                   </div>
                   <div v-if="f.key == 'address' || f.key == 'description'">
@@ -50,7 +48,7 @@
                     />
                   </div>
                 </v-flex>
-              </v-layout>      
+              </v-layout>
             </form>
           </v-container>
         </v-card-text>
@@ -101,14 +99,24 @@ export default {
           value: "",
           rules: "required|max:30"
         },
-        { key: "email", caption: "Email", value: "", rules: "required|email" },
+        {
+          key: "email",
+          caption: "Email",
+          value: "",
+          rules: "required|email"
+        },
         {
           key: "contact_person",
           caption: "Nama kontak",
           value: "",
           rules: "required|max:50"
         },
-        { key: "address", caption: "Alamat", value: "", rules: "max:250" },
+        {
+          key: "address",
+          caption: "Alamat",
+          value: "",
+          rules: "max:250"
+        },
         {
           key: "description",
           caption: "Deskripsi",
@@ -139,6 +147,7 @@ export default {
   },
   methods: {
     onClose() {
+      this.formData = {}
       this.$emit("onClose")
     },
     setFields() {

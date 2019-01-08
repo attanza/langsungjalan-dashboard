@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <marketingTable :data="currentEdit"/>
-    <contactTable/>
+    <contactTable target-id="targetId"/>
     <yearsTable/>
     <attachmentTable/>
     <table class="table is-fullwidth mt-3">
@@ -24,7 +24,8 @@
         </tr>
       </tbody>
     </table>
-</v-container></template>
+  </v-container>
+</template>
 
 <script>
 import { global } from "~/mixins"
@@ -35,11 +36,7 @@ import attachmentTable from "./attachmentTable"
 
 export default {
   components: { marketingTable, contactTable, yearsTable, attachmentTable },
-  mixins: [global],
-
-  data() {
-    return {}
-  }
+  mixins: [global]
 }
 </script>
 
