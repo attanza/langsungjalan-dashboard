@@ -73,11 +73,6 @@ export default {
       type: String,
       required: false,
       default: ""
-    },
-    targetId: {
-      type: String,
-      required: false,
-      default: ""
     }
   },
   data: () => ({

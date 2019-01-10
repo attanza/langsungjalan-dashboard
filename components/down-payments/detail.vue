@@ -42,9 +42,10 @@
                   :data-vv-as="f.caption"
                 />
               </div>
-              <div v-if="f.key == 'is_verified'">
-                <v-switch
-                  v-model="formData['is_verified']"
+              <div v-if="f.key == 'verified_at'">
+                <v-checkbox
+                  v-model="is_verified"
+                  :disabled="is_verified"
                   label="Verified"
                   color="primary"
                 />
@@ -82,6 +83,12 @@ export default {
           rules: "required|integer"
         },
         {
+          key: "transaction_no",
+          caption: "Nomor Transaksi",
+          value: "",
+          rules: "required"
+        },
+        {
           key: "name",
           caption: "Nama",
           value: "",
@@ -100,18 +107,25 @@ export default {
           rules: "required|integer"
         },
         {
-          key: "is_verified",
-          caption: "Verified",
+          key: "verified_by",
+          caption: "Verified by",
           value: "",
-          rules: "required|boolean"
+          rules: ""
+        },
+        {
+          key: "verified_at",
+          caption: "Verified at",
+          value: "",
+          rules: ""
         }
       ],
       formData: {},
       showDialog: false,
-      notIncluded: ["marketing_target_id", "is_verified"],
+      notIncluded: ["marketing_target_id", "verified_by", "verified_at"],
       targetEntries: [],
       targetComboLoading: false,
-      searchTarget: null
+      searchTarget: null,
+      is_verified: false
     }
   },
   computed: {
@@ -160,6 +174,7 @@ export default {
           id: this.currentEdit.target.id,
           code: this.currentEdit.target.code
         })
+        this.is_verified = this.currentEdit.verified_at ? true : false
       }
     },
     submit() {
@@ -174,6 +189,7 @@ export default {
       try {
         this.activateLoader()
         if (this.currentEdit) {
+          this.formData.is_verified = this.is_verified
           const resp = await axios
             .put(DP_URL + "/" + this.currentEdit.id, this.formData)
             .then(res => res.data)

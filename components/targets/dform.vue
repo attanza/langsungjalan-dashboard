@@ -44,7 +44,6 @@
                     single-line
                     item-text="name"
                     item-value="id"
-                    cache-items
                   />
                 </v-flex>
                 <v-flex xs12>

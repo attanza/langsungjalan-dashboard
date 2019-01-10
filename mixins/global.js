@@ -116,6 +116,7 @@ export default {
       this.$store.commit("currentEdit2", null)
       this.$store.commit("comboData", null)
       this.$store.commit("comboData2", null)
+      this.$store.commit("targetId", null)
     }
   },
   computed: {

@@ -103,6 +103,7 @@ export default {
 
   mounted() {
     this.pupulateTable()
+    this.clearStore()
   },
 
   methods: {

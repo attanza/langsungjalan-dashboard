@@ -1,20 +1,12 @@
 <template>
   <div>
-    <h2 class="primary--text mb-2">Detail Target</h2>   
+    <h2 class="primary--text mb-2">Detail Target</h2>
     <v-tabs align-with-title color="primary" class="white elevation-1" dark>
       <v-tabs-slider color="white"/>
-      <v-tab href="#detail">
-        Detail
-      </v-tab>
-      <v-tab href="#schedulles">
-        Jadwal
-      </v-tab>
-      <v-tab href="#reports">
-        Laporan
-      </v-tab>
-      <v-tab href="#dps">
-        Down Payment
-      </v-tab>
+      <v-tab href="#detail">Detail</v-tab>
+      <v-tab href="#schedulles">Jadwal</v-tab>
+      <v-tab href="#reports">Laporan</v-tab>
+      <v-tab href="#dps">Down Payment</v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
       </v-tab-item>
@@ -22,10 +14,10 @@
         <schedulleList/>
       </v-tab-item>
       <v-tab-item :id="'reports'">
-        <reportList :target-id="targetId"/>
+        <reportList/>
       </v-tab-item>
       <v-tab-item :id="'dps'">
-        <dpList :target-id="targetId"/>
+        <dpList/>
       </v-tab-item>
     </v-tabs>
   </div>
@@ -57,10 +49,8 @@ export default {
     }
   },
   components: { schedulleList, detail, reportList, dpList },
-  computed: {
-    targetId() {
-      return this.$route.params ? this.$route.params.id : ""
-    }
+  mounted() {
+    this.$store.commit("targetId", this.$route.params.id)
   }
 }
 </script>

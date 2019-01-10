@@ -220,7 +220,7 @@ export default {
   },
   created() {
     this.initData()
-    if (this.targetId && this.targetId != 0) {
+    if (this.targetId) {
       this.marketing_target_id = this.targetId
     }
   },

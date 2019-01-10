@@ -10,7 +10,7 @@
             <form>
               <v-layout row wrap>
                 <v-flex v-for="(f, index) in fillable" :key="index" xs12>
-                  <div v-if="f.key === 'marketing_target_id'">
+                  <div v-if="!targetId && f.key === 'marketing_target_id'">
                     <label>Kode Target Marketing</label>
                     <v-autocomplete
                       v-validate="f.rules"
@@ -164,6 +164,7 @@ export default {
       this.targetEntries = await axios
         .get(COMBO_DATA_URL + "MarketingTarget")
         .then(res => res.data)
+      if (this.targetId) this.marketing_target_id = this.targetId
     },
     submit() {
       this.$validator.validateAll().then(result => {

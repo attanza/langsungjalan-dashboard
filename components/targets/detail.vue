@@ -97,7 +97,6 @@
     />
     <schedulle-form
       :show="schedulleFormShow"
-      :target-id="targetId"
       @onClose="schedulleFormShow = false"
       @onAdd="addSchedulle"
     />
@@ -127,11 +126,6 @@ export default {
       description: "",
       autoCompleteLoading: false,
       schedulleFormShow: false
-    }
-  },
-  computed: {
-    targetId() {
-      return this.currentEdit.id.toString() || null
     }
   },
   watch: {
