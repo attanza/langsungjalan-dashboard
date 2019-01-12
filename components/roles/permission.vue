@@ -11,22 +11,58 @@
             hide-details
           />
           <v-spacer/>
-          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Kembali" @onClick="toHome"/>
-          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Simpan" @onClick="showDialog = true"/>              
+          <Tbtn
+            color="primary"
+            icon="chevron_left"
+            icon-mode
+            tooltip-text="Kembali"
+            @onClick="toHome"
+          />
+          <Tbtn
+            color="primary"
+            icon="save"
+            icon-mode
+            tooltip-text="Simpan"
+            @onClick="showDialog = true"
+          />
 
-          <Tbtn color="primary" tooltip-text="Tandai semua" icon-mode icon="check_box" @onClick="selectAll"/>
-          <Tbtn color="primary" tooltip-text="Tidak ditandai semua" icon-mode icon="check_box_outline_blank" @onClick="clearAll"/> 
+          <Tbtn
+            v-if="search ==''"
+            color="primary"
+            tooltip-text="Tandai semua"
+            icon-mode
+            icon="check_box"
+            @onClick="selectAll"
+          />
+          <Tbtn
+            v-if="search ==''"
+            color="primary"
+            tooltip-text="Tidak ditandai semua"
+            icon-mode
+            icon="check_box_outline_blank"
+            @onClick="clearAll"
+          />
         </v-toolbar>
         <v-card-text>
           <v-layout v-if="items" row wrap>
             <v-flex v-for="permission in items" :key="permission.id" md3 sm4 xs6>
-              <v-checkbox v-model="permissionArray" :label="permission.name" :value="permission.id" color="primary"/>
+              <v-checkbox
+                v-model="permissionArray"
+                :label="permission.name"
+                :value="permission.id"
+                color="primary"
+              />
             </v-flex>
           </v-layout>
         </v-card-text>
       </v-container>
     </v-card>
-    <Dialog :showDialog="showDialog" text="Yakin menambah Permission ?" @onClose="showDialog = false" @onConfirmed="attachPermissions"/>
+    <Dialog
+      :showDialog="showDialog"
+      text="Yakin menambah Permission ?"
+      @onClose="showDialog = false"
+      @onConfirmed="attachPermissions"
+    />
   </div>
 </template>
 
@@ -75,6 +111,8 @@ export default {
           role_id: this.currentEdit.id,
           permissions: this.permissionArray
         }
+        console.log("formData", formData)
+
         const resp = await axios
           .put(ROLE_PERMISSIONS_URL, formData)
           .then(res => res.data)
