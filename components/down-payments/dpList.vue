@@ -30,7 +30,7 @@
         class="elevation-1"
       >
         <template slot="items" slot-scope="props">
-          <td>
+          <!-- <td>
             <v-checkbox
               :input-value="!!props.item.verified_at"
               :disabled="!!props.item.verified_at"
@@ -38,7 +38,7 @@
               color="primary"
               @change="editData(props.item)"
             />
-          </td>
+          </td>-->
           <td>
             <a @click="toDetail(props.item)">{{ props.item.transaction_no }}</a>
           </td>
@@ -76,7 +76,7 @@ export default {
   data: () => ({
     title: "Down Payment",
     headers: [
-      { text: "Verified", align: "left", value: "is_verified" },
+      // { text: "Verified", align: "left", value: "is_verified" },
       {
         text: "Nomor Transaksi",
         align: "left",

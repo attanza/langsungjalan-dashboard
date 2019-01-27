@@ -4,11 +4,29 @@
       <v-container grid-list-md fluid style="padding-top: 5px;">
         <v-toolbar color="transparent" card>
           <v-spacer/>
-          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Kembali" @onClick="toHome"/>
-          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Simpan" @onClick="submit"/>              
-          <Tbtn color="primary" icon="refresh" icon-mode tooltip-text="Refresh" @onClick="setFields"/>  
-          <Tbtn color="primary" icon="delete" icon-mode tooltip-text="Hapus" @onClick="confirmDelete"/>  
-        </v-toolbar>  
+          <Tbtn
+            color="primary"
+            icon="chevron_left"
+            icon-mode
+            tooltip-text="Kembali"
+            @onClick="toHome"
+          />
+          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Simpan" @onClick="submit"/>
+          <Tbtn
+            color="primary"
+            icon="refresh"
+            icon-mode
+            tooltip-text="Refresh"
+            @onClick="setFields"
+          />
+          <Tbtn
+            color="primary"
+            icon="delete"
+            icon-mode
+            tooltip-text="Hapus"
+            @onClick="confirmDelete"
+          />
+        </v-toolbar>
         <form>
           <v-layout row wrap>
             <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
@@ -31,7 +49,7 @@
                   hide-selected
                 />
               </div>
-              <div v-if="!inArray(notIncluded, f.key)" >
+              <div v-if="!inArray(notIncluded, f.key)">
                 <label>{{ f.caption }}</label>
                 <v-text-field
                   v-validate="f.rules"
@@ -42,20 +60,25 @@
                   :data-vv-as="f.caption"
                 />
               </div>
-              <div v-if="f.key == 'verified_at'">
+              <!-- <div v-if="f.key == 'verified_at'">
                 <v-checkbox
                   v-model="is_verified"
                   :disabled="is_verified"
                   label="Verified"
                   color="primary"
                 />
-              </div>
+              </div>-->
             </v-flex>
-          </v-layout>        
+          </v-layout>
         </form>
       </v-container>
     </v-card>
-    <Dialog :showDialog="showDialog" text="Yakin mau menghapus ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
+    <Dialog
+      :showDialog="showDialog"
+      text="Yakin mau menghapus ?"
+      @onClose="showDialog = false"
+      @onConfirmed="removeData"
+    />
   </div>
 </template>
 

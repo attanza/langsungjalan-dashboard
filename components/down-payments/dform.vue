@@ -38,11 +38,12 @@
                       :name="f.key"
                       :data-vv-name="f.key"
                       :data-vv-as="f.caption"
+                      :type="f.key == 'dp' ? 'number' : 'text'"
                     />
                   </div>
-                  <div v-if="f.key == 'is_verified'">
+                  <!-- <div v-if="f.key == 'is_verified'">
                     <v-switch v-model="formData['is_verified']" label="Verified" color="primary"/>
-                  </div>
+                  </div>-->
                 </v-flex>
               </v-layout>
             </form>
