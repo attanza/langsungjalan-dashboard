@@ -75,13 +75,13 @@ export default {
           key: "phone",
           caption: "Telepon",
           value: "",
-          rules: "required|max:30"
+          rules: "max:30"
         },
         {
           key: "email",
           caption: "Email",
           value: "",
-          rules: "required|email"
+          rules: "email"
         },
         {
           key: "contact_person",
