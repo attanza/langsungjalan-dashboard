@@ -157,7 +157,6 @@ export default {
     async saveData() {
       try {
         this.activateLoader()
-        console.log(this.formData)
         const resp = await axios
           .post(UNIVERSITY_URL, this.formData)
           .then(res => res.data)

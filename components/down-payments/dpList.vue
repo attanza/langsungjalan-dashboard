@@ -43,6 +43,8 @@
             <a @click="toDetail(props.item)">{{ props.item.transaction_no }}</a>
           </td>
           <td>{{ props.item.target ? props.item.target.code : '' }}</td>
+          <td>{{ props.item.target && props.item.target.study && props.item.target.study.university ? props.item.target.study.university.name : '' }}</td>
+          <td>{{ props.item.target && props.item.target.study && props.item.target.study.studyName ? props.item.target.study.studyName.name : '' }}</td>
           <td>{{ props.item.name }}</td>
           <td>{{ props.item.phone }}</td>
           <td>{{ props.item.dp.toLocaleString('id') }}</td>
@@ -84,6 +86,16 @@ export default {
       },
       {
         text: "Kode Target",
+        align: "left",
+        value: "marketing_target_id"
+      },
+      {
+        text: "Perguruan Tinggi",
+        align: "left",
+        value: "marketing_target_id"
+      },
+      {
+        text: "Study Program",
         align: "left",
         value: "marketing_target_id"
       },
