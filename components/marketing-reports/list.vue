@@ -33,10 +33,10 @@
           <td>
             <a @click="toDetail(props.item)">{{ props.item.code }}</a>
           </td>
-          <td>{{ props.item.schedulle ? props.item.schedulle.code : "" }}</td>
-          <td>{{ props.item.schedulle && props.item.schedulle.marketing ? props.item.schedulle.marketing.name : "" }}</td>
-          <td>{{ props.item.method }}</td>
-          <td>{{ props.item.date | moment("DD MMM YYYY HH:mm:ss") }}</td>
+          <td>{{ props.item.schedulle && props.item.schedulle.target && props.item.schedulle.target.study && props.item.schedulle.target.study.university ? props.item.schedulle.target.study.university.name : "" }}</td>
+          <td>{{ props.item.schedulle && props.item.schedulle.target && props.item.schedulle.target.study && props.item.schedulle.target.study.studyName ? props.item.schedulle.target.study.studyName.name : "" }}</td>
+          <td>{{ props.item.schedulle && props.item.schedulle.action ? props.item.schedulle.action.name : '' }}</td>
+          <td>{{ props.item.result }}</td>
           <td class="justify-center layout px-0">
             <v-btn icon class="mx-0" @click="getEdit(props.item)">
               <v-icon color="primary">edit</v-icon>
@@ -79,14 +79,19 @@ export default {
     title: "Laporan Marketing",
     headers: [
       { text: "Kode Laporan", align: "left", value: "code" },
-      { text: "Kode Jadwal", align: "left", value: "schedulle.code" },
       {
-        text: "Marketing",
+        text: "Perguruan Tinggi",
         align: "left",
-        value: "schedulle.marketing.name"
+        value: "schedulle.target.study.university.name"
       },
-      { text: "Metode", align: "left", value: "method" },
-      { text: "Tanggal", align: "left", value: "date" },
+      {
+        text: "Program Studi",
+        align: "left",
+        value: "schedulle.target.study.studyName.name"
+      },
+      { text: "Aksi", align: "left", value: "schedulle.action.name" },
+      { text: "Hasil", align: "left", value: "result" },
+
       { text: "Aksi", align: "center", value: "", sortable: false }
     ],
     items: [],

@@ -98,7 +98,7 @@
                     />
                   </v-menu>
                 </div>
-                <div v-if="f.key == 'description'">
+                <div v-if="f.key == 'description' || f.key == 'result'">
                   <label>{{ f.caption }}</label>
                   <v-textarea
                     v-validate="f.rules"
@@ -218,7 +218,7 @@ export default {
           rules: "decimal"
         }
       ],
-      notIncluded: ["description", "date", "schedulle_id"],
+      notIncluded: ["description", "result", "date", "schedulle_id"],
       formData: {},
       schedulleEntries: [],
       schedulleComboLoading: false,
