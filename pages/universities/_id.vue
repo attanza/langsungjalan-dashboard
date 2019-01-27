@@ -1,22 +1,16 @@
 <template>
   <div>
-    <h2 class="primary--text mb-2">Detail Perguruan Tinggi</h2>    
+    <h2 class="primary--text mb-2">Detail Perguruan Tinggi</h2>
     <v-tabs align-with-title color="primary" class="white elevation-1" dark>
       <v-tabs-slider color="white"/>
-      <v-tab href="#detail">
-        Detail
-      </v-tab>
-      <v-tab href="#study">
-        Program Studi
-      </v-tab>
-      <v-tab href="#maps">
-        Peta
-      </v-tab>
+      <v-tab href="#detail">Detail</v-tab>
+      <v-tab href="#study">Program Studi</v-tab>
+      <v-tab href="#maps">Peta</v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
       </v-tab-item>
       <v-tab-item :id="'study'">
-        <study/>
+        <studyList/>
       </v-tab-item>
       <v-tab-item :id="'maps'">
         <maps/>
@@ -28,7 +22,8 @@
 <script>
 import { UNIVERSITY_URL } from "~/utils/apis"
 import axios from "axios"
-import { detail, dform, maps, study } from "~/components/university"
+import { detail, dform, maps } from "~/components/university"
+import { studyList } from "~/components/studies"
 import catchError from "~/utils/catchError"
 
 export default {
@@ -40,7 +35,10 @@ export default {
       catchError(e)
     }
   },
-  components: { detail, dform, maps, study }
+  components: { detail, dform, maps, studyList },
+  mounted() {
+    this.$store.commit("universityId", this.$route.params.id)
+  }
 }
 </script>
 

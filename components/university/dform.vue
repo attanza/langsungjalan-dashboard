@@ -83,13 +83,13 @@ export default {
         {
           key: "phone",
           caption: "Telepon",
-          value: "",
+          value: null,
           rules: "max:30"
         },
         {
           key: "email",
           caption: "Email",
-          value: "",
+          value: null,
           rules: "email"
         },
         {

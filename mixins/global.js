@@ -117,6 +117,7 @@ export default {
       this.$store.commit("comboData", null)
       this.$store.commit("comboData2", null)
       this.$store.commit("targetId", null)
+      this.$store.commit("universityId", null)
     }
   },
   computed: {
@@ -129,7 +130,8 @@ export default {
       "permissions",
       "user",
       "dashboardData",
-      "targetId"
+      "targetId",
+      "universityId"
     ])
   }
 }

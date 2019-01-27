@@ -3,7 +3,14 @@
     <h2 class="primary--text mb-3">{{ title }}</h2>
     <v-card class="pt-3">
       <v-toolbar card color="transparent">
-        <Tbtn :bottom="true" :tooltip-text="'Tambah ' + title " icon-mode color="primary" icon="add" @onClick="showForm = true"/>
+        <Tbtn
+          :bottom="true"
+          :tooltip-text="'Tambah ' + title "
+          icon-mode
+          color="primary"
+          icon="add"
+          @onClick="showForm = true"
+        />
         <!-- <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>        -->
         <v-spacer/>
         <v-text-field
@@ -13,7 +20,6 @@
           single-line
           hide-details
         />
-
       </v-toolbar>
       <v-data-table
         :headers="headers"
@@ -23,12 +29,11 @@
         :total-items="totalItems"
         :rows-per-page-items="rowsPerPage"
         class="elevation-1"
-
       >
         <template slot="items" slot-scope="props">
-          <td >{{ props.item.code }}</td>
+          <td>{{ props.item.code }}</td>
           <td vif="props.item.study.university">{{ props.item.study.university.name }}</td>
-          <td v-if="props.item.study.studyName">{{ props.item.study.studyName.name }} </td>
+          <td v-if="props.item.study.studyName">{{ props.item.study.studyName.name }}</td>
           <td>{{ props.item.description }}</td>
           <td>{{ props.item.created_at | moment("DD MMM YYYY HH:mm:ss") }}</td>
           <td class="justify-center layout px-0">
@@ -40,9 +45,14 @@
       </v-data-table>
     </v-card>
     <dform :show="showForm" @onClose="showForm = false" @onAdd="addData"/>
-    <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" model="Schedulle" @onClose="showDownloadDialog = false"/>
-
-
+    <DownloadDialog
+      :show-dialog="showDownloadDialog"
+      :data-to-export="dataToExport"
+      :fillable="fillable"
+      :type-dates="typeDates"
+      model="Schedulle"
+      @onClose="showDownloadDialog = false"
+    />
   </div>
 </template>
 <script>

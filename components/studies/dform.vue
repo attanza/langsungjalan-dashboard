@@ -21,6 +21,22 @@
                       :data-vv-as="f.caption"
                     />
                   </div>
+                  <div v-if="!universityId && f.key == 'university_id' && comboData">
+                    <label>Universitas</label>
+                    <v-autocomplete
+                      v-validate="'required|numeric'"
+                      :items="comboData"
+                      :error-messages="errors.collect('university_id')"
+                      :data-vv-name="'university_id'"
+                      :data-vv-as="'Universitas'"
+                      v-model="formData['university_id']"
+                      label="Pilih universitas"
+                      single-line
+                      item-text="name"
+                      item-value="id"
+                      @change="getUniversityById"
+                    />
+                  </div>
                   <div v-if="f.key == 'study_name_id' && comboData2">
                     <label>Nama Studi</label>
                     <v-autocomplete
@@ -36,21 +52,7 @@
                       item-value="id"
                     />
                   </div>
-                  <div v-if="f.key == 'university_id' && comboData">
-                    <label>Universitas</label>
-                    <v-autocomplete
-                      v-validate="'required|numeric'"
-                      :items="comboData"
-                      :error-messages="errors.collect('university_id')"
-                      :data-vv-name="'university_id'"
-                      :data-vv-as="'Universitas'"
-                      v-model="formData['university_id']"
-                      label="Pilih universitas"
-                      single-line
-                      item-text="name"
-                      item-value="id"
-                    />
-                  </div>
+
                   <div v-if="f.key == 'address' || f.key == 'description'">
                     <label>{{ f.caption }}</label>
                     <v-textarea
@@ -78,7 +80,7 @@
 </template>
 <script>
 import { global } from "~/mixins"
-import { STUDIES_URL, COMBO_DATA_URL } from "~/utils/apis"
+import { STUDIES_URL, COMBO_DATA_URL, UNIVERSITY_URL } from "~/utils/apis"
 import axios from "axios"
 import catchError, { showNoty } from "~/utils/catchError"
 export default {
@@ -92,22 +94,24 @@ export default {
       required: true
     }
   },
+
   data() {
     return {
       dialog: false,
       fillable: [
-        {
-          key: "study_name_id",
-          caption: "Nama Studi",
-          value: "",
-          rules: "required|integer"
-        },
         {
           key: "university_id",
           caption: "Universitas",
           value: "",
           rules: "integer"
         },
+        {
+          key: "study_name_id",
+          caption: "Nama Studi",
+          value: "",
+          rules: "required|integer"
+        },
+
         {
           key: "phone",
           caption: "Telepon",
@@ -170,6 +174,10 @@ export default {
     },
     setFields() {
       this.errors.clear()
+      if (this.universityId) {
+        this.formData.university_id = parseInt(this.universityId)
+        this.getUniversityById()
+      }
       // this.fillable.forEach(data => (this.formData[data.key] = data.value))
     },
     setYears() {
@@ -200,6 +208,33 @@ export default {
       } catch (e) {
         this.deactivateLoader()
         catchError(e)
+      }
+    },
+    async getUniversityById() {
+      try {
+        this.activateLoader()
+
+        const fillable = [
+          "address",
+          "email",
+          "phone",
+          "contact_person",
+          "lat",
+          "lng"
+        ]
+        if (this.formData["university_id"]) {
+          const resp = await axios
+            .get(`${UNIVERSITY_URL}/${this.formData["university_id"]}`)
+            .then(res => res.data.data)
+          if (resp) {
+            fillable.map(f => {
+              if (resp[f]) this.formData[f] = resp[f]
+            })
+          }
+        }
+        this.deactivateLoader()
+      } catch (e) {
+        this.deactivateLoader()
       }
     }
   }
