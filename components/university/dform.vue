@@ -9,7 +9,12 @@
           <v-container grid-list-md>
             <form>
               <v-layout row wrap>
-                <v-flex v-for="(f, index) in fillable" v-if="!inArray(notIncluded, f.key)" :key="index" xs12>
+                <v-flex
+                  v-for="(f, index) in fillable"
+                  v-if="!inArray(notIncluded, f.key)"
+                  :key="index"
+                  xs12
+                >
                   <label>{{ f.caption }}</label>
                   <v-text-field
                     v-validate="f.rules"
@@ -18,10 +23,14 @@
                     :name="f.key"
                     :data-vv-name="f.key"
                     :data-vv-as="f.caption"
-
                   />
                 </v-flex>
-                <v-flex v-for="(f, index) in fillable" v-if="inArray(notIncluded, f.key)" :key="index" xs12>
+                <v-flex
+                  v-for="(f, index) in fillable"
+                  v-if="inArray(notIncluded, f.key)"
+                  :key="index"
+                  xs12
+                >
                   <label>{{ f.caption }}</label>
                   <v-textarea
                     v-validate="f.rules"
@@ -32,7 +41,7 @@
                     :data-vv-as="f.caption"
                   />
                 </v-flex>
-              </v-layout>     
+              </v-layout>
             </form>
           </v-container>
         </v-card-text>
@@ -148,6 +157,7 @@ export default {
     async saveData() {
       try {
         this.activateLoader()
+        console.log(this.formData)
         const resp = await axios
           .post(UNIVERSITY_URL, this.formData)
           .then(res => res.data)

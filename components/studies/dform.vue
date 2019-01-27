@@ -112,13 +112,13 @@ export default {
           key: "phone",
           caption: "Telepon",
           value: "",
-          rules: "required|max:30"
+          rules: "max:30"
         },
         {
           key: "email",
           caption: "Email",
           value: "",
-          rules: "required|email"
+          rules: "email"
         },
         {
           key: "contact_person",
@@ -170,7 +170,7 @@ export default {
     },
     setFields() {
       this.errors.clear()
-      this.fillable.forEach(data => (this.formData[data.key] = data.value))
+      // this.fillable.forEach(data => (this.formData[data.key] = data.value))
     },
     setYears() {
       for (let i = 2000; i < 2030; i++) {

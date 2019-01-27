@@ -4,10 +4,28 @@
       <v-container grid-list-md fluid style="padding-top: 5px;">
         <v-toolbar color="transparent" card>
           <v-spacer/>
-          <Tbtn color="primary" icon="chevron_left" icon-mode tooltip-text="Kembali" @onClick="toHome"/>
-          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Simpan" @onClick="submit"/>              
-          <Tbtn color="primary" icon="refresh" icon-mode tooltip-text="Refresh" @onClick="setFields"/>  
-          <Tbtn color="primary" icon="delete" icon-mode tooltip-text="Hapus" @onClick="confirmDelete"/>  
+          <Tbtn
+            color="primary"
+            icon="chevron_left"
+            icon-mode
+            tooltip-text="Kembali"
+            @onClick="toHome"
+          />
+          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Simpan" @onClick="submit"/>
+          <Tbtn
+            color="primary"
+            icon="refresh"
+            icon-mode
+            tooltip-text="Refresh"
+            @onClick="setFields"
+          />
+          <Tbtn
+            color="primary"
+            icon="delete"
+            icon-mode
+            tooltip-text="Hapus"
+            @onClick="confirmDelete"
+          />
         </v-toolbar>
         <form>
           <v-layout row wrap class="mt-3 px-2">
@@ -25,7 +43,7 @@
                 />
               </div>
               <div v-if="f.key == 'study_name_id' && comboData2">
-                <label>Nama Studi</label>                
+                <label>Nama Studi</label>
                 <v-autocomplete
                   v-validate="'required|numeric'"
                   :items="comboData2"
@@ -41,7 +59,7 @@
                 />
               </div>
               <div v-if="f.key == 'university_id' && comboData">
-                <label>Universitas</label>                
+                <label>Universitas</label>
                 <v-autocomplete
                   v-validate="'required|numeric'"
                   :items="comboData"
@@ -68,11 +86,16 @@
                 />
               </div>
             </v-flex>
-          </v-layout>       
+          </v-layout>
         </form>
       </v-container>
     </v-card>
-    <Dialog :showDialog="showDialog" text="Yakin mau menghapus ?" @onClose="showDialog = false" @onConfirmed="removeData"/>
+    <Dialog
+      :showDialog="showDialog"
+      text="Yakin mau menghapus ?"
+      @onClose="showDialog = false"
+      @onConfirmed="removeData"
+    />
   </div>
 </template>
 
@@ -108,13 +131,13 @@ export default {
           key: "phone",
           caption: "Telepon",
           value: "",
-          rules: "required|max:30"
+          rules: "max:30"
         },
         {
           key: "email",
           caption: "Email",
           value: "",
-          rules: "required|email"
+          rules: "email"
         },
         {
           key: "contact_person",
