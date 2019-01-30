@@ -67,14 +67,6 @@ import dform from "./dform"
 export default {
   components: { dform },
   mixins: [global],
-
-  props: {
-    schedulleId: {
-      type: String,
-      required: false,
-      default: ""
-    }
-  },
   data: () => ({
     title: "Laporan Marketing",
     headers: [
@@ -120,9 +112,9 @@ export default {
       try {
         this.activateLoader()
         const { descending, sortBy } = this.pagination
-        const endPoint = `${MARKETING_REPORTS_URL}?${this.getQueryParams()}schedulle_id=${
-          this.schedulleId
-        }&marketing_target_id=${this.targetId ? this.targetId : ""}`
+        const endPoint = `${MARKETING_REPORTS_URL}?${this.getQueryParams()}schedulle_id=${this
+          .schedulleId || ""}&marketing_target_id=${this.targetId ||
+          ""}&university_id=${this.universityId || ""}`
 
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data

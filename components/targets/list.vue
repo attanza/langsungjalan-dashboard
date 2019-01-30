@@ -63,13 +63,6 @@ export default {
   middleware: "auth",
   components: { dform, DownloadDialog },
   mixins: [global],
-  props: {
-    studyId: {
-      type: String,
-      required: false,
-      default: ""
-    }
-  },
   data: () => ({
     title: "Target",
     headers: [
@@ -107,9 +100,8 @@ export default {
         this.loading = true
 
         const { descending, sortBy } = this.pagination
-        const endPoint = `${TARGET_URL}?${this.getQueryParams()}study_id=${
-          this.studyId ? this.studyId : ""
-        }`
+        const endPoint = `${TARGET_URL}?${this.getQueryParams()}study_id=${this
+          .studyId || ""}`
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data
         this.totalItems = res.meta.total

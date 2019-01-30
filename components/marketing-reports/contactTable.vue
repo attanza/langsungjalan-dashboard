@@ -177,7 +177,7 @@ export default {
     getTargetId(data) {
       return data.schedulle && data.schedulle.target
         ? data.schedulle.target.id
-        : null
+        : ""
     },
     getEdit(data) {
       this.dataToEdit = data

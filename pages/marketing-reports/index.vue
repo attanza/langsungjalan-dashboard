@@ -8,12 +8,19 @@
 
 <script>
 import { reportList } from "~/components/marketing-reports"
+import { global } from "~/mixins"
+
 export default {
   components: { reportList },
+  mixins: [global],
+
   data() {
     return {
       title: "Laporan Marketing"
     }
+  },
+  mounted() {
+    this.clearStore()
   }
 }
 </script>

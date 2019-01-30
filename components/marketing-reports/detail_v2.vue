@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <marketingTable :data="currentEdit"/>
-    <contactTable target-id="targetId"/>
+    <contactTable/>
     <yearsTable/>
     <attachmentTable/>
     <table class="table is-fullwidth mt-3">

@@ -12,8 +12,10 @@ export const state = () => ({
   comboData3: null,
   permissions: null,
   dashboardData: null,
+  universityId: null,
+  studyId: null,
   targetId: null,
-  universityId: null
+  schedulleId: null
 })
 
 export const mutations = {
@@ -47,11 +49,17 @@ export const mutations = {
   dashboardData(state, p) {
     state.dashboardData = p
   },
+  universityId(state, p) {
+    state.universityId = p
+  },
+  studyId(state, p) {
+    state.studyId = p
+  },
   targetId(state, p) {
     state.targetId = p
   },
-  universityId(state, p) {
-    state.universityId = p
+  schedulleId(state, p) {
+    state.schedulleId = p
   }
 }
 

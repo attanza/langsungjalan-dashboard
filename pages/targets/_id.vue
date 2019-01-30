@@ -36,6 +36,7 @@ import catchError from "~/utils/catchError"
 export default {
   async fetch({ store, params }) {
     try {
+      store.commit("targetId", params.id || null)
       let currentEdit = await axios.get(TARGET_URL + "/" + params.id)
       if (currentEdit) store.commit("currentEdit", currentEdit.data.data)
       // University Combo Data
@@ -50,7 +51,7 @@ export default {
   },
   components: { schedulleList, detail, reportList, dpList },
   mounted() {
-    this.$store.commit("targetId", this.$route.params.id)
+    this.$store.commit("targetId", this.$route.params.id || null)
   }
 }
 </script>

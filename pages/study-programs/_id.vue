@@ -17,7 +17,7 @@
         <maps/>
       </v-tab-item>
       <v-tab-item :id="'targets'">
-        <targets :study-id="studyId"/>
+        <targets/>
       </v-tab-item>
     </v-tabs>
   </div>
@@ -34,6 +34,7 @@ import catchError from "~/utils/catchError"
 export default {
   async fetch({ store, params }) {
     try {
+      store.commit("studyId", params.id || null)
       // Current Edit
       let currentEdit = await axios.get(STUDIES_URL + "/" + params.id)
       if (currentEdit) store.commit("currentEdit", currentEdit.data.data)
@@ -53,7 +54,7 @@ export default {
     }
   },
   created() {
-    this.studyId = this.$route.params.id ? this.$route.params.id.toString() : ""
+    this.$store.commit("studyId", this.$route.params.id || null)
   }
 }
 </script>

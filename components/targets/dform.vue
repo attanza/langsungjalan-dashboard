@@ -20,7 +20,7 @@
                     data-vv-as="Kode"
                   />
                 </v-flex>
-                <v-flex v-if="universities" xs12>
+                <v-flex v-if="!studyId && universities" xs12>
                   <label>Universitas</label>
                   <v-autocomplete
                     :items="universities"
@@ -31,7 +31,7 @@
                     item-value="id"
                   />
                 </v-flex>
-                <v-flex v-if="studies" xs12>
+                <v-flex v-if="!studyId && studies" xs12>
                   <label>Studi Program</label>
                   <v-autocomplete
                     v-validate="'required|numeric'"
@@ -130,7 +130,8 @@ export default {
   },
   created() {
     this.setAuth()
-    this.initStore()
+    if (this.studyId) this.study_program_id = this.studyId
+    else this.initStore()
   },
   methods: {
     onClose() {

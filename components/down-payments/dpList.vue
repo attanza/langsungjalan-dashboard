@@ -130,9 +130,8 @@ export default {
       try {
         this.activateLoader()
         const { descending, sortBy } = this.pagination
-        const endPoint = `${DP_URL}?${this.getQueryParams()}&marketing_target_id=${
-          this.targetId ? this.targetId : ""
-        }`
+        const endPoint = `${DP_URL}?${this.getQueryParams()}&marketing_target_id=${this
+          .targetId || ""}`
 
         const res = await axios.get(endPoint).then(res => res.data)
         this.items = res.data

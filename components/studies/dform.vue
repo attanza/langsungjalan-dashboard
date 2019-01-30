@@ -173,6 +173,7 @@ export default {
       this.$emit("onClose")
     },
     setFields() {
+      this.formData = {}
       this.errors.clear()
       if (this.universityId) {
         this.formData.university_id = parseInt(this.universityId)

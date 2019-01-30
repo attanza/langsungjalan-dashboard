@@ -76,7 +76,6 @@ export default {
         title: title,
         useBom: true,
         useKeysAsHeaders: true
-        // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
       }
 
       if (data.length) {
@@ -116,8 +115,10 @@ export default {
       this.$store.commit("currentEdit2", null)
       this.$store.commit("comboData", null)
       this.$store.commit("comboData2", null)
-      this.$store.commit("targetId", null)
       this.$store.commit("universityId", null)
+      this.$store.commit("studyId", null)
+      this.$store.commit("targetId", null)
+      this.$store.commit("schedulleId", null)
     }
   },
   computed: {
@@ -130,8 +131,10 @@ export default {
       "permissions",
       "user",
       "dashboardData",
+      "universityId",
+      "studyId",
       "targetId",
-      "universityId"
+      "schedulleId"
     ])
   }
 }

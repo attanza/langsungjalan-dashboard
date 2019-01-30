@@ -20,7 +20,7 @@
                     :data-vv-as="f.caption"
                   />
                 </div>
-                <div v-if="f.key == 'schedulle_id' && schedulleId == 0">
+                <div v-if="!schedulleId && f.key == 'schedulle_id'">
                   <label>Kode Jadwal</label>
                   <v-autocomplete
                     v-validate="'required|integer'"
@@ -140,11 +140,6 @@ export default {
     show: {
       type: Boolean,
       required: true
-    },
-    schedulleId: {
-      type: Number,
-      required: false,
-      default: 0
     },
     isEdit: {
       type: Boolean,
@@ -277,7 +272,7 @@ export default {
       this.reportDate = moment(Date.now()).format("YYYY-MM-DD")
       this.reportTime = moment(Date.now()).format("HH:mm:ss")
       this.errors.clear()
-      if (this.schedulleId && this.schedulleId != 0) {
+      if (this.schedulleId) {
         this.formData["schedulle_id"] = this.schedulleId
       }
 
