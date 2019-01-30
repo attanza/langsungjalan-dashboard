@@ -157,6 +157,9 @@ export default {
     async saveData() {
       try {
         this.activateLoader()
+        for (let key in this.formData) {
+          if (this.formData[key] === "") this.formData[key] = null
+        }
         const resp = await axios
           .post(UNIVERSITY_URL, this.formData)
           .then(res => res.data)
