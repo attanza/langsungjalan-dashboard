@@ -41,6 +41,9 @@
           <td>
             <a @click="toDetail(props.item)">{{ props.item.target.code }}</a>
           </td>
+          <td>{{ props.item.target && props.item.target.study && props.item.target.study.university ? props.item.target.study.university.name : "" }}</td>
+          <td>{{ props.item.target && props.item.target.study && props.item.target.study.studyName ? props.item.target.study.studyName.name : "" }}</td>
+
           <td>{{ props.item.name }}</td>
           <td>{{ props.item.title }}</td>
           <td>{{ props.item.email }}</td>
@@ -76,7 +79,18 @@ export default {
     title: "Kontak",
     headers: [
       { text: "Kode Target", align: "left", value: "target.code" },
+      {
+        text: "Perguruan Tinggi",
+        align: "left",
+        value: "target.study.university.name"
+      },
+      {
+        text: "Program Studi",
+        align: "left",
+        value: "target.study.university.studyName.name"
+      },
       { text: "Nama", align: "left", value: "name" },
+
       { text: "Jabatan", align: "left", value: "title" },
       { text: "Email", align: "left", value: "email" },
       { text: "Telepon", align: "left", value: "phone" }
