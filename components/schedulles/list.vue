@@ -34,8 +34,8 @@
             <a @click="toDetail(props.item)">{{ props.item.code }}</a>
           </td>
           <td>{{ props.item.target ? props.item.target.code : "" }}</td>
-          <td v-if="props.item.marketing">{{ props.item.marketing.name }}</td>
-          <td v-if="props.item.action">{{ props.item.action.name }}</td>
+          <td>{{ props.item.marketing ? props.item.marketing.name : "" }}</td>
+          <td>{{ props.item.action ? props.item.action.name : "" }}</td>
           <td>{{ props.item.date | moment("DD MMM YYYY HH:mm:ss") }}</td>
         </template>
       </v-data-table>
