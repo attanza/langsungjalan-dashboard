@@ -47,7 +47,7 @@
           <td>{{ props.item.target && props.item.target.study && props.item.target.study.studyName ? props.item.target.study.studyName.name : '' }}</td>
           <td>{{ props.item.name }}</td>
           <td>{{ props.item.phone }}</td>
-          <td>{{ props.item.dp.toLocaleString('id') }}</td>
+          <td>{{ props.item.dp ? props.item.dp.toLocaleString('id') : 0 }}</td>
         </template>
       </v-data-table>
     </v-card>
