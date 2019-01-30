@@ -32,8 +32,10 @@
         class="elevation-1"
       >
         <template slot="items" slot-scope="props">
-          <td v-if="props.item.studyName">
-            <a @click="toDetail(props.item)">{{ props.item.studyName.name }}</a>
+          <td>
+            <a
+              @click="toDetail(props.item)"
+            >{{ props.item.studyName ? props.item.studyName.name : "-" }}</a>
           </td>
           <td v-if="props.item.university">{{ props.item.university.name }}</td>
           <td>{{ props.item.contact_person }}</td>
