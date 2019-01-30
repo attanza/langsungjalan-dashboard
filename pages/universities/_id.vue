@@ -34,13 +34,16 @@ import { reportList } from "~/components/marketing-reports"
 import catchError from "~/utils/catchError"
 
 export default {
-  async fetch({ store, params }) {
+  async fetch({ store, params, redirect }) {
     try {
       store.commit("universityId", params.id || null)
       let resp = await axios.get(UNIVERSITY_URL + "/" + params.id)
       if (resp) store.commit("currentEdit", resp.data.data)
     } catch (e) {
-      catchError(e)
+      if (process.client) catchError(e)
+      else {
+        redirect("/")
+      }
     }
   },
   components: { detail, dform, maps, studyList, reportList },

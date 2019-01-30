@@ -23,7 +23,7 @@ import { global } from "~/mixins"
 import catchError from "~/utils/catchError"
 
 export default {
-  async fetch({ store, params }) {
+  async fetch({ store, params, redirect }) {
     try {
       let resp = await axios
         .get(MARKETING_REPORTS_URL + "/" + params.id)
@@ -41,9 +41,10 @@ export default {
       let actions = await axios.get(COMBO_DATA_URL + "Action")
       if (actions) store.commit("comboData2", actions.data)
     } catch (e) {
-      console.log("e", e)
-
-      catchError(e)
+      if (process.client) catchError(e)
+      else {
+        redirect("/")
+      }
     }
   },
   components: { "detail-v2": detail_v2, maps },

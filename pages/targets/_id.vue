@@ -34,7 +34,7 @@ import { dpList } from "~/components/down-payments"
 import catchError from "~/utils/catchError"
 
 export default {
-  async fetch({ store, params }) {
+  async fetch({ store, params, redirect }) {
     try {
       store.commit("targetId", params.id || null)
       let currentEdit = await axios.get(TARGET_URL + "/" + params.id)
@@ -46,7 +46,10 @@ export default {
       let studies = await axios.get(COMBO_DATA_URL + "StudyProgram")
       if (studies) store.commit("comboData2", studies.data)
     } catch (e) {
-      catchError(e)
+      if (process.client) catchError(e)
+      else {
+        redirect("/")
+      }
     }
   },
   components: { schedulleList, detail, reportList, dpList },

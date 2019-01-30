@@ -1,14 +1,10 @@
 <template>
   <div>
-    <h2 v-if="currentEdit" class="primary--text mb-2">Role {{ currentEdit.name }}</h2>    
+    <h2 v-if="currentEdit" class="primary--text mb-2">Role {{ currentEdit.name }}</h2>
     <v-tabs align-with-title color="primary" class="white elevation-1" dark>
       <v-tabs-slider color="white"/>
-      <v-tab href="#detail">
-        Detail
-      </v-tab>
-      <v-tab href="#permissions">
-        Permission
-      </v-tab>
+      <v-tab href="#detail">Detail</v-tab>
+      <v-tab href="#permissions">Permission</v-tab>
       <v-tab-item :id="'detail'">
         <detail/>
       </v-tab-item>
@@ -29,7 +25,7 @@ import catchError from "~/utils/catchError"
 const API_URL = process.env.API_URL
 
 export default {
-  async fetch({ store, params }) {
+  async fetch({ store, params, redirect }) {
     try {
       let resp = await axios.get(ROLE_URL + "/" + params.id)
       if (resp) store.commit("currentEdit", resp.data.data)
@@ -43,7 +39,10 @@ export default {
       if (rolePermissions)
         store.commit("permissions", rolePermissions.data.data)
     } catch (e) {
-      catchError(e)
+      if (process.client) catchError(e)
+      else {
+        redirect("/")
+      }
     }
   },
   components: { detail, dform, permission },

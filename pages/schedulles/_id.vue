@@ -24,7 +24,7 @@ import { reportList } from "~/components/marketing-reports"
 import catchError from "~/utils/catchError"
 
 export default {
-  async fetch({ store, params }) {
+  async fetch({ store, params, redirect }) {
     try {
       store.commit("schedulleId", params.id || null)
 
@@ -37,7 +37,10 @@ export default {
       let actions = await axios.get(COMBO_DATA_URL + "Action")
       if (actions) store.commit("comboData2", actions.data)
     } catch (e) {
-      catchError(e)
+      if (process.client) catchError(e)
+      else {
+        redirect("/")
+      }
     }
   },
   components: { detail, reportList },

@@ -32,7 +32,7 @@ import { list as targets } from "~/components/targets"
 
 import catchError from "~/utils/catchError"
 export default {
-  async fetch({ store, params }) {
+  async fetch({ store, params, redirect }) {
     try {
       store.commit("studyId", params.id || null)
       // Current Edit
@@ -44,7 +44,10 @@ export default {
       let resp2 = await axios.get(COMBO_DATA_URL + "StudyName")
       if (resp2) store.commit("comboData2", resp2.data)
     } catch (e) {
-      catchError(e)
+      if (process.client) catchError(e)
+      else {
+        redirect("/")
+      }
     }
   },
   components: { detail, dform, maps, list, targets },

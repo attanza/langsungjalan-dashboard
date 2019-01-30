@@ -39,7 +39,7 @@
       >
         <template slot="items" slot-scope="props">
           <td>
-            <a @click="toDetail(props.item)">{{ props.item.target.code }}</a>
+            <a @click="toDetail(props.item)">{{ props.item.target ? props.item.target.code : "-" }}</a>
           </td>
           <td>{{ props.item.target && props.item.target.study && props.item.target.study.university ? props.item.target.study.university.name : "" }}</td>
           <td>{{ props.item.target && props.item.target.study && props.item.target.study.studyName ? props.item.target.study.studyName.name : "" }}</td>
