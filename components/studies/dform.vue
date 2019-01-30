@@ -121,7 +121,7 @@ export default {
         {
           key: "email",
           caption: "Email",
-          value: "",
+          value: null,
           rules: "email"
         },
         {
@@ -175,11 +175,11 @@ export default {
     setFields() {
       this.formData = {}
       this.errors.clear()
+      this.fillable.forEach(data => (this.formData[data.key] = data.value))
       if (this.universityId) {
         this.formData.university_id = parseInt(this.universityId)
         this.getUniversityById()
       }
-      // this.fillable.forEach(data => (this.formData[data.key] = data.value))
     },
     setYears() {
       for (let i = 2000; i < 2030; i++) {
@@ -197,6 +197,9 @@ export default {
     async saveData() {
       try {
         this.activateLoader()
+        for (let key in this.formData) {
+          if (this.formData[key] === "") this.formData[key] = null
+        }
         const resp = await axios
           .post(STUDIES_URL, this.formData)
           .then(res => res.data)

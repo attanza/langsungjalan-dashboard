@@ -32,8 +32,8 @@
       >
         <template slot="items" slot-scope="props">
           <td>{{ props.item.code }}</td>
-          <td vif="props.item.study.university">{{ props.item.study.university.name }}</td>
-          <td v-if="props.item.study.studyName">{{ props.item.study.studyName.name }}</td>
+          <td>{{ props.item.study && props.item.study.university ? props.item.study.university.name : "" }}</td>
+          <td>{{ props.item.study && props.item.study.studyName ? props.item.study.studyName.name : "" }}</td>
           <td>{{ props.item.description }}</td>
           <td>{{ props.item.created_at | moment("DD MMM YYYY HH:mm:ss") }}</td>
           <td class="justify-center layout px-0">
