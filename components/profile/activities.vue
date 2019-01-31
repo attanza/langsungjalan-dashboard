@@ -1,8 +1,15 @@
 <template>
   <div>
-    <v-card dark class="pt-3">
+    <v-card class="pt-3">
       <v-toolbar card color="transparent">
-        <Tbtn :bottom="true" :tooltip-text="'Download ' + title + ' data'" icon-mode color="primary" icon="cloud_download" @onClick="downloadData"/>       
+        <Tbtn
+          :bottom="true"
+          :tooltip-text="'Download ' + title + ' data'"
+          icon-mode
+          color="primary"
+          icon="cloud_download"
+          @onClick="downloadData"
+        />
         <v-spacer/>
         <v-text-field
           v-model="search"
@@ -30,12 +37,19 @@
             <v-btn icon class="mx-0" @click="toDetail(props.item)">
               <Tbtn :tooltip-text="'Show '+title" icon-mode flat color="white" icon="remove_red_eye" @onClick="toDetail(props.item)"/>
             </v-btn>
-          </td> -->
+          </td>-->
         </template>
       </v-data-table>
     </v-card>
-    <DownloadDialog :show-dialog="showDownloadDialog" :data-to-export="dataToExport" :fillable="fillable" :type-dates="typeDates" :query="`user_id=${user.id}`" model="Activity" @onClose="showDownloadDialog = false"/>
-
+    <DownloadDialog
+      :show-dialog="showDownloadDialog"
+      :data-to-export="dataToExport"
+      :fillable="fillable"
+      :type-dates="typeDates"
+      :query="`user_id=${user.id}`"
+      model="Activity"
+      @onClose="showDownloadDialog = false"
+    />
   </div>
 </template>
 <script>

@@ -1,32 +1,44 @@
 <template>
   <div>
-    <v-card dark class="pt-3">
+    <v-card class="pt-3">
       <v-container grid-list-md fluid style="padding-top: 0px;">
         <v-toolbar color="transparent" card>
           <v-spacer/>
-          <Tbtn color="primary" icon="vpn_key" icon-mode tooltip-text="Change password" @onClick="showForm = true"/>  
-          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Save" @onClick="submit"/>              
-          <Tbtn color="primary" icon="refresh" icon-mode tooltip-text="Refresh" @onClick="setFields"/>  
-        </v-toolbar>  
+          <Tbtn
+            color="primary"
+            icon="vpn_key"
+            icon-mode
+            tooltip-text="Change password"
+            @onClick="showForm = true"
+          />
+          <Tbtn color="primary" icon="save" icon-mode tooltip-text="Save" @onClick="submit"/>
+          <Tbtn
+            color="primary"
+            icon="refresh"
+            icon-mode
+            tooltip-text="Refresh"
+            @onClick="setFields"
+          />
+        </v-toolbar>
         <form>
           <v-layout row wrap class="mt-3 px-2">
-            
-            <v-flex v-for="(f, index) in fillable" v-if="!inArray(['is_active', 'password'], f.key)" :key="index" sm6 xs12>
-              <label>{{ setCase(f.key) }}</label>
-              <v-text-field
-                v-validate="f.rules"
-                v-model="formData[f.key]"
-                :error-messages="errors.collect(f.key)"
-                :name="f.key"
-                :data-vv-name="f.key"
-              />
+            <v-flex v-for="(f, index) in fillable" :key="index" sm6 xs12>
+              <span v-if="!inArray(['is_active', 'password'], f.key)">
+                <label>{{ setCase(f.key) }}</label>
+                <v-text-field
+                  v-validate="f.rules"
+                  v-model="formData[f.key]"
+                  :error-messages="errors.collect(f.key)"
+                  :name="f.key"
+                  :data-vv-name="f.key"
+                />
+              </span>
             </v-flex>
-          </v-layout>     
+          </v-layout>
         </form>
       </v-container>
     </v-card>
     <dform :show="showForm" @onClose="showForm = false"/>
-
   </div>
 </template>
 

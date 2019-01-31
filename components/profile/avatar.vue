@@ -1,21 +1,30 @@
 <template>
   <v-layout row class="mt-3">
     <v-flex xs12 sm6 offset-sm3>
-      <v-card dark>
+      <v-card>
         <v-img :src="avatar" aspect-ratio="1.7"/>
         <v-card-text>
-          <v-text-field v-model="imageName" label="Select Image" prepend-icon="attach_file" @click="pickFile"/>
+          <v-text-field
+            v-model="imageName"
+            label="Select Image"
+            prepend-icon="attach_file"
+            @click="pickFile"
+          />
           <input
             ref="image"
             type="file"
             style="display: none"
             accept="image/*"
             @change="onFilePicked"
-            
           >
-          <Tbtn color="primary" block icon="cloud_upload" tooltip-text="Save profile picture" @onClick="submitFile"/>             
+          <Tbtn
+            color="primary"
+            block
+            icon="cloud_upload"
+            tooltip-text="Save profile picture"
+            @onClick="submitFile"
+          />
         </v-card-text>
-
       </v-card>
     </v-flex>
   </v-layout>

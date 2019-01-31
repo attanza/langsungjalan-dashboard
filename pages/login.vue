@@ -65,6 +65,15 @@ export default {
     loading: false,
     allowedLogin: ["super-administrator", "administrator", "supervisor"]
   }),
+  mounted() {
+    const devUrl = "http://localhost:4444/api/v1"
+    const currentBaseUrl = process.env.API_URL
+    if (currentBaseUrl === devUrl) {
+      ;(this.email = "super_administrator@langsungjalan.com"),
+        (this.password = "P4sw0rd@langsungjalan.com")
+    }
+    this.clearStore()
+  },
   methods: {
     submit() {
       this.$validator.validateAll().then(result => {
